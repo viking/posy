@@ -1,0 +1,49 @@
+<h1>Editing <%= permission_singular %></h1>
+
+<%%= error_messages_for :<%= permission_singular %> %>
+
+<%% form_for(:<%= permission_singular %>, :url => <%= permission_singular %>_path(@<%= permission_singular %>), :html => { :method => :put }) do |f| %>
+  <p>
+    <b><%= group_class %></b><br />
+    <%%=h @<%= permission_singular %>.<%= group_singular %>.name %>
+  </p>
+
+  <p>
+    <b>Resource Type</b><br />
+    <%%=h @<%= permission_singular %>.controller ? 'Controller' : @<%= permission_singular %>.resource_type %>
+  </p>
+
+  <%% if @<%= permission_singular %>.controller -%>
+  <p>
+    <b>Controller</b><br />
+    <%%=h @<%= permission_singular %>.controller %>
+  </p>
+  <%% else -%>
+  <p>
+    <b>Resource</b><br />
+    <%%=h @<%= permission_singular %>.resource.name %>
+  </p>
+  <%% end -%>
+
+  <p>
+    <b>Read</b><br />
+    <%%= f.check_box :can_read %>
+  </p>
+
+  <p>
+    <b>Write</b><br />
+    <%%= f.check_box :can_write %>
+  </p>
+
+  <p>
+    <b>Sticky</b><br />
+    <%%= f.check_box :is_sticky %>
+  </p>
+
+  <p>
+    <%%= submit_tag "Update" %>
+  </p>
+<%% end %>
+
+<%%= link_to_show 'Show', @<%= permission_singular %> %> |
+<%%= link_to_index 'Back' %>

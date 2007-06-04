@@ -1,0 +1,32 @@
+<h1>Editing <%= user_singular %></h1>
+
+<%%= error_messages_for :<%= user_singular %> %>
+
+<%% form_for(:<%= user_singular %>, :url => <%= user_singular %>_path(@<%= user_singular %>), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Login</b><br />
+    <%%= f.text_field :login %>
+  </p>
+
+  <p>
+    <b>Email</b><br />
+    <%%= f.text_field :email %>
+  </p>
+
+  <p>
+    <b>Password</b><br />
+    <%%= f.password_field :password %>
+  </p>
+
+  <p>
+    <b>Password confirmation</b><br />
+    <%%= f.password_field :password_confirmation %>
+  </p>
+
+  <p>
+    <%%= submit_tag "Update" %>
+  </p>
+<%% end %>
+
+<%%= link_to 'Show', <%= user_singular %>_path(@<%= user_singular %>) %> |
+<%%= link_to 'Back', <%= user_plural %>_path %>

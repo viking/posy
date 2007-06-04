@@ -1,0 +1,33 @@
+<h1>Listing <%= permission_plural %></h1>
+
+<table>
+  <tr>
+    <th><%= group_class %></th>
+    <th>Thing</th>
+    <th>Read</th>
+    <th>Write</th>
+    <th>Sticky</th>
+  </tr>
+  
+<%% for <%= permission_singular %> in @<%= permission_plural %> %>
+  <tr>
+    <td><%%=h <%= permission_singular %>.<%= group_singular %>.name %></td>
+    <td><%%= resource_link(<%= permission_singular %>.controller || <%= permission_singular %>.resource) %></td>
+    <td><%%=h <%= permission_singular %>.can_read ? "yes" : "no" %></td>
+    <td><%%=h <%= permission_singular %>.can_write ? "yes" : "no" %></td>
+    <td><%%=h <%= permission_singular %>.is_sticky ? "yes" : "no" %></td>
+    <td><%%= link_to_show 'Show', <%= permission_singular %> %></td>
+    <td><%%= link_to_edit 'Edit', <%= permission_singular %> %></td>
+    <td><%%= link_to_destroy 'Destroy', <%= permission_singular %>, :confirm => 'Are you sure?' %></td>
+  </tr>
+<%% end %>
+</table>
+
+<br />
+
+<%%= link_to_new 'New <%= permission_singular %>' %> |
+<%% if @<%= group_singular %> -%>
+<%%= link_to 'Back', <%= group_singular %>_path(@<%= group_singular %>) %>
+<%% else -%>
+<%%= link_to 'Back', main_url %>
+<%% end -%>

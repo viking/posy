@@ -1,0 +1,28 @@
+<h1>Listing <%= membership_plural %></h1>
+
+<table>
+  <tr>
+    <th><%= group_class %></th>
+    <th><%= user_class %></th>
+  </tr>
+  
+<%% for <%= membership_singular %> in @<%= membership_plural %> %>
+  <tr>
+    <td><%%=h <%= membership_singular %>.<%= group_singular %>.name %></td>
+    <td><%%=h <%= membership_singular %>.<%= user_singular %>.login %></td>
+    <td><%%= link_to_show 'Show', <%= membership_singular %> %></td>
+    <td><%%= link_to_destroy 'Destroy', <%= membership_singular %>, :confirm => 'Are you sure?' %></td>
+  </tr>
+<%% end %>
+</table>
+
+<br />
+
+<%%= link_to_new 'New <%= membership_singular %>' %> |
+<%% if @<%= user_singular %> -%>
+<%%= link_to 'Back', <%= user_singular %>_path(@<%= user_singular %>) %>
+<%% elsif @<%= group_singular %> -%>
+<%%= link_to 'Back', <%= group_singular %>_path(@<%= group_singular %>) %>
+<%% else -%>
+<%%= link_to 'Back', main_url %>
+<%% end -%>

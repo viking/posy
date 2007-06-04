@@ -1,0 +1,22 @@
+<h1>Listing <%= user_plural %></h1>
+
+<table>
+  <tr>
+    <th>Login</th>
+    <th>Email</th>
+  </tr>
+  
+<%% for <%= user_singular %> in @<%= user_plural %> %>
+  <tr>
+    <td><%%=h <%= user_singular %>.login %></td>
+    <td><%%=h <%= user_singular %>.email %></td>
+    <td><%%= link_to 'Show', <%= user_singular %>_path(<%= user_singular %>) %></td>
+    <td><%%= link_to 'Edit', edit_<%= user_singular %>_path(<%= user_singular %>) %></td>
+    <td><%%= link_to 'Destroy', <%= user_singular %>_path(<%= user_singular %>), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<%% end %>
+</table>
+
+<br />
+
+<%%= link_to 'New <%= user_singular %>', new_<%= user_singular %>_path %> | <%%= link_to 'Back', main_url %>

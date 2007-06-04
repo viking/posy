@@ -1,0 +1,9 @@
+controllers:
+  - dogs
+  - cats
+  - robots
+
+model_name_methods:
+  Cat: name
+  Dog: name
+  default: name

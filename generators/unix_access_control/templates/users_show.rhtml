@@ -1,0 +1,60 @@
+<h1>Showing <%= user_singular %></h1>
+
+<p>
+  <b>Login:</b>
+  <%%=h @<%= user_singular %>.login %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%%=h @<%= user_singular %>.email %>
+</p>
+
+<p>
+  <b>Created At:</b>
+  <%%=h @<%= user_singular %>.created_at %>
+</p>
+
+<p>
+  <b>Updated At:</b>
+  <%%=h @<%= user_singular %>.updated_at %>
+</p>
+
+<p>
+  <b>Created By:</b>
+  <%%=h @<%= user_singular %>.creator ? @<%= user_singular %>.creator.login : "N/A" %>
+</p>
+
+<p>
+  <b>Updated By:</b>
+  <%%=h @<%= user_singular %>.updater ? @<%= user_singular %>.updater.login : "N/A" %>
+</p>
+
+<%%= link_to 'Edit', edit_<%= user_singular %>_path(@<%= user_singular %>) %> |
+<%%= link_to 'Back', <%= user_plural %>_path %>
+
+<br/>
+<h2><%= user_class %>'s <%= group_plural %></h2>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Permanent</th>
+  </tr>
+  
+<%% for <%= group_singular %> in @<%= user_singular %>.<%= group_plural %> %>
+  <tr>
+    <td><%%=h <%= group_singular %>.name %></td>
+    <td><%%=h <%= group_singular %>.description %></td>
+    <td><%%=h <%= group_singular %>.permanent %></td>
+    <td><%%= link_to 'Show', <%= group_singular %>_path(<%= group_singular %>) %></td>
+    <td><%%= link_to 'Edit', edit_<%= group_singular %>_path(<%= group_singular %>) %></td>
+    <td><%%= link_to 'Destroy', <%= group_singular %>_path(<%= group_singular %>), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<%% end %>
+</table>
+<br/>
+
+<%%= link_to 'Add <%= group_singular %>', <%= user_singular %>_new_<%= membership_singular %>_path(@<%= user_singular %>) %> | 
+<%%= link_to '<%= membership_class %> index', <%= user_singular %>_<%= membership_plural %>_path(@<%= user_singular %>) %>

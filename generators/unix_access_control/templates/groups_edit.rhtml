@@ -1,0 +1,27 @@
+<h1>Editing <%= group_singular %></h1>
+
+<%%= error_messages_for :<%= group_singular %> %>
+
+<%% form_for(:<%= group_singular %>, :url => <%= group_singular %>_path(@<%= group_singular %>), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Name</b><br />
+    <%%= f.text_field :name %>
+  </p>
+
+  <p>
+    <b>Description</b><br />
+    <%%= f.text_field :description %>
+  </p>
+
+  <p>
+    <b>Permanent</b><br />
+    <%%= f.check_box :permanent %>
+  </p>
+
+  <p>
+    <%%= submit_tag "Update" %>
+  </p>
+<%% end %>
+
+<%%= link_to 'Show', <%= group_singular %>_path(@<%= group_singular %>) %> |
+<%%= link_to 'Back', <%= group_plural %>_path %>

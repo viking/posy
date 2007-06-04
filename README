@@ -1,0 +1,29 @@
+UnixAccessControl
+=================
+
+This plugin contains a generator to create a unix access control scheme.  Each user
+belongs in a group (via memberships), and groups have permissions to resources (models)
+and controllers.  Resource permissions always take precendence over controller
+permissions.  Also contained in this plugin is the userstamp plugin, which will
+stamp user id's on records that have created_by and updated_by fields.
+
+To use the generator with the default names, run:
+  ./script/generate unix_access_control
+
+You can also specify what names you want to use for users, groups, memberships,
+permissions, and sessions.  Check out the USAGE file in the generators directory for 
+more information.
+
+After using the generator, edit the config/access_control.yml file and add the names
+of the controllers that you want users to have access to.  Also, add:
+
+  before_filter :login_required
+
+to any controller you wish to have access control over.  To make an admin user, open
+up console and create a user, then add them to the group named 'admin' like so:
+  
+  u = User.create(:login => 'foo', email => 'foo@bar.com', :password => 'foobar',
+                  :password_confirmation => 'foobar')
+  u.groups << Group.find_by_name('admin')
+
+Enjoi!

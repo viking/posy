@@ -1,0 +1,29 @@
+<h1>New <%= membership_singular %></h1>
+
+<%%= error_messages_for :<%= membership_singular %> %>
+
+<%% form_for(:<%= membership_singular %>, :url => url_for_create) do |f| %>
+  <p>
+    <b><%= group_class %></b><br />
+    <%% if @<%= group_singular %> -%>
+    <%%=h @<%= group_singular %>.name %>
+    <%% else -%>
+    <%%= f.collection_select :<%= group_singular %>_id, @<%= group_plural %>, 'id', 'name' %>
+    <%% end -%>
+  </p>
+
+  <p>
+    <b><%= user_class %></b><br />
+    <%% if @<%= user_singular %> -%>
+    <%%=h @<%= user_singular %>.login %>
+    <%% else -%>
+    <%%= f.collection_select :<%= user_singular %>_id, @<%= user_plural %>, 'id', 'login' %>
+    <%% end -%>
+  </p>
+
+  <p>
+    <%%= submit_tag "Create" %>
+  </p>
+<%% end %>
+
+<%%= link_to_index 'Back' %>

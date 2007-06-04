@@ -1,0 +1,12 @@
+Description:
+    This generator will create all the necessary files needed for the unix access
+    control scheme.
+
+Example:
+    ./script/generate unix_access_control [user-model] [ [group-model] [ [membership-model] [ [permission-model] [session-model] ] ] ]
+
+    This will create scaffolding for users, groups, memberships, permissions, and sessions.
+
+After generating:
+    - Edit config/access_control.yml and add controllers you want users to have access to.
+    - Add "before_filter :login_required" to all controllers you wish to restrict access to.

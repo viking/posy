@@ -1,0 +1,429 @@
+# All of these are what you might expect, except that the 'robots_w' <%= group_singular %>
+# additionally has full access to the cat named Pokey (Cat.find(2))
+
+one:
+  id: 1
+  <%= group_singular %>_id: 2   # robots_r
+  resource_id:
+  resource_type:
+  controller: robots
+  can_read: yes
+  can_write: no
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+two:
+  id: 2
+  <%= group_singular %>_id: 3   # robots_w
+  resource_id:
+  resource_type:
+  controller: robots
+  can_read: no
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+three:
+  id: 3
+  <%= group_singular %>_id: 4   # robots_rw
+  resource_id:
+  resource_type:
+  controller: robots
+  can_read: yes
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+four:
+  id: 4
+  <%= group_singular %>_id: 5   # dogs_r
+  resource_id:
+  resource_type:
+  controller: dogs
+  can_read: yes
+  can_write: no
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+five:
+  id: 5
+  <%= group_singular %>_id: 6   # dogs_w
+  resource_id:
+  resource_type:
+  controller: dogs
+  can_read: no
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+six:
+  id: 6
+  <%= group_singular %>_id: 7   # dogs_rw
+  resource_id:
+  resource_type:
+  controller: dogs
+  can_read: yes
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+seven:
+  id: 7
+  <%= group_singular %>_id: 8   # cats_r
+  resource_id:
+  resource_type:
+  controller: cats
+  can_read: yes
+  can_write: no
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+eight:
+  id: 8
+  <%= group_singular %>_id: 9   # cats_w
+  resource_id:
+  resource_type:
+  controller: cats
+  can_read: no
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+nine:
+  id: 9
+  <%= group_singular %>_id: 10  # cats_rw
+  resource_id:
+  resource_type:
+  controller: cats
+  can_read: yes
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+ten:
+  id: 10
+  <%= group_singular %>_id: 11  # ottoman_r
+  resource_id: 1
+  resource_type: Dog
+  controller:
+  can_read: yes
+  can_write: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+eleven:
+  id: 11
+  <%= group_singular %>_id: 12  # ottoman_w
+  resource_id: 1
+  resource_type: Dog
+  controller:
+  can_read: no
+  can_write: yes
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twelve:
+  id: 12
+  <%= group_singular %>_id: 13  # ottoman_rw
+  resource_id: 1
+  resource_type: Dog
+  controller:
+  can_read: yes
+  can_write: yes
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+thirteen:
+  id: 13
+  <%= group_singular %>_id: 14  # fluffy_r
+  resource_id: 1
+  resource_type: Cat
+  controller:
+  can_read: yes
+  can_write: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+fourteen:
+  id: 14
+  <%= group_singular %>_id: 15  # fluffy_w
+  resource_id: 1
+  resource_type: Cat
+  controller:
+  can_read: no
+  can_write: yes
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+fifteen:
+  id: 15
+  <%= group_singular %>_id: 16  # fluffy_rw
+  resource_id: 1
+  resource_type: Cat
+  controller:
+  can_read: yes
+  can_write: yes
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+sixteen:
+  id: 16
+  <%= group_singular %>_id: 17  # robo_r
+  resource_id: 1
+  resource_type: Robot
+  controller:
+  can_read: yes
+  can_write: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+seventeen:
+  id: 17
+  <%= group_singular %>_id: 18  # robo_w
+  resource_id: 1
+  resource_type: Robot
+  controller:
+  can_read: no
+  can_write: yes
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+eighteen:
+  id: 18
+  <%= group_singular %>_id: 19  # robo_rw
+  resource_id: 1
+  resource_type: Robot
+  controller:
+  can_read: yes
+  can_write: yes
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+nineteen:
+  id: 19
+  <%= group_singular %>_id: 3     # robots_w
+  resource_id: 2  # Pokey
+  resource_type: Cat
+  controller:
+  can_read: yes
+  can_write: yes
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twenty:
+  id: 20
+  <%= group_singular %>_id: 21  # sticky_people
+  controller: cats
+  can_read: yes
+  can_write: yes
+  is_sticky: yes
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twenty_one:
+  id: 21
+  <%= group_singular %>_id: 21  # sticky_people
+  controller: dogs
+  can_read: yes
+  can_write: yes
+  is_sticky: yes
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twenty_two:
+  id: 22
+  <%= group_singular %>_id: 22  # all_r
+  controller: dogs
+  can_read: yes
+  can_write: no
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twenty_three:
+  id: 23
+  <%= group_singular %>_id: 22  # all_r
+  controller: cats
+  can_read: yes
+  can_write: no
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twenty_four:
+  id: 24
+  <%= group_singular %>_id: 22  # all_r
+  controller: robots
+  can_read: yes
+  can_write: no
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twenty_five:
+  id: 25
+  <%= group_singular %>_id: 23  # all_w
+  controller: dogs
+  can_read: no
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twenty_six:
+  id: 26
+  <%= group_singular %>_id: 23  # all_w
+  controller: cats
+  can_read: no
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twenty_seven:
+  id: 27
+  <%= group_singular %>_id: 23  # all_w
+  controller: robots
+  can_read: no
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twenty_eight:
+  id: 28
+  <%= group_singular %>_id: 24  # all_rw
+  controller: dogs
+  can_read: yes
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+twenty_nine:
+  id: 29
+  <%= group_singular %>_id: 24  # all_rw
+  controller: cats
+  can_read: yes
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+thirty:
+  id: 30
+  <%= group_singular %>_id: 24  # all_rw
+  controller: robots
+  can_read: yes
+  can_write: yes
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+thirty_one:
+  id: 31
+  <%= group_singular %>_id: 22  # all_r
+  resource_id: 1
+  resource_type: Dog
+  can_read: yes
+  can_write: no
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+thirty_two:
+  id: 32
+  <%= group_singular %>_id: 22  # all_r
+  resource_id: 1
+  resource_type: Cat
+  can_read: yes
+  can_write: no
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1
+
+thirty_three:
+  id: 33
+  <%= group_singular %>_id: 22  # all_r
+  resource_id: 1
+  resource_type: Robot
+  can_read: yes
+  can_write: no
+  is_sticky: no
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
+  created_by: 1
+  updated_by: 1

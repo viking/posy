@@ -1,0 +1,35 @@
+<h1>Showing <%= membership_singular %></h1>
+
+<p>
+  <b><%= group_class %>:</b>
+  <%%= link_to @<%= membership_singular %>.<%= group_singular %>.name, <%= group_singular %>_url(@<%= membership_singular %>.<%= group_singular %>) %>
+</p>
+
+<p>
+  <b><%= user_class %>:</b>
+  <%%= link_to @<%= membership_singular %>.<%= user_singular %>.login, <%= user_singular %>_url(@<%= membership_singular %>.<%= user_singular %>) %>
+</p>
+
+<p>
+  <b>Created At:</b>
+  <%%=h @<%= membership_singular %>.created_at %>
+</p>
+
+<p>
+  <b>Updated At:</b>
+  <%%=h @<%= membership_singular %>.updated_at %>
+</p>
+
+<p>
+  <b>Created By:</b>
+  <%%=h @<%= membership_singular %>.creator ? @<%= membership_singular %>.creator.login : "N/A" %>
+</p>
+
+<p>
+  <b>Updated By:</b>
+  <%%=h @<%= membership_singular %>.updater ? @<%= membership_singular %>.updater.login : "N/A" %>
+</p>
+
+
+
+<%%= link_to 'Back', <%= membership_plural %>_path %>
