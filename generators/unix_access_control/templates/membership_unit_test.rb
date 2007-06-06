@@ -48,12 +48,6 @@ class <%= membership_class %>Test < Test::Unit::TestCase
     end
   end
 
-  def test_should_update
-    assert update_<%= membership_singular %>(:two, :<%= group_singular %> => <%= group_plural %>(:empty))
-    
-    assert_equal <%= user_plural %>(:admin).id, <%= membership_plural %>(:two).updated_by
-  end
-
   def test_<%= group_singular %>_association
     assert <%= membership_plural %>(:one).<%= group_singular %>.is_a?(<%= group_class %>)
     assert <%= membership_plural %>(:two).<%= group_singular %>.is_a?(<%= group_class %>)
