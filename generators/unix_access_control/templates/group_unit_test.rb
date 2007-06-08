@@ -1,108 +1,153 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
+module <%= group_class %>Helpers
+  def create_<%= group_singular %>(options = {})
+    <%= group_class %>.create({
+      :name => 'foo', 
+      :description => 'the foo <%= group_singular %>', 
+      :permanent => false
+    }.merge(options))
+  end
+end
+
 class <%= group_class %>Test < Test::Unit::TestCase
-  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>, :cats, :dogs, :robots
-  include AuthenticatedTestHelper
+  include <%= group_class %>Helpers
+  fixtures :<%= group_plural %>, :<%= user_plural %>
 
-  def setup
-    login_as(:admin)
+  def test_should_create_a_new_<%= group_singular %>
+    <%= group_singular %> = create_<%= group_singular %>
+    assert !<%= group_singular %>.new_record?
   end
 
-  def test_should_create
-    g = nil
-    assert_difference <%= group_class %>, :count do
-      g = create_<%= group_singular %>
-      assert !g.new_record?, "#{g.errors.full_messages.to_sentence}"
-    end
-
-    assert_equal <%= user_plural %>(:admin)['id'], g.created_by
+  def test_should_require_name_on_creation
+    <%= group_singular %> = create_<%= group_singular %>(:name => nil)
+    assert !<%= group_singular %>.errors[:name].nil?
   end
 
-  def test_should_require_name
-    assert_no_difference <%= group_class %>, :count do
-      g = create_<%= group_singular %>(:name => nil)
-      assert g.errors.on(:name)
-    end
-  end
-
-  def test_should_require_unique_name
-    assert_no_difference <%= group_class %>, :count do
-      g = create_<%= group_singular %>(:name => 'admin')
-      assert g.errors.on(:name)
-    end
-  end
-
-  def test_should_update
-    assert update_<%= group_singular %>(:empty, :description => "I'm hollow")
-    assert_equal "I'm hollow", <%= group_plural %>(:empty).description
-
-    assert_equal <%= user_plural %>(:admin).id, <%= group_plural %>(:empty).updated_by
-  end
-
-  def test_should_not_update
-    # can't update permanent <%= group_plural %>
-    assert_raises(RuntimeError) { update_<%= group_singular %>(:admin, :name => 'foo') }
-  end
-
-  def test_should_destroy
-    g = <%= group_plural %>(:empty)
-    assert_difference(<%= group_class %>, :count, -1) { g.destroy }
-    assert <%= membership_class %>.find(:all, :conditions => ['<%= group_singular %>_id = ?', g.id]).empty?
-    assert <%= permission_class %>.find(:all, :conditions => ['<%= group_singular %>_id = ?', g.id]).empty?
-  end
-
-  def test_should_not_destroy
-    g = <%= group_plural %>(:admin)
-    assert_raises(RuntimeError) { g.destroy }
-  end
-
-  def test_include?
-    g = <%= group_plural %>(:admin)
-    assert g.include?(<%= user_plural %>(:admin))
-    assert g.include?(1)
-    assert !g.include?(2)
-    assert_raises(TypeError) { g.include?('foo') }
-  end
-
-  def test_<%= membership_singular %>_association
-    assert !<%= group_plural %>(:admin).<%= membership_plural %>.empty?
-    assert !<%= group_plural %>(:robots_r).<%= membership_plural %>.empty?
-  end
-
-  def test_<%= user_singular %>_association
-    # has_many :<%= user_plural %>, :through => :<%= membership_plural %>
-    assert <%= group_plural %>(:admin).<%= user_plural %>.collect { |u| u.id }.include?(<%= user_plural %>(:admin).id)
-    assert <%= group_plural %>(:robots_r).<%= user_plural %>.collect { |u| u.id }.include?(<%= user_plural %>(:robot_reader).id)
-  end
-
-  def test_<%= permission_singular %>_association
-    assert !<%= group_plural %>(:robots_r).<%= permission_plural %>.empty?
-    assert !<%= group_plural %>(:cats_r).<%= permission_plural %>.empty?
-    assert <%= group_plural %>(:ottoman_w).<%= permission_plural %>.for(dogs(:ottoman))
-    assert <%= group_plural %>(:dogs_rw).<%= permission_plural %>.for('dogs')
-    assert_nil <%= group_plural %>(:cats_rw).<%= permission_plural %>.for(dogs(:mr_pants))
+  def test_should_require_a_unique_name_on_creation
+    <%= group_singular %>1 = create_<%= group_singular %>
+    <%= group_singular %>2 = create_<%= group_singular %>
+    assert <%= group_singular %>1.errors[:name].nil?
+    assert !<%= group_singular %>2.errors[:name].nil?
   end
 
   def test_should_belong_to_creator
-    assert_equal <%= user_plural %>(:admin).id, <%= group_plural %>(:admin).creator.id
+    <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
+    <%= group_singular %> = create_<%= group_singular %>
+    assert_equal <%= user_plural %>(:admin), <%= group_singular %>.creator
+  end
+end
+
+module AnExisting<%= group_class %>Behavior
+  def test_should_belong_to_creator
+    assert_equal <%= user_plural %>(:admin), @<%= group_singular %>.creator
+  end
+end
+
+class ANonPermanent<%= group_class %>Test < Test::Unit::TestCase
+  include <%= group_class %>Helpers
+  fixtures :<%= group_plural %>, :<%= user_plural %>
+
+  def setup
+    <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
+    @<%= group_singular %> = create_<%= group_singular %>
   end
 
-  def test_should_belong_to_updater
-    assert_equal <%= user_plural %>(:admin).id, <%= group_plural %>(:admin).updater.id
+  include AnExisting<%= group_class %>Behavior
+
+  def test_should_update
+    assert @<%= group_singular %>.update_attribute(:description, "1337 h4x0rz")
   end
 
-  def test_should_get_<%= user_plural %>_not_in
-    assert (<%= group_plural %>(:admin).<%= user_plural %> & <%= group_plural %>(:admin).<%= user_plural %>_not_in).empty?
-    assert (<%= group_plural %>(:cats_w).<%= user_plural %> & <%= group_plural %>(:cats_w).<%= user_plural %>_not_in).empty?
-    assert_equal <%= user_class %>.count, <%= group_plural %>(:empty).<%= user_plural %>_not_in.length
+  def test_should_belong_to_updater_after_updating
+    <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
+    @<%= group_singular %>.update_attribute(:description, "1337 h4x0rz")
+    assert_equal <%= user_plural %>(:admin), @<%= group_singular %>.updater
   end
 
-  protected
-    def create_<%= group_singular %>(options = {})
-      <%= group_class %>.create({:name => 'foo', :description => 'the foo <%= group_singular %>', :permanent => false}.merge(options))
+  def test_should_destroy
+    old_count = <%= group_class %>.count
+    @<%= group_singular %>.destroy
+    assert <%= group_class %>.count < old_count
+  end
+end
+
+class APermanent<%= group_class %>Test < Test::Unit::TestCase
+  include <%= group_class %>Helpers
+  fixtures :<%= group_plural %>, :<%= user_plural %>
+
+  def setup
+    <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
+    @<%= group_singular %> = create_<%= group_singular %>(:permanent => true)
+  end
+
+  include AnExisting<%= group_class %>Behavior
+
+  def test_should_raise_an_error_when_trying_to_update
+    assert_raises(RuntimeError) do
+      assert @<%= group_singular %>.update_attribute(:description, "1337 h4x0rz")
     end
+  end
 
-    def update_<%= group_singular %>(<%= group_singular %>, options)
-      <%= group_plural %>(<%= group_singular %>).update_attributes(options)
+  def test_should_raise_an_error_when_trying_to_destroy
+    assert_raises(RuntimeError) do
+      @<%= group_singular %>.destroy
     end
+  end
+end
+
+class A<%= group_class %>WithTwo<%= user_class %>sTest < Test::Unit::TestCase
+  include <%= group_class %>Helpers
+  fixtures :<%= group_plural %>, :<%= user_plural %>
+
+  def setup
+    <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
+    @<%= group_singular %> = create_<%= group_singular %>
+    @<%= group_singular %>.<%= user_plural %> << <%= user_plural %>(:fred)
+    @<%= group_singular %>.<%= user_plural %> << <%= user_plural %>(:george)
+  end
+
+  include AnExisting<%= group_class %>Behavior
+
+  def test_should_include_the_first_<%= user_singular %>
+    assert @<%= group_singular %>.include?(<%= user_plural %>(:fred))
+  end
+
+  def test_should_include_the_first_<%= user_singular %>_s_id
+    assert @<%= group_singular %>.include?(<%= user_plural %>(:fred).id)
+  end
+
+  def test_should_not_include_a_<%= user_singular %>_not_in_the_<%= group_singular %>
+    assert !@<%= group_singular %>.include?(<%= user_plural %>(:draco))
+  end
+
+  def test_should_have_two_<%= membership_plural %>
+    assert_equal 2, @<%= group_singular %>.<%= membership_plural %>.length
+  end
+
+  def test_should_have_two_<%= user_plural %>
+    assert_equal 2, @<%= group_singular %>.<%= user_plural %>.length
+  end
+
+
+  def test_should_have_excluded_<%= user_plural %>
+    assert @<%= group_singular %>.<%= user_plural %>_not_in.length >= 1
+  end
+end
+
+class A<%= group_class %>WithOne<%= permission_class %>Test < Test::Unit::TestCase
+  include <%= group_class %>Helpers
+  fixtures :<%= group_plural %>, :<%= user_plural %>, :<%= permission_plural %>
+
+  def setup
+    <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
+    @<%= group_singular %> = create_<%= group_singular %>
+    @perm = @<%= group_singular %>.<%= permission_plural %>.create(:resource => <%= user_plural %>(:admin))
+  end
+
+  include AnExisting<%= group_class %>Behavior
+
+  def test_should_have_that_<%= permission_singular %>
+    assert_equal @perm, @<%= group_singular %>.<%= permission_plural %>[0]
+  end
 end

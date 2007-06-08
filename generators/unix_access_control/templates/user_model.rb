@@ -23,8 +23,7 @@ class <%= user_class %> < ActiveRecord::Base
 
   # TODO: destroying <%= user_plural %> should be generally disabled unless the <%= user_singular %> was created
   #       by mistake; <%= user_singular %> id's will probably be in lots of tables (like audit trails)
-  #       that need to be maintained even if a <%= user_singular %>'s access to a form or project
-  #       is terminated
+  #       that need to be maintained even if a <%= user_singular %>'s access to a resource is terminated
 
   # Authenticates a <%= user_singular %> by their login name and unencrypted password.  Returns the <%= user_singular %> or nil.
   def self.authenticate(login, password)
@@ -86,8 +85,6 @@ class <%= user_class %> < ActiveRecord::Base
       # controller
       # NOTE: no effort is made here to make sure the #{thing} controller exists
       perm = <%= permission_plural %>.detect { |p| p.controller == thing.to_s }
-    #when Foo
-    #  perm = <%= permission_plural %>.detect { |p| p.resource == thing }
     when ActiveRecord::Base
       perm = <%= permission_plural %>.detect { |p| p.resource == thing }
     else
@@ -105,18 +102,22 @@ class <%= user_class %> < ActiveRecord::Base
       raise "bad access_mode"
     end
   end
+  alias :has_access_to? :can_access?
 
   def can_read?(thing)
     can_access?(thing, 'r')
   end
+  alias :has_read_access_to? :can_read?
 
   def can_write?(thing)
     can_access?(thing, 'w')
   end
+  alias :has_write_access_to? :can_write?
 
   def can_read_and_write?(thing)
     can_access?(thing, 'rw')
   end
+  alias :has_read_and_write_access_to? :can_read_and_write?
 
   def <%= group_plural %>_not_in
     exclude_list = <%= group_plural %>.collect { |g| "id != #{quote_value(g)}" }

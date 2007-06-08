@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.dirname(__FILE__) + '/../spec_helper'
 
 module <%= permission_class %>Helpers
   def create_<%= permission_singular %>(options)
@@ -10,123 +10,125 @@ module <%= permission_class %>Helpers
   end
 end
 
-class <%= permission_class %>Test < Test::Unit::TestCase
+describe <%= permission_class %> do
   include <%= permission_class %>Helpers
   fixtures :<%= group_plural %>, :<%= permission_plural %>
 
-  def setup
+  before(:all) do
     UnixAccessControl.send(:class_variable_set, "@@configuration", { 'controllers' => ['vampires'] })  # </hax>
   end
 
-  def test_should_create_with_a_resource
+  it "should create with a resource" do
     <%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :resource => Pocky.new)
-    assert !<%= permission_singular %>.new_record?
+    <%= permission_singular %>.should_not be_a_new_record
   end
 
-  def test_should_create_with_a_controller
+  it "should create with a controller" do
     <%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :controller => "vampires")
-    assert !<%= permission_singular %>.new_record?
+    <%= permission_singular %>.should_not be_a_new_record
   end
 
-  def test_should_require_a_valid_controller_on_creation
+  it "should require a valid controller on creation" do
     <%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :controller => "dinosaurs")
-    assert !<%= permission_singular %>.errors[:controller].nil?
+    <%= permission_singular %>.errors[:controller].should_not be_nil
   end
 
-  def test_should_require_either_a_resource_or_a_controller_on_creation
+  it "should require either a resource or a controller on creation" do
     <%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys))
-    assert !<%= permission_singular %>.errors[:controller].nil?
-    assert !<%= permission_singular %>.errors[:resource_id].nil?
+    <%= permission_singular %>.errors[:controller].should_not be_nil
+    <%= permission_singular %>.errors[:resource_id].should_not be_nil
   end
 
-  def test_should_not_allow_both_a_resource_and_a_controller_on_creation
+  it "should not allow both a resource and a controller on creation" do
     <%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :controller => "vampires", :resource => Pocky.new)
-    assert !<%= permission_singular %>.errors[:controller].nil?
-    assert !<%= permission_singular %>.errors[:resource_id].nil?
+    <%= permission_singular %>.errors[:controller].should_not be_nil
+    <%= permission_singular %>.errors[:resource_id].should_not be_nil
   end
 
-  def test_should_require_a_resource_type_when_there_s_a_resource_id
+  it "should require a resource_type when there's a resource_id" do
     <%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :resource_id => 1)
-    assert !<%= permission_singular %>.errors[:resource_type].nil?
+    <%= permission_singular %>.errors[:resource_type].should_not be_nil
   end
 
-  def test_should_require_a_<%= group_singular %>_on_creation
+  it "should require a <%= group_singular %> on creation" do
     <%= permission_singular %> = create_<%= permission_singular %>(:resource => Pocky.new)
-    assert !<%= permission_singular %>.errors[:<%= group_singular %>_id].nil?
+    <%= permission_singular %>.errors[:<%= group_singular %>_id].should_not be_nil
   end
 
-  def test_should_not_allow_duplicate_resource_<%= permission_plural %>
+  it "should not allow duplicate resource <%= permission_plural %>" do
     pocky = Pocky.new
     <%= permission_singular %>1 = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :resource => pocky)
     <%= permission_singular %>2 = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :resource => pocky)
-    assert <%= permission_singular %>1.valid?
-    assert !<%= permission_singular %>2.valid?
+    <%= permission_singular %>1.should be_valid
+    <%= permission_singular %>2.should_not be_valid
   end
 
-  def test_should_not_allow_duplicate_controller_<%= permission_plural %>
+  it "should not allow duplicate controller <%= permission_plural %>" do
     <%= permission_singular %>1 = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :controller => "vampires")
     <%= permission_singular %>2 = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :controller => "vampires")
-    assert <%= permission_singular %>1.valid?
-    assert !<%= permission_singular %>2.valid?
+    <%= permission_singular %>1.should be_valid
+    <%= permission_singular %>2.should_not be_valid
   end
 end
 
-module AnExisting<%= permission_class %>Behavior
-  def test_should_update
-    assert @<%= permission_singular %>.update_attributes(:can_read => false, :can_write => true)
+describe "an existing <%= permission_singular %>", :shared => true do
+  it "should update" do
+    @<%= permission_singular %>.update_attributes(:can_read => false, :can_write => true).should be_true
   end
 
-  def test_should_belong_to_a_<%= group_singular %>
-    assert_equal <%= group_plural %>(:weasleys), @<%= permission_singular %>.<%= group_singular %>
+  it "should belong to a <%= group_singular %>" do
+    @<%= permission_singular %>.<%= group_singular %>.should eql(<%= group_plural %>(:weasleys))
   end
 
-  def test_should_belong_to_a_creator
-    assert_equal <%= user_plural %>(:admin), @<%= permission_singular %>.creator
+  it "should belong to a creator" do
+    @<%= permission_singular %>.creator.should eql(<%= user_plural %>(:admin))
   end
 
-  def test_should_belong_to_a_updater
-    assert_equal <%= user_plural %>(:admin), @<%= permission_singular %>.updater
+  it "should belong to a updater" do
+    @<%= permission_singular %>.updater.should eql(<%= user_plural %>(:admin))
   end
 end
 
-class AnExistingResource<%= permission_class %>Test < Test::Unit::TestCase
+describe "an existing resource <%= permission_singular %>" do
   include <%= permission_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>
 
-  def setup
+  before(:each) do
     <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
     @pocky = Pocky.new
     @<%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :resource => @pocky)
   end
 
-  include AnExisting<%= permission_class %>Behavior
+  it_should_behave_like "an existing <%= permission_singular %>"
 
-  def test_should_not_allow_duplicate_<%= permission_plural %>_on_update
+  it "should not allow duplicate <%= permission_plural %> on update" do
     another_<%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:malfoys), :resource => @pocky)
-    assert !@<%= permission_singular %>.update_attributes(:<%= group_singular %> => <%= group_plural %>(:malfoys))
+    @<%= permission_singular %>.update_attributes(:<%= group_singular %> => <%= group_plural %>(:malfoys)).should be_false
   end
 
-  def test_should_belong_to_a_resource
-    assert_equal @pocky, @<%= permission_singular %>.resource
+  it "should belong to a resource" do
+    @<%= permission_singular %>.resource.should == @pocky
   end
 end
 
-class AnExistingController<%= permission_class %>Test < Test::Unit::TestCase
+describe "an existing controller <%= permission_singular %>" do
   include <%= permission_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>
 
-  def setup
+  before(:all) do
     UnixAccessControl.send(:class_variable_set, "@@configuration", { 'controllers' => ['vampires'] })  # </hax>
+  end
 
+  before(:each) do
     <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
     @controller = "vampires" 
     @<%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :controller => @controller)
   end
 
-  include AnExisting<%= permission_class %>Behavior
+  it_should_behave_like "an existing <%= permission_singular %>"
 
-  def test_should_not_allow_duplicate_<%= permission_plural %>_on_update
+  it "should not allow duplicate <%= permission_plural %> on update" do
     another_<%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:malfoys), :controller => @controller)
-    assert !@<%= permission_singular %>.update_attributes(:<%= group_singular %> => <%= group_plural %>(:malfoys))
+    @<%= permission_singular %>.update_attributes(:<%= group_singular %> => <%= group_plural %>(:malfoys)).should be_false
   end
 end

@@ -2,190 +2,63 @@ admin:
   id: 1
   login: admin
   email: admin@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
+  salt: b20c4b3846992b7c2d718c2e588f2c032a112835
+  crypted_password: 8af044306e5fac065530191ebbffe4a19cff1234
   created_by: 1
   updated_by: 1
-  deleted: no
+  deleted: false
+  updated_at: <%%= Time.now.to_s :db %> 
+  created_at: <%%= Time.now.to_s :db %> 
+  accessed_at:
 
-robot_reader:
+george:
   id: 2
-  login: robot_reader
-  email: robot_reader@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
+  login: george
+  email: george@example.com
+  salt: b20c4b3846992b7c2d718c2e588f2c032a112835
+  crypted_password: 8af044306e5fac065530191ebbffe4a19cff1234
   created_by: 1
   updated_by: 1
-  deleted: no
+  deleted: false
+  updated_at: <%%= Time.now.to_s :db %> 
+  created_at: <%%= Time.now.to_s :db %> 
+  accessed_at:
 
-robot_writer:
+fred:
   id: 3
-  login: robot_writer
-  email: robot_writer@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
+  login: fred
+  email: fred@example.com
+  salt: b20c4b3846992b7c2d718c2e588f2c032a112835
+  crypted_password: 8af044306e5fac065530191ebbffe4a19cff1234
   created_by: 1
   updated_by: 1
-  deleted: no
+  deleted: false
+  updated_at: <%%= Time.now.to_s :db %> 
+  created_at: <%%= Time.now.to_s :db %> 
+  accessed_at:
 
-robot_admin:
+ginny:
   id: 4
-  login: robot_admin
-  email: robot_admin@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
+  login: ginny
+  email: ginny@example.com
+  salt: b20c4b3846992b7c2d718c2e588f2c032a112835
+  crypted_password: 8af044306e5fac065530191ebbffe4a19cff1234
   created_by: 1
   updated_by: 1
-  deleted: no
+  deleted: false
+  updated_at: <%%= Time.now.to_s :db %> 
+  created_at: <%%= Time.now.to_s :db %> 
+  accessed_at:
 
-dog_reader:
+draco:
   id: 5
-  login: dog_reader
-  email: dog_reader@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
+  login: draco
+  email: draco@example.com
+  salt: b20c4b3846992b7c2d718c2e588f2c032a112835
+  crypted_password: 8af044306e5fac065530191ebbffe4a19cff1234
   created_by: 1
   updated_by: 1
-  deleted: no
-
-dog_writer:
-  id: 6
-  login: dog_writer
-  email: dog_writer@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
-
-dog_admin:
-  id: 7
-  login: dog_admin
-  email: dog_admin@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
-
-cat_reader:
-  id: 8
-  login: cat_reader
-  email: cat_reader@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
-
-cat_writer:
-  id: 9
-  login: cat_writer
-  email: cat_writer@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
-
-cat_admin:
-  id: 10
-  login: cat_admin
-  email: cat_admin@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
-
-hercule:
-  id: 11
-  login: hercule
-  email: hercule@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
-
-sticky_guy:
-  id: 12
-  login: sticky_guy
-  email: sticky_guy@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
-
-sticky_gal:
-  id: 13
-  login: sticky_gal
-  email: sticky_gal@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
-
-all_reader:
-  id: 14
-  login: all_reader
-  email: all_reader@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
-
-all_writer:
-  id: 15
-  login: all_writer
-  email: all_writer@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
-
-all_admin:
-  id: 16
-  login: all_admin
-  email: all_admin@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%%= 10.days.ago.to_s :db %>
-  updated_at: <%%= 10.days.ago.to_s :db %>
-  created_by: 1
-  updated_by: 1
-  deleted: no
+  deleted: false
+  updated_at: <%%= Time.now.to_s :db %>
+  created_at: <%%= Time.now.to_s :db %>
+  accessed_at:

@@ -2,238 +2,28 @@ admin:
   id: 1
   name: admin
   description: administration <%= group_singular %>
-  permanent: yes
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
+  permanent: true
   created_by: 1
   updated_by: 1
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
 
-robots_r:
+weasleys:
   id: 2
-  name: robots_r
-  description: <%= group_singular %> with read access to robots
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
+  name: weasleys
+  description: the weasley family 
+  permanent: true
   created_by: 1
   updated_by: 1
+  created_at: <%%= Time.now.to_s :db %>
+  updated_at: <%%= Time.now.to_s :db %>
 
-robots_w:
+malfoys:
   id: 3
-  name: robots_w
-  description: <%= group_singular %> with write access to robots
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
+  name: malfoys
+  description: the malfoy family 
+  permanent: true
   created_by: 1
   updated_by: 1
-
-robots_rw:
-  id: 4
-  name: robots_rw
-  description: <%= group_singular %> with full access to robots
-  permanent: no
   created_at: <%%= Time.now.to_s :db %>
   updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-dogs_r:
-  id: 5
-  name: dogs_r
-  description: <%= group_singular %> with read access to dogs
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-dogs_w:
-  id: 6
-  name: dogs_w
-  description: <%= group_singular %> with write access to dogs
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-dogs_rw:
-  id: 7
-  name: dogs_rw
-  description: <%= group_singular %> with full access to dogs
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-cats_r:
-  id: 8
-  name: cats_r
-  description: <%= group_singular %> with read access to cats
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-cats_w:
-  id: 9
-  name: cats_w
-  description: <%= group_singular %> with write access to cats
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-cats_rw:
-  id: 10
-  name: cats_rw
-  description: <%= group_singular %> with full access to cats
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-ottoman_r:
-  id: 11
-  name: ottoman_r
-  description: read-only access to Ottoman the dog
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-ottoman_w:
-  id: 12
-  name: ottoman_w
-  description: write-only access to Ottoman the dog
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-ottoman_rw:
-  id: 13
-  name: ottoman_rw
-  description: full access to Ottoman the dog
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-fluffy_r:
-  id: 14
-  name: fluffy_r
-  description: read-only access to Fluffy the cat
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-fluffy_w:
-  id: 15
-  name: fluffy_w
-  description: write-only access to Fluffy the cat
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-fluffy_rw:
-  id: 16
-  name: fluffy_rw
-  description: full access to Fluffy the cat
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-robo_r:
-  id: 17
-  name: robo_r
-  description: read-only access to Robo the robot
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-robo_w:
-  id: 18
-  name: robo_w
-  description: write-only access to Robo the robot
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-robo_rw:
-  id: 19
-  name: robo_rw
-  description: full access to Robo the robot
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-empty:
-  id: 20
-  name: empty
-  description: I feel empty inside
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-sticky_people:
-  id: 21
-  name: sticky_people
-  description: Never underestimate the stickiness
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-all_r:
-  id: 22
-  name: all_r
-  description: read-only access to all controllers
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-all_w:
-  id: 23
-  name: all_w
-  description: write-only access to all controllers
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1
-
-all_rw:
-  id: 24
-  name: all_rw
-  description: read/write access to all controllers
-  permanent: no
-  created_at: <%%= Time.now.to_s :db %>
-  updated_at: <%%= Time.now.to_s :db %>
-  created_by: 1
-  updated_by: 1

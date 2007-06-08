@@ -5,7 +5,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
                 "#{thing}_model_file_name", "#{thing}_controller_file_name",
                 "#{thing}_migrate_file_name", "#{thing}_unit_test_file_name",
                 "#{thing}_fixture_file_name", "#{thing}_functional_test_file_name",
-                "#{thing}_helper_file_name"
+                "#{thing}_helper_file_name", "#{thing}_model_spec_file_name"
   end
 
   def initialize(runtime_args, runtime_options = {})
@@ -27,6 +27,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       instance_variable_set("@#{thing}_helper_file_name", "#{fn.pluralize}_helper.rb")
       instance_variable_set("@#{thing}_migrate_file_name", "create_#{fn.pluralize}")
       instance_variable_set("@#{thing}_unit_test_file_name", "#{fn}_test.rb")
+      instance_variable_set("@#{thing}_model_spec_file_name", "#{fn}_spec.rb")
       instance_variable_set("@#{thing}_fixture_file_name", "#{fn.pluralize}.yml")
       instance_variable_set("@#{thing}_functional_test_file_name", "#{fn.pluralize}_controller_test.rb")
     end
@@ -44,6 +45,9 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       m.directory File.join("test", "unit")
       m.directory File.join("test", "functional")
       m.directory File.join("test", "fixtures")
+      m.directory File.join("test", "mocks", "test")
+      m.directory File.join("spec", "models")
+      m.directory File.join("spec", "fixtures")
       m.directory File.join("public", "images")
       m.directory File.join("public", "stylesheets")
       m.directory "lib"
@@ -60,6 +64,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
         unitfn    = instance_variable_get("@#{thing}_unit_test_file_name") 
         funcfn    = instance_variable_get("@#{thing}_functional_test_file_name") 
         fixfn     = instance_variable_get("@#{thing}_fixture_file_name") 
+        mspecfn   = instance_variable_get("@#{thing}_model_spec_file_name")
 
         m.template "#{thing}_model.rb", File.join("app", "models", modelfn) unless thing == "session"
         m.template "#{tplural}_controller.rb", File.join("app", "controllers", ctrlfn)
@@ -79,7 +84,9 @@ class UnixAccessControlGenerator < Rails::Generator::Base
         # tests
         unless thing == "session"
           m.template "#{thing}_unit_test.rb", File.join("test", "unit", unitfn)
+          m.template "#{thing}_model_spec.rb", File.join("spec", "models", mspecfn)
           m.template "#{tplural}.yml", File.join("test", "fixtures", fixfn)
+          m.template "#{tplural}.yml", File.join("spec", "fixtures", fixfn)
         end
         m.template "#{tplural}_functional_test.rb", File.join("test", "functional", funcfn)
       end
@@ -165,6 +172,7 @@ EOF
       m.template "application_layout.rhtml", File.join("app", "views", "layouts", "application.rhtml")
       m.template "errors_denied.rhtml", File.join("app", "views", "errors", "denied.rhtml")
       m.template "access_control.yml", File.join("config", "access_control.yml")
+      m.template "pocky_mock.rb", File.join("test", "mocks", "test", "pocky.rb")
       m.file "spinner.gif",  File.join("public", "images", "spinner.gif")
       m.file "scaffold.css", File.join("public", "stylesheets", "scaffold.css")
     end

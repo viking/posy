@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.dirname(__FILE__) + '/../spec_helper'
 
 module <%= membership_class %>Helpers
   def create_<%= membership_singular %>(<%= user_singular %>, <%= group_singular %>)
@@ -9,37 +9,37 @@ module <%= membership_class %>Helpers
   end
 end
 
-class <%= membership_class %>Test < Test::Unit::TestCase
+describe <%= membership_class %> do
   include <%= membership_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
 
-  def setup
+  before(:all) do
     UnixAccessControl.send(:class_variable_set, "@@configuration", { 'controllers' => %w{vampires werewolves} })  # </hax>
   end
 
-  def test_should_create
+  it "should create" do
     <%= membership_singular %> = create_<%= membership_singular %>(<%= user_plural %>(:fred), <%= group_plural %>(:weasleys))
-    assert !<%= membership_singular %>.new_record?
+    <%= membership_singular %>.should_not be_a_new_record
   end
 
-  def test_should_require_<%= group_singular %>_on_creation
+  it "should require <%= group_singular %> on creation" do
     <%= membership_singular %> = create_<%= membership_singular %>(<%= user_plural %>(:fred), nil)
-    assert !<%= membership_singular %>.errors[:<%= group_singular %>_id].nil?
+    <%= membership_singular %>.errors[:<%= group_singular %>_id].should_not be_nil
   end
 
-  def test_should_require_<%= user_singular %>_on_creation
+  it "should require <%= user_singular %> on creation" do
     <%= membership_singular %> = create_<%= membership_singular %>(nil, <%= group_plural %>(:weasleys))
-    assert !<%= membership_singular %>.errors[:<%= user_singular %>_id].nil?
+    <%= membership_singular %>.errors[:<%= user_singular %>_id].should_not be_nil
   end
 
-  def test_should_not_allow_duplicate_<%= membership_plural %>
+  it "should not allow duplicate <%= membership_plural %>" do
     <%= membership_singular %>1 = create_<%= membership_singular %>(<%= user_plural %>(:fred), <%= group_plural %>(:weasleys))
     <%= membership_singular %>2 = create_<%= membership_singular %>(<%= user_plural %>(:fred), <%= group_plural %>(:weasleys))
-    assert <%= membership_singular %>1.valid?
-    assert !<%= membership_singular %>2.valid?
+    <%= membership_singular %>1.should be_valid
+    <%= membership_singular %>2.should_not be_valid
   end
 
-  def test_should_not_allow_<%= user_plural %>_to_join_<%= group_plural %>_with_overlapping_<%= permission_plural %>
+  it "should not allow <%= user_plural %> to join <%= group_plural %> with overlapping <%= permission_plural %>" do
     <%= group_singular %>1 = <%= group_class %>.create(:name => "uber")
     <%= group_singular %>2 = <%= group_class %>.create(:name => "leet")
     <%= group_singular %>1.<%= permission_plural %>.create(:controller => "vampires", :can_read  => true)
@@ -47,33 +47,33 @@ class <%= membership_class %>Test < Test::Unit::TestCase
 
     <%= membership_singular %>1 = create_<%= membership_singular %>(<%= user_plural %>(:fred), <%= group_singular %>1)
     <%= membership_singular %>2 = create_<%= membership_singular %>(<%= user_plural %>(:fred), <%= group_singular %>2)
-    assert <%= membership_singular %>1.valid?
-    assert !<%= membership_singular %>2.valid?
+    <%= membership_singular %>1.should be_valid
+    <%= membership_singular %>2.should_not be_valid
   end
 end
 
-class AnExisting<%= membership_class %>Test < Test::Unit::TestCase
+describe "an existing <%= membership_singular %>" do
   include <%= membership_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
 
-  def setup
+  before(:each) do
     <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
     @<%= membership_singular %> = create_<%= membership_singular %>(<%= user_plural %>(:george), <%= group_plural %>(:weasleys))
   end
 
-  def test_should_belong_to_a_<%= user_singular %>
-    assert_equal <%= user_plural %>(:george), @<%= membership_singular %>.<%= user_singular %>
+  it "should belong to a <%= user_singular %>" do
+    @<%= membership_singular %>.<%= user_singular %>.should eql(<%= user_plural %>(:george))
   end
 
-  def test_should_belong_to_a_<%= group_singular %>
-    assert_equal <%= group_plural %>(:weasleys), @<%= membership_singular %>.<%= group_singular %>
+  it "should belong to a <%= group_singular %>" do
+    @<%= membership_singular %>.<%= group_singular %>.should eql(<%= group_plural %>(:weasleys))
   end
 
-  def test_should_belong_to_a_creator
-    assert_equal <%= user_plural %>(:admin), @<%= membership_singular %>.creator
+  it "should belong to a creator" do
+    @<%= membership_singular %>.creator.should eql(<%= user_plural %>(:admin))
   end
 
-  def test_should_belong_to_an_updater
-    assert_equal <%= user_plural %>(:admin), @<%= membership_singular %>.updater
+  it "should belong to an updater" do
+    @<%= membership_singular %>.updater.should eql(<%= user_plural %>(:admin))
   end
 end
