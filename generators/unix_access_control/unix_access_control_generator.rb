@@ -68,7 +68,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
 
         m.template "#{thing}_model.rb", File.join("app", "models", modelfn) unless thing == "session"
         m.template "#{tplural}_controller.rb", File.join("app", "controllers", ctrlfn)
-        unless migration_exists?(migratefn)
+        unless m.migration_exists?(migratefn)
           m.migration_template "#{tplural}_migration.rb", "db/migrate", :migration_file_name => migratefn
         end
 
