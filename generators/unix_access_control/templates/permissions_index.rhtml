@@ -25,9 +25,7 @@
 
 <br />
 
-<%%= link_to_new 'New <%= permission_singular %>' %> |
+<%%= link_to_new 'New <%= permission_singular %>' %>
 <%% if @<%= group_singular %> -%>
-<%%= link_to 'Back', <%= group_singular %>_path(@<%= group_singular %>) %>
-<%% else -%>
-<%%= link_to 'Back', main_url %>
+| <%%= link_to 'Back', <%= group_singular %>_path(@<%= group_singular %>) %>
 <%% end -%>

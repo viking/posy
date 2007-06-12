@@ -1,13 +1,16 @@
-require 'pp'
+require 'ruby-debug'
 class UnixAccessControlGenerator < Rails::Generator::Base
+  default_options :skip_migration => false
+
   %w{user group membership permission session}.each do |thing|
     attr_reader "#{thing}_class", "#{thing}_singular", "#{thing}_plural",
                 "#{thing}_model_file_name", "#{thing}_controller_file_name",
                 "#{thing}_migrate_file_name", "#{thing}_unit_test_file_name",
                 "#{thing}_fixture_file_name", "#{thing}_functional_test_file_name",
-                "#{thing}_helper_file_name", "#{thing}_model_spec_file_name"
+                "#{thing}_helper_file_name", "#{thing}_model_spec_file_name",
+                "#{thing}_controller_spec_file_name"
   end
-
+  
   def initialize(runtime_args, runtime_options = {})
     super
 
@@ -19,17 +22,19 @@ class UnixAccessControlGenerator < Rails::Generator::Base
     @model_file_names = {}
     %w{user group membership permission session}.each_with_index do |thing, i|
       fn = args[i] || thing
+      fnplural = fn.pluralize
       instance_variable_set("@#{thing}_singular", fn)
-      instance_variable_set("@#{thing}_plural", fn.pluralize)
+      instance_variable_set("@#{thing}_plural", fnplural)
       instance_variable_set("@#{thing}_class", fn.classify)
       instance_variable_set("@#{thing}_model_file_name", "#{fn}.rb")
-      instance_variable_set("@#{thing}_controller_file_name", "#{fn.pluralize}_controller.rb")
-      instance_variable_set("@#{thing}_helper_file_name", "#{fn.pluralize}_helper.rb")
-      instance_variable_set("@#{thing}_migrate_file_name", "create_#{fn.pluralize}")
+      instance_variable_set("@#{thing}_controller_file_name", "#{fnplural}_controller.rb")
+      instance_variable_set("@#{thing}_helper_file_name", "#{fnplural}_helper.rb")
+      instance_variable_set("@#{thing}_migrate_file_name", "create_#{fnplural}")
       instance_variable_set("@#{thing}_unit_test_file_name", "#{fn}_test.rb")
       instance_variable_set("@#{thing}_model_spec_file_name", "#{fn}_spec.rb")
-      instance_variable_set("@#{thing}_fixture_file_name", "#{fn.pluralize}.yml")
-      instance_variable_set("@#{thing}_functional_test_file_name", "#{fn.pluralize}_controller_test.rb")
+      instance_variable_set("@#{thing}_fixture_file_name", "#{fnplural}.yml")
+      instance_variable_set("@#{thing}_functional_test_file_name", "#{fnplural}_controller_test.rb")
+      instance_variable_set("@#{thing}_controller_spec_file_name", "#{fnplural}_controller_spec.rb")
     end
   end
 
@@ -47,6 +52,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       m.directory File.join("test", "fixtures")
       m.directory File.join("test", "mocks", "test")
       m.directory File.join("spec", "models")
+      m.directory File.join("spec", "controllers")
       m.directory File.join("spec", "fixtures")
       m.directory File.join("public", "images")
       m.directory File.join("public", "stylesheets")
@@ -65,10 +71,11 @@ class UnixAccessControlGenerator < Rails::Generator::Base
         funcfn    = instance_variable_get("@#{thing}_functional_test_file_name") 
         fixfn     = instance_variable_get("@#{thing}_fixture_file_name") 
         mspecfn   = instance_variable_get("@#{thing}_model_spec_file_name")
+        cspecfn   = instance_variable_get("@#{thing}_controller_spec_file_name")
 
         m.template "#{thing}_model.rb", File.join("app", "models", modelfn) unless thing == "session"
         m.template "#{tplural}_controller.rb", File.join("app", "controllers", ctrlfn)
-        unless m.migration_exists?(migratefn)
+        unless options[:skip_migration]
           m.migration_template "#{tplural}_migration.rb", "db/migrate", :migration_file_name => migratefn
         end
 
@@ -91,6 +98,14 @@ class UnixAccessControlGenerator < Rails::Generator::Base
           m.template "#{tplural}.yml", File.join("spec", "fixtures", fixfn)
         end
         m.template "#{tplural}_functional_test.rb", File.join("test", "functional", funcfn)
+
+        # generic controller spec
+        if %w{user group}.include? thing 
+          m.template "generic_controller_spec.rb", File.join("spec", "controllers", cspecfn),
+            :assigns => {:thing_plural => tplural, :thing_singular => thing, :thing_class => thing.classify}
+        else
+          m.template "#{tplural}_controller_spec.rb", File.join("spec", "controllers", cspecfn)
+        end
       end
 
       # lib templates
@@ -179,4 +194,12 @@ EOF
       m.file "scaffold.css", File.join("public", "stylesheets", "scaffold.css")
     end
   end
+
+  protected
+    def add_options!(opt)
+      opt.separator ''
+      opt.separator 'Options:'
+      opt.on("--skip-migration",
+             "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
+    end
 end

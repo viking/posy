@@ -12,7 +12,7 @@ class Create<%= group_class %>s < ActiveRecord::Migration
       t.column :created_by,  :integer
       t.column :updated_by,  :integer
     end
-    <%= group_class %>.create(:name => 'admin', :description => 'administration <%= group_singular %>', :permanent => true)
+    g = <%= group_class %>.create(:name => 'admin', :description => 'administration <%= group_singular %>', :permanent => true)
   end
 
   def self.down

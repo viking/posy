@@ -18,11 +18,9 @@
 
 <br />
 
-<%%= link_to_new 'New <%= membership_singular %>' %> |
+<%%= link_to_new 'New <%= membership_singular %>' %>
 <%% if @<%= user_singular %> -%>
-<%%= link_to 'Back', <%= user_singular %>_path(@<%= user_singular %>) %>
+| <%%= link_to 'Back', <%= user_singular %>_path(@<%= user_singular %>) %>
 <%% elsif @<%= group_singular %> -%>
-<%%= link_to 'Back', <%= group_singular %>_path(@<%= group_singular %>) %>
-<%% else -%>
-<%%= link_to 'Back', main_url %>
+| <%%= link_to 'Back', <%= group_singular %>_path(@<%= group_singular %>) %>
 <%% end -%>
