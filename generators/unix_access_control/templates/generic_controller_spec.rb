@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe "the <%= thing_plural %> controller when no one is logged in" do
+describe "requesting /<%= thing_plural %>/* when no one is logged in" do
   controller_name :<%= thing_plural %>
 
   it "should redirect to /<%= session_plural %>/new on GET to index" do
@@ -39,7 +39,7 @@ describe "the <%= thing_plural %> controller when no one is logged in" do
   end
 end
 
-describe "the <%= thing_plural %> controller when an admin is logged in" do
+describe "GET /<%= thing_plural %> as admin" do
   controller_name :<%= thing_plural %>
 
   include AuthenticatedTestHelper
@@ -47,97 +47,169 @@ describe "the <%= thing_plural %> controller when an admin is logged in" do
 
   before(:each) do
     login_as(:admin)
-    @member     = mock_model(<%= thing_class %>)
-    @collection = [@<%= thing_singular %>]
+    <%= thing_class %>.stub!(:find).and_return([])
 
-    <%= thing_class %>.stub!(:new).and_return(@member)
-    <%= thing_class %>.stub!(:find).and_return(@member)
-    @member.stub!(:save).and_return(true)
-    @member.stub!(:update_attributes).and_return(true)
-    @member.stub!(:destroy).and_return(@member)
-  end
-
-  it "should GET /<%= thing_plural %> successfully" do
-    <%= thing_class %>.stub!(:find).and_return(@collection)
     get :index
+  end
+
+  it "should be successful" do
     response.should be_success
   end
 
-  it "should have @<%= thing_plural %> after GET /<%= thing_plural %>" do
-    <%= thing_class %>.stub!(:find).and_return(@collection)
-    get :index
-    assigns[:<%= thing_plural %>].should == @collection
+  it "should set @<%= thing_plural %>" do
+    assigns[:<%= thing_plural %>].should == [] 
   end
+end
 
-  it "should GET /<%= thing_plural %>/1 successfully" do
+describe "GET /<%= thing_plural %>/1 as admin" do
+  controller_name :<%= thing_plural %>
+
+  include AuthenticatedTestHelper
+  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
+
+  before(:each) do
+    login_as(:admin)
+    @<%= thing_singular %> = mock_model(<%= thing_class %>)
+    <%= thing_class %>.stub!(:find).and_return(@<%= thing_singular %>)
+
     get :show, :id => "1"
+  end
+
+  it "should be successful" do
     response.should be_success
   end
 
-  it "should have a @<%= thing_singular %> after GET /<%= thing_plural %>/1" do
-    get :show, :id => "1"
-    assigns[:<%= thing_singular %>].should == @member
+  it "should set @<%= thing_singular %>" do
+    assigns[:<%= thing_singular %>].should == @<%= thing_singular %>
+  end
+end
+
+describe "GET /<%= thing_plural %>/new as admin" do
+  controller_name :<%= thing_plural %>
+
+  include AuthenticatedTestHelper
+  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
+
+  before(:each) do
+    login_as(:admin)
+    @<%= thing_singular %> = mock_model(<%= thing_class %>)
+    <%= thing_class %>.stub!(:new).and_return(@<%= thing_singular %>)
+
+    get :new
   end
 
-  it "should GET /<%= thing_plural %>/new successfully" do
-    get :new
+  it "should be successful" do
     response.should be_success
   end
 
-  it "should have a @<%= thing_singular %> after GET /<%= thing_plural %>/new" do
-    get :new
-    assigns[:<%= thing_singular %>].should == @member
+  it "should set @<%= thing_singular %>" do
+    assigns[:<%= thing_singular %>].should == @<%= thing_singular %>
+  end
+end
+
+describe "GET /<%= thing_plural %>/1;edit as admin" do
+  controller_name :<%= thing_plural %>
+
+  include AuthenticatedTestHelper
+  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
+
+  before(:each) do
+    login_as(:admin)
+    @<%= thing_singular %> = mock_model(<%= thing_class %>)
+    <%= thing_class %>.stub!(:find).and_return(@<%= thing_singular %>)
+
+    get :edit, :id => "1"
   end
 
   it "should GET /<%= thing_plural %>/1;edit successfully" do
-    get :show, :id => "1"
     response.should be_success
   end
 
   it "should have a @<%= thing_singular %> after GET /<%= thing_plural %>/1;edit" do
-    get :show, :id => "1"
-    assigns[:<%= thing_singular %>].should == @member
+    assigns[:<%= thing_singular %>].should == @<%= thing_singular %>
+  end
+end
+
+describe "POST /<%= thing_plural %> as admin" do
+  controller_name :<%= thing_plural %>
+
+  include AuthenticatedTestHelper
+  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
+
+  before(:each) do
+    login_as(:admin)
+    @<%= thing_singular %> = mock_model(<%= thing_class %>)
+    <%= thing_class %>.stub!(:new).and_return(@<%= thing_singular %>)
+    @<%= thing_singular %>.stub!(:save).and_return(true)
   end
 
-  it "should redirect to /<%= thing_plural %>/:id on valid POST to /<%= thing_plural %>" do
+  it "should redirect to /<%= thing_plural %>/:id when valid" do
     post :create
-    response.should redirect_to(:action => 'show', :id => @member.id)
+    response.should redirect_to(<%= thing_singular %>_url(@<%= thing_singular %>))
   end
 
-  it "should render 'new' on invalid POST to /<%= thing_plural %>" do
-    @member.stub!(:save).and_return(false)
+  it "should render 'new' when invalid" do
+    @<%= thing_singular %>.stub!(:save).and_return(false)
     post :create
     response.should render_template("new")
   end
 
-  it "should have a @<%= thing_singular %> on POST to /<%= thing_plural %>" do
+  it "should set @<%= thing_singular %>" do
     post :create
-    assigns[:<%= thing_singular %>].should == @member
+    assigns[:<%= thing_singular %>].should == @<%= thing_singular %>
+  end
+end
+
+describe "PUT /<%= thing_plural %>/1 as admin" do
+  controller_name :<%= thing_plural %>
+
+  include AuthenticatedTestHelper
+  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
+
+  before(:each) do
+    login_as(:admin)
+    @<%= thing_singular %> = mock_model(<%= thing_class %>)
+    <%= thing_class %>.stub!(:find).and_return(@<%= thing_singular %>)
+    @<%= thing_singular %>.stub!(:update_attributes).and_return(true)
   end
 
-  it "should redirect to /<%= thing_plural %>/:id on valid PUT to /<%= thing_plural %>/1" do
+  it "should redirect to /<%= thing_plural %>/:id when valid" do
     put :update, :id => '1'
-    response.should redirect_to(:action => 'show', :id => @member.id)
+    response.should redirect_to(<%= thing_singular %>_url(@<%= thing_singular %>))
   end
 
-  it "should render 'edit' on invalid PUT to /<%= thing_plural %>/1" do
-    @member.stub!(:update_attributes).and_return(false)
+  it "should render 'edit' when invalid" do
+    @<%= thing_singular %>.stub!(:update_attributes).and_return(false)
     put :update, :id => '1'
     response.should render_template("edit")
   end
 
-  it "should have a @<%= thing_singular %> on PUT to /<%= thing_plural %>/1" do
+  it "should set @<%= thing_singular %>" do
     put :update, :id => '1'
-    assigns[:<%= thing_singular %>].should == @member
+    assigns[:<%= thing_singular %>].should == @<%= thing_singular %>
+  end
+end
+
+describe "DELETE /<%= thing_plural %>/1 as admin" do
+  controller_name :<%= thing_plural %>
+
+  include AuthenticatedTestHelper
+  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
+
+  before(:each) do
+    login_as(:admin)
+    @<%= thing_singular %> = mock_model(<%= thing_class %>)
+    <%= thing_class %>.stub!(:find).and_return(@<%= thing_singular %>)
+    @<%= thing_singular %>.stub!(:destroy).and_return(@<%= thing_singular %>)
+
+    delete :destroy, :id => '1'
   end
 
-  it "should redirect to /<%= thing_plural %> on DELETE to /<%= thing_plural %>/1" do
-    delete :destroy, :id => '1'
-    response.should redirect_to("/<%= thing_plural %>")
+  it "should redirect to /<%= thing_plural %>" do
+    response.should redirect_to(<%= thing_plural %>_url)
   end
 
-  it "should have a @<%= thing_singular %> on DELETE to /<%= thing_plural %>/1" do
-    delete :destroy, :id => '1'
-    assigns[:<%= thing_singular %>].should == @member
+  it "should set @<%= thing_singular %>" do
+    assigns[:<%= thing_singular %>].should == @<%= thing_singular %>
   end
 end
