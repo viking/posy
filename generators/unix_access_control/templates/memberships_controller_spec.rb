@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe "the <%= membership_plural %> controller when no one is logged in" do
+describe "requesting /<%= membership_plural %>/* when not logged in" do
   controller_name :<%= membership_plural %>
 
   it "should redirect to /<%= session_plural %>/new on GET to index" do
@@ -29,7 +29,7 @@ describe "the <%= membership_plural %> controller when no one is logged in" do
   end
 end
 
-describe "the <%= membership_plural %> controller when an admin is logged in" do
+describe "requesting /<%= membership_plural %>/* as admin" do
   controller_name :<%= membership_plural %>
 
   include AuthenticatedTestHelper

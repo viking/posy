@@ -62,7 +62,6 @@ class <%= permission_class %>sController < ApplicationController
 
   # GET /<%= permission_plural %>/1;edit
   def edit
-    # don't allow <%= user_plural %> to change anything but read/write/sticky flags
     if params[:<%= group_singular %>_id]
       @<%= group_singular %> = <%= group_class %>.find(params[:<%= group_singular %>_id])
       @<%= permission_singular %> = @<%= group_singular %>.<%= permission_plural %>.find(params[:id])

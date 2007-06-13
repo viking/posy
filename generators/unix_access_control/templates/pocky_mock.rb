@@ -1,9 +1,10 @@
 # it's a tasty stub!
 class Pocky
-  attr_reader :id
+  attr_reader :id, :name
 
   def initialize(id = nil)
-    @id = id || rand(10)
+    @id   = id || rand(10)
+    @name = "Pocky ##{@id}"
   end
 
   def new_record?
