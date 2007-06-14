@@ -8,7 +8,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
                 "#{thing}_migrate_file_name", "#{thing}_unit_test_file_name",
                 "#{thing}_fixture_file_name", "#{thing}_functional_test_file_name",
                 "#{thing}_helper_file_name", "#{thing}_model_spec_file_name",
-                "#{thing}_controller_spec_file_name"
+                "#{thing}_controller_spec_file_name", "#{thing}_helper_spec_file_name"
   end
   
   def initialize(runtime_args, runtime_options = {})
@@ -35,6 +35,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       instance_variable_set("@#{thing}_fixture_file_name", "#{fnplural}.yml")
       instance_variable_set("@#{thing}_functional_test_file_name", "#{fnplural}_controller_test.rb")
       instance_variable_set("@#{thing}_controller_spec_file_name", "#{fnplural}_controller_spec.rb")
+      instance_variable_set("@#{thing}_helper_spec_file_name", "#{fnplural}_helper_spec.rb")
     end
   end
 
@@ -53,6 +54,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       m.directory File.join("test", "mocks", "test")
       m.directory File.join("spec", "models")
       m.directory File.join("spec", "controllers")
+      m.directory File.join("spec", "helpers")
       m.directory File.join("spec", "fixtures")
       m.directory File.join("public", "images")
       m.directory File.join("public", "stylesheets")
@@ -72,6 +74,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
         fixfn     = instance_variable_get("@#{thing}_fixture_file_name") 
         mspecfn   = instance_variable_get("@#{thing}_model_spec_file_name")
         cspecfn   = instance_variable_get("@#{thing}_controller_spec_file_name")
+        hspecfn   = instance_variable_get("@#{thing}_helper_spec_file_name")
 
         m.template "#{thing}_model.rb", File.join("app", "models", modelfn) unless thing == "session"
         m.template "#{tplural}_controller.rb", File.join("app", "controllers", ctrlfn)
@@ -89,6 +92,9 @@ class UnixAccessControlGenerator < Rails::Generator::Base
 
         # helper
         m.template "#{tplural}_helper.rb", File.join("app", "helpers", helpfn)
+
+        # helper spec
+        m.template "#{tplural}_helper_spec.rb", File.join("spec", "helpers", hspecfn)
 
         # tests
         unless thing == "session"
@@ -176,7 +182,7 @@ EOF
       h(resource)
     when ActiveRecord::Base
       link_to("\#{resource.send(UnixAccessControl.name_method_for(resource.class))} (\#{resource.class})",
-              :controller => resource.class.to_s.downcase.pluralize, :action => 'show', :id => resource)
+              :controller => resource.class.to_s.downcase.pluralize, :action => 'show', :id => resource.id)
     else
       resource
     end
@@ -186,6 +192,7 @@ EOF
       end
 
       # other
+      m.template "application_helper_spec.rb", File.join("spec", "helpers", "application_helper_spec.rb")
       m.template "application_layout.rhtml", File.join("app", "views", "layouts", "application.rhtml")
       m.template "errors_denied.rhtml", File.join("app", "views", "errors", "denied.rhtml")
       m.template "access_control.yml", File.join("config", "access_control.yml")
