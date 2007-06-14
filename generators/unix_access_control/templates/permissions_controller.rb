@@ -87,7 +87,13 @@ class <%= permission_class %>sController < ApplicationController
     respond_to do |format|
       if @<%= permission_singular %>.save
         flash[:notice] = '<%= permission_class %> was successfully created.'
-        format.html { redirect_to <%= permission_singular %>_url(@<%= permission_singular %>) }
+        format.html do
+          if @<%= group_singular %>
+            redirect_to <%= group_singular %>_<%= permission_singular %>_url(@<%= group_singular %>, @<%= permission_singular %>)
+          else
+            redirect_to <%= permission_singular %>_url(@<%= permission_singular %>)
+          end
+        end
         format.xml  { head :created, :location => <%= permission_singular %>_url(@<%= permission_singular %>) }
       else
         format.html { render :action => "new" }
@@ -112,7 +118,13 @@ class <%= permission_class %>sController < ApplicationController
     respond_to do |format|
       if @<%= permission_singular %>.update_attributes(params[:<%= permission_singular %>])
         flash[:notice] = '<%= permission_class %> was successfully updated.'
-        format.html { redirect_to <%= permission_singular %>_url(@<%= permission_singular %>) }
+        format.html do
+          if @<%= group_singular %>
+            redirect_to <%= group_singular %>_<%= permission_singular %>_url(@<%= group_singular %>, @<%= permission_singular %>)
+          else
+            redirect_to <%= permission_singular %>_url(@<%= permission_singular %>)
+          end
+        end
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -133,7 +145,13 @@ class <%= permission_class %>sController < ApplicationController
     @<%= permission_singular %>.destroy
 
     respond_to do |format|
-      format.html { redirect_to <%= permission_plural %>_url }
+      format.html do
+        if @<%= group_singular %>
+          redirect_to <%= group_singular %>_<%= permission_plural %>_url(@<%= group_singular %>)
+        else
+          redirect_to <%= permission_plural %>_url
+        end
+      end
       format.xml  { head :ok }
     end
   end
