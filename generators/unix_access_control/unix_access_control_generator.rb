@@ -55,6 +55,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       m.directory File.join("spec", "models")
       m.directory File.join("spec", "controllers")
       m.directory File.join("spec", "helpers")
+      m.directory File.join("spec", "views")
       m.directory File.join("spec", "fixtures")
       m.directory File.join("public", "images")
       m.directory File.join("public", "stylesheets")
@@ -89,6 +90,13 @@ class UnixAccessControlGenerator < Rails::Generator::Base
         m.template "#{tplural}_edit.rhtml",  File.join("app", "views", tplural, "edit.rhtml")   unless %w{membership session}.include?(thing)
         m.template "#{tplural}_new.rhtml",   File.join("app", "views", tplural, "new.rhtml")
         m.template "#{tplural}_new.rjs",     File.join("app", "views", tplural, "new.rjs")  if thing == "permission"
+
+        # view specs
+        m.directory File.join("spec", "views", tplural)
+        m.template "#{tplural}_index_view_spec.rb", File.join("spec", "views", tplural, "index_view_spec.rb")  unless thing == "session"
+        m.template "#{tplural}_show_view_spec.rb",  File.join("spec", "views", tplural, "show_view_spec.rb")   unless thing == "session"
+        m.template "#{tplural}_edit_view_spec.rb",  File.join("spec", "views", tplural, "edit_view_spec.rb")   unless %w{membership session}.include?(thing)
+        m.template "#{tplural}_new_view_spec.rb",   File.join("spec", "views", tplural, "new_view_spec.rb")
 
         # helper
         m.template "#{tplural}_helper.rb", File.join("app", "helpers", helpfn)

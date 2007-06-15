@@ -116,26 +116,40 @@ describe "GET /<%= permission_plural %>/new as admin" do
   before(:each) do
     login_as(:admin)
     @<%= permission_singular %> = mock_model(<%= permission_class %>)
+    @resource_types = %w{Lion Tiger Bear}
     <%= permission_class %>.stub!(:new).and_return(@<%= permission_singular %>)
     <%= group_class %>.stub!(:find).and_return([])
-
-    get :new
+    UnixAccessControl.stub!(:models).and_return(@resource_types)
   end
 
   it "should be successful" do
+    get :new
     response.should be_success
   end
 
   it "should render template 'new'" do
+    get :new
     response.should render_template('new')
   end
 
   it "should set @<%= permission_singular %>" do
+    get :new
     assigns[:<%= permission_singular %>].should == @<%= permission_singular %>
   end
 
   it "should set @<%= group_plural %>" do
+    get :new
     assigns[:<%= group_plural %>].should == [] 
+  end
+
+  it "should set @resource_types" do
+    get :new
+    assigns[:resource_types].should == ['Controller'] + @resource_types
+  end
+
+  it "should call UnixAccessControl.models" do
+    UnixAccessControl.should_receive(:models).and_return(@resource_types)
+    get :new
   end
 end
 

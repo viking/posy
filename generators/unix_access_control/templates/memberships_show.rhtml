@@ -30,6 +30,10 @@
   <%%=h @<%= membership_singular %>.updater ? @<%= membership_singular %>.updater.login : "N/A" %>
 </p>
 
-
-
+<%% if @<%= user_singular %> -%>
+<%%= link_to 'Back', <%= user_singular %>_<%= membership_plural %>_path(@<%= user_singular %>) %>
+<%% elsif @<%= group_singular %> -%>
+<%%= link_to 'Back', <%= group_singular %>_<%= membership_plural %>_path(@<%= group_singular %>) %>
+<%% else -%>
 <%%= link_to 'Back', <%= membership_plural %>_path %>
+<%% end -%>

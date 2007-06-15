@@ -14,7 +14,7 @@
 
   <p>
     <b>Resource Type</b><br />
-    <%%= f.select :resource_type, %w{Controller Dog Cat Robot}, :include_blank => true %>
+    <%%= f.select :resource_type, @resource_types, :include_blank => true %>
     <%%= observe_field '<%= permission_singular %>_resource_type', :url => { :action => 'new', :format => 'js' }, :with => "'value='+value", :method => :get, :loading => "new Element.show('spinner')", :loaded => "new Element.hide('spinner')" %>
   </p>
 

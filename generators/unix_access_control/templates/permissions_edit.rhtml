@@ -2,7 +2,7 @@
 
 <%%= error_messages_for :<%= permission_singular %> %>
 
-<%% form_for(:<%= permission_singular %>, :url => <%= permission_singular %>_path(@<%= permission_singular %>), :html => { :method => :put }) do |f| %>
+<%% form_for(:<%= permission_singular %>, :url => url_for_update(@<%= permission_singular %>), :html => { :method => :put }) do |f| %>
   <p>
     <b><%= group_class %></b><br />
     <%%=h @<%= permission_singular %>.<%= group_singular %>.name %>

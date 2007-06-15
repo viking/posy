@@ -42,6 +42,7 @@ class <%= permission_class %>sController < ApplicationController
       @<%= group_plural %> = <%= group_class %>.find(:all)
       @<%= permission_singular %> = <%= permission_class %>.new
     end
+    @resource_types = ['Controller'] + UnixAccessControl.models
 
     respond_to do |format|
       format.html # new.rhtml

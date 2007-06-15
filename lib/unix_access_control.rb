@@ -14,6 +14,10 @@ module UnixAccessControl
     configuration['controllers'] || []
   end
 
+  def self.models
+    configuration['models'] || []
+  end
+
   def self.model_name_methods
     configuration['model_name_methods'] || {}
   end
