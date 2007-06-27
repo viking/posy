@@ -1,5 +1,5 @@
 class <%= permission_class %>sController < ApplicationController
-  before_filter :login_required
+  prepend_before_filter :login_required
 
   # GET /<%= permission_plural %>
   # GET /<%= permission_plural %>.xml

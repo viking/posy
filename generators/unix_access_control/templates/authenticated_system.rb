@@ -1,4 +1,18 @@
+require 'ruby-debug'
 module AuthenticatedSystem
+  DEFAULT_ACTION_PERMISSIONS = HashWithIndifferentAccess.new({
+    'r' => %w{index show},
+    'w' => %w{new create update destroy},
+    'b' => %w{edit},
+    't' => %w{edit update destroy}
+  })
+
+  # Actions that are affected by resource <%= permission_plural %>.
+  DEFAULT_RESOURCE_ACTIONS = %w{show edit update destroy}
+
+  # Actions that are affected when a <%= permission_singular %> is sticky.
+  DEFAULT_STICKY_ACTIONS   = %w{edit update destroy}
+
   module ClassMethods
     # You can use this method to either get or set the action_<%= permission_plural %> inheritable
     # attribute.  You'll probably want to use chmod instead of setting this manually.
@@ -24,16 +38,34 @@ module AuthenticatedSystem
       write_inheritable_attribute(:resource_actions, read_inheritable_attribute(:resource_actions) - actions.collect { |a| a.to_s })
     end
 
+    # You can use this method to get or add additional actions that are affected by sticky
+    # <%= permission_plural %>.  The default actions are: edit, update, destroy.
+    #
+    # NOTE: It doesn't make sense to have an action in sticky_actions that also isn't in
+    #       resource_actions, because access will always be denied (since authorized? will
+    #       check for current_resource, which will be nil).
+    #
+    def sticky_actions(*actions)
+      return read_inheritable_attribute(:sticky_actions)    if actions.empty?
+      write_inheritable_array(:sticky_actions, actions.collect { |a| a.to_s })
+    end
+
+    # Use this method to remove actions from the list of actions that are affected by
+    # sticky <%= permission_plural %>.
+    #
+    def remove_sticky_actions(*actions)
+      write_inheritable_attribute(:sticky_actions, read_inheritable_attribute(:sticky_actions) - actions.collect { |a| a.to_s })
+    end
+
     # Use this to get or set the model name that I should use to look for resource <%= permission_plural %>.
     # By default, this is the singular of the controller name.
     #
     def resource_model_name(name = nil)
+      # NOTE: using instance variable instead of class variable here
       if name
-        write_inheritable_attribute(:resource_model_name, name.to_s.classify)
-      elsif read_inheritable_attribute(:resource_model_name).nil?
-        write_inheritable_attribute(:resource_model_name, controller_name.singularize.classify)
+        @resource_model_name = name.to_s.classify
       end
-      read_inheritable_attribute(:resource_model_name)
+      @resource_model_name ||= controller_name.singularize.classify
     end
 
     # Use this method to set what <%= permission_plural %> are needed to perform what actions.
@@ -47,7 +79,7 @@ module AuthenticatedSystem
     #       If you don't have a '+' or '-', the <%= permission_singular %> is just set to whatever
     #       you specify.
     #
-    # examples:
+    # Examples:
     #   chmod "+r", :foo
     #   chmod "+rw", :bar, :baz
     #   chmod "-r", :index
@@ -118,6 +150,24 @@ module AuthenticatedSystem
   end
 
   protected
+    def current_resource
+      unless defined? @current_resource
+        unless params[:id]
+          @current_resource = nil
+          return @current_resource
+        end
+        
+        begin
+          model = resource_model_name.constantize
+          @current_resource = model.find_by_id(params[:id]) # returns nil if not found
+        rescue NameError => boom
+          logger.error boom
+          raise NameError, "resource_model_name is bad; please use the resource_model_name method to set the correct model name"
+        end
+      end
+      @current_resource
+    end
+
     # This will grab the associated <%= permission_singular %> for the selected action.  If params[:id] exists,
     # it will try to grab the <%= permission_singular %> for the associated resource FIRST, and if that doesn't
     # exist it will try to get the <%= permission_singular %> for the associated controller.
@@ -135,31 +185,13 @@ module AuthenticatedSystem
         end
         perms = current_<%= user_singular %>.<%= permission_plural %>
 
-        # try to grab the resource by guessing the model name first
-        if resource_actions.include?(action_name) and params[:id]
+        # grab the current resource <%= permission_singular %>
+        if resource_actions.include?(action_name) and !current_resource.nil?
           @current_<%= permission_singular %> = perms.detect { |p| p.resource == current_resource } 
         end
         @current_<%= permission_singular %> ||= perms.detect { |p| p.controller == controller_name }
       end
       @current_<%= permission_singular %>
-    end
-
-    def current_resource
-      unless defined? @current_resource
-        unless params[:id]
-          @current_resource = nil
-          return @current_resource
-        end
-        
-        begin
-          model = resource_model_name.constantize
-          @current_resource = model.find_by_id(params[:id])
-        rescue NameError => boom
-          p boom
-          raise NameError, "resource_model_name is bad; please use the resource_model_name method to set the correct model name"
-        end
-      end
-      @current_resource
     end
 
     def <%= user_singular %>_can_read?
@@ -178,7 +210,6 @@ module AuthenticatedSystem
       current_<%= permission_singular %> ? current_<%= permission_singular %>.is_sticky : false
     end
 
-
     # Returns true or false if the <%= user_singular %> is logged in.
     # Preloads @current_<%= user_singular %> with the <%= user_singular %> model if they're logged in.
     def logged_in?
@@ -194,19 +225,10 @@ module AuthenticatedSystem
     # Check if the <%= user_singular %> is authorized.  You can specify one-time <%= permission_plural %> via:
     #     flash[:allow] = true
     #
-    # default <%= permission_singular %> -> actions map: 
-    #   read:
-    #     - index
-    #     - show
+    # See the DEFAULT_ACTION_PERMISSIONS constant for default behavior.
     #
-    #   write:
-    #     - new
-    #     - create
-    #     - update
-    #     - destroy
-    #
-    #   read/write:
-    #     - edit
+    # About sticky <%= permission_plural %>:
+    #   
     #
     # NOTE: controllers with additional actions should specify what <%= permission_singular %> is required
     #       to access those actions by using =chmod=; actions not specified are denied by default.
@@ -224,9 +246,9 @@ module AuthenticatedSystem
       bools << <%= user_singular %>_can_read_and_write?   if ap['b'].include?(action_name)
       if bools.any?
         # handle sticky <%= permission_plural %>
-        if <%= permission_singular %>_is_sticky? and %w{edit update destroy}.include?(action_name)
+        if sticky_actions.include?(action_name) and <%= permission_singular %>_is_sticky?
           # make sure the <%= user_singular %> is the owner
-          current_resource.created_by == current_<%= user_singular %>.id
+          current_resource ? current_resource.created_by == current_<%= user_singular %>.id : false
         else
           true
         end
@@ -250,8 +272,10 @@ module AuthenticatedSystem
     #   skip_before_filter :login_required
     #
     def login_required
-      <%= user_singular %>name, passwd = get_auth_data
-      self.current_<%= user_singular %> ||= <%= user_class %>.authenticate(<%= user_singular %>name, passwd) || :false if <%= user_singular %>name && passwd
+      unless @current_<%= user_singular %>
+        <%= user_singular %>name, passwd = get_auth_data
+        self.current_<%= user_singular %> = <%= user_class %>.authenticate(<%= user_singular %>name, passwd) || :false if <%= user_singular %>name && passwd
+      end
       logged_in? && authorized? ? true : access_denied
     end
     
@@ -305,14 +329,19 @@ module AuthenticatedSystem
       base.extend(ClassMethods)
 
       # default action_<%= permission_plural %> hash
-      ap = HashWithIndifferentAccess.new
-      ap['r'] = %w{index show}
-      ap['w'] = %w{new create update destroy}
-      ap['b'] = %w{edit}
-      base.write_inheritable_attribute(:action_<%= permission_plural %>, ap)
+      unless base.inheritable_attributes[:action_<%= permission_plural %>]
+        base.write_inheritable_attribute(:action_<%= permission_plural %>, DEFAULT_ACTION_PERMISSIONS.dup)
+      end
 
       # default resource_actions array
-      base.write_inheritable_attribute(:resource_actions, %w{show edit update destroy})
+      unless base.inheritable_attributes[:resource_actions]
+        base.write_inheritable_attribute(:resource_actions, DEFAULT_RESOURCE_ACTIONS.dup)
+      end
+
+      # default sticky_actions array
+      unless base.inheritable_attributes[:sticky_actions]
+        base.write_inheritable_attribute(:sticky_actions, DEFAULT_STICKY_ACTIONS.dup)
+      end
     end
 
   private

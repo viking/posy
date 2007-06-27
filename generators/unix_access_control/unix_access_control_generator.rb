@@ -57,6 +57,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       m.directory File.join("spec", "helpers")
       m.directory File.join("spec", "views")
       m.directory File.join("spec", "fixtures")
+      m.directory File.join("spec", "libs")
       m.directory File.join("public", "images")
       m.directory File.join("public", "stylesheets")
       m.directory "lib"
@@ -158,6 +159,8 @@ EOF
   include AuthenticatedSystem
 
   # userstamp filter
+  # NOTE: since this sets @current_user, you'll want to use prepend_before_filter
+  #       for login_required if you want HTTP authentication to work properly
   before_filter do |c|
     User.current_user = c.current_user == :false ? nil : c.current_user
   end
@@ -205,6 +208,7 @@ EOF
       m.template "errors_denied.rhtml", File.join("app", "views", "errors", "denied.rhtml")
       m.template "access_control.yml", File.join("config", "access_control.yml")
       m.template "pocky_mock.rb", File.join("test", "mocks", "test", "pocky.rb")
+      m.template "authenticated_system_spec.rb", File.join("spec", "libs", "authenticated_system_spec.rb")
       m.file "spinner.gif",  File.join("public", "images", "spinner.gif")
       m.file "scaffold.css", File.join("public", "stylesheets", "scaffold.css")
     end

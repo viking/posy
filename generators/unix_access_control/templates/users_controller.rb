@@ -1,5 +1,5 @@
 class <%= user_class %>sController < ApplicationController
-  before_filter :login_required
+  prepend_before_filter :login_required
 
   # GET /<%= user_plural %>
   # GET /<%= user_plural %>.xml
