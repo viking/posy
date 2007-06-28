@@ -57,6 +57,35 @@
   </tr>
 <%% end %>
 </table>
+<br/>
+
+<%%= link_to 'Add <%= user_singular %>', <%= group_singular %>_new_<%= membership_singular %>_path(@<%= group_singular %>) %> |
+<%%= link_to '<%= membership_class %> index', <%= group_singular %>_<%= membership_plural %>_path(@<%= group_singular %>) %>
 
 <br/>
-<%%= link_to 'Add <%= user_singular %>', <%= group_singular %>_new_<%= membership_singular %>_path(@<%= group_singular %>) %>
+<h2><%= group_class %>'s <%= permission_plural %></h2>
+
+<table>
+  <tr>
+    <th>Thing</th>
+    <th>Read</th>
+    <th>Write</th>
+    <th>Sticky</th>
+  </tr>
+  
+<%% for <%= permission_singular %> in @<%= group_singular %>.<%= permission_plural %> %>
+  <tr>
+    <td><%%= resource_link(<%= permission_singular %>.controller || <%= permission_singular %>.resource) %></td>
+    <td><%%=h <%= permission_singular %>.can_read ? "yes" : "no" %></td>
+    <td><%%=h <%= permission_singular %>.can_write ? "yes" : "no" %></td>
+    <td><%%=h <%= permission_singular %>.is_sticky ? "yes" : "no" %></td>
+    <td><%%= link_to 'Show', <%= group_singular %>_<%= permission_singular %>_url(@<%= group_singular %>, <%= permission_singular %>) %></td>
+    <td><%%= link_to 'Edit', <%= group_singular %>_edit_<%= permission_singular %>_url(@<%= group_singular %>, <%= permission_singular %>) %></td>
+    <td><%%= link_to 'Destroy', <%= group_singular %>_<%= permission_singular %>_url(@<%= group_singular %>, <%= permission_singular %>), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<%% end %>
+</table>
+<br/>
+
+<%%= link_to 'Add <%= permission_singular %>', <%= group_singular %>_new_<%= permission_singular %>_path(@<%= group_singular %>) %> |
+<%%= link_to '<%= permission_class %> index', <%= group_singular %>_<%= permission_plural %>_path(@<%= group_singular %>) %>

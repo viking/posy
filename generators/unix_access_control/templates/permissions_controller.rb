@@ -46,16 +46,8 @@ class <%= permission_class %>sController < ApplicationController
 
     respond_to do |format|
       format.html # new.rhtml
-
-      format.js do 
-        type = params[:value] 
-        case type
-        when 'Controller'
-          @controllers = UnixAccessControl.controllers 
-        when /[A-Z]\w+/
-          @resources = type.constantize.find(:all).collect { |x| [x.name, x.id] }
-        end
-
+      format.js do
+        setup_resources_or_controllers
         render :action => 'new.rjs'
       end
     end
@@ -97,7 +89,11 @@ class <%= permission_class %>sController < ApplicationController
         end
         format.xml  { head :created, :location => <%= permission_singular %>_url(@<%= permission_singular %>) }
       else
-        format.html { render :action => "new" }
+        format.html do
+          @resource_types = ['Controller'] + UnixAccessControl.models
+          setup_resources_or_controllers
+          render :action => "new"
+        end
         format.xml  { render :xml => @<%= permission_singular %>.errors.to_xml }
       end
     end
@@ -156,4 +152,15 @@ class <%= permission_class %>sController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  protected
+    def setup_resources_or_controllers
+      type = params[:<%= permission_singular %>][:resource_type]  rescue nil
+      case type
+      when 'Controller'
+        @controllers = UnixAccessControl.controllers 
+      when /[A-Z]\w+/
+        @resources = type.constantize.find(:all).collect { |x| [x.name, x.id] }
+      end
+    end
 end

@@ -177,18 +177,18 @@ describe "GET /<%= permission_plural %>/new.js as admin" do
     response.should render_template('new.rjs')
   end
 
-  it "should set @controllers when params[:value] is 'Controller'" do
+  it "should set @controllers when params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
     UnixAccessControl.stub!(:controllers).and_return(%w{vampires})
     
-    get :new, :format => 'js', :value => 'Controller'
+    get :new, :format => 'js', :<%= permission_singular %> => { :resource_type => 'Controller' }
     assigns[:controllers].should == %w{vampires}
   end
 
-  it "should set @resources when params[:value] is 'Pocky'" do
+  it "should set @resources when params[:<%= permission_singular %>][:resource_type] is 'Pocky'" do
     @pockys = Array.new(5) { |i| Pocky.new(i+1) }
     Pocky.stub!(:find).and_return(@pockys)
 
-    get :new, :format => 'js', :value => 'Pocky'
+    get :new, :format => 'js', :<%= permission_singular %> => { :resource_type => 'Pocky' }
     assigns[:resources].should == @pockys.collect { |p| [p.name, p.id] }
   end
 end
@@ -202,11 +202,13 @@ describe "POST /<%= permission_plural %>/ as admin" do
   before(:each) do
     login_as(:admin)
     @<%= permission_singular %> = mock_model(<%= permission_class %>)
+    @resource_types = %w{Lion Tiger Bear}
 
     <%= permission_class %>.stub!(:new).and_return(@<%= permission_singular %>)
     <%= group_class %>.stub!(:find).and_return([])
     @<%= permission_singular %>.stub!(:save).and_return(true)
     @<%= permission_singular %>.stub!(:controller).and_return(nil)
+    UnixAccessControl.stub!(:models).and_return(@resource_types)
   end
   
   it "should redirect to /<%= permission_plural %>/:id when valid" do
@@ -218,6 +220,12 @@ describe "POST /<%= permission_plural %>/ as admin" do
     @<%= permission_singular %>.stub!(:save).and_return(false)
     post :create
     response.should render_template("new")
+  end
+
+  it "should set @resource_types when invalid" do
+    @<%= permission_singular %>.stub!(:save).and_return(false)
+    post :create
+    assigns[:resource_types].should == ['Controller'] + @resource_types
   end
 
   it "should set @<%= permission_singular %>" do
@@ -235,6 +243,23 @@ describe "POST /<%= permission_plural %>/ as admin" do
 
     @<%= permission_singular %>.should_receive(:resource_type=).with(nil)
     post :create
+  end
+
+  it "should set @controllers when invalid and params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
+    @<%= permission_singular %>.stub!(:save).and_return(false)
+    UnixAccessControl.stub!(:controllers).and_return(%w{vampires})
+    
+    post :create, :<%= permission_singular %> => { :resource_type => 'Controller' }
+    assigns[:controllers].should == %w{vampires}
+  end
+
+  it "should set @resources when invalid params[:<%= permission_singular %>][:resource_type] is 'Pocky'" do
+    @<%= permission_singular %>.stub!(:save).and_return(false)
+    @pockys = Array.new(5) { |i| Pocky.new(i+1) }
+    Pocky.stub!(:find).and_return(@pockys)
+
+    post :create, :<%= permission_singular %> => { :resource_type => 'Pocky' }
+    assigns[:resources].should == @pockys.collect { |p| [p.name, p.id] }
   end
 end
 
@@ -454,18 +479,18 @@ describe "GET /<%= group_plural %>/1/<%= permission_plural %>/new.js as admin" d
     response.should render_template('new.rjs')
   end
 
-  it "should set @controllers when params[:value] is 'Controller'" do
+  it "should set @controllers when params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
     UnixAccessControl.stub!(:controllers).and_return(%w{vampires})
     
-    get :new, :format => 'js', :<%= group_singular %>_id => '1', :value => 'Controller'
+    get :new, :format => 'js', :<%= group_singular %>_id => '1', :<%= permission_singular %> => { :resource_type => 'Controller' }
     assigns[:controllers].should == %w{vampires}
   end
 
-  it "should set @resources when params[:value] is 'Pocky'" do
+  it "should set @resources when params[:<%= permission_singular %>][:resource_type] is 'Pocky'" do
     @pockys = Array.new(5) { |i| Pocky.new(i+1) }
     Pocky.stub!(:find).and_return(@pockys)
 
-    get :new, :format => 'js', :<%= group_singular %>_id => '1', :value => 'Pocky'
+    get :new, :format => 'js', :<%= group_singular %>_id => '1', :<%= permission_singular %> => { :resource_type => 'Pocky' }
     assigns[:resources].should == @pockys.collect { |p| [p.name, p.id] }
   end
 end
@@ -513,6 +538,23 @@ describe "POST /<%= group_plural %>/1/<%= permission_plural %>/ as admin" do
 
     @<%= permission_singular %>.should_receive(:resource_type=).with(nil)
     post :create, :<%= group_singular %>_id => '1'
+  end
+
+  it "should set @controllers when invalid and params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
+    @<%= permission_singular %>.stub!(:save).and_return(false)
+    UnixAccessControl.stub!(:controllers).and_return(%w{vampires})
+    
+    post :create, :<%= permission_singular %> => { :resource_type => 'Controller' }
+    assigns[:controllers].should == %w{vampires}
+  end
+
+  it "should set @resources when invalid params[:<%= permission_singular %>][:resource_type] is 'Pocky'" do
+    @<%= permission_singular %>.stub!(:save).and_return(false)
+    @pockys = Array.new(5) { |i| Pocky.new(i+1) }
+    Pocky.stub!(:find).and_return(@pockys)
+
+    post :create, :<%= permission_singular %> => { :resource_type => 'Pocky' }
+    assigns[:resources].should == @pockys.collect { |p| [p.name, p.id] }
   end
 end
 

@@ -14,11 +14,24 @@
 
   <p>
     <b>Resource Type</b><br />
-    <%%= f.select :resource_type, @resource_types, :include_blank => true %>
-    <%%= observe_field '<%= permission_singular %>_resource_type', :url => { :action => 'new', :format => 'js' }, :with => "'value='+value", :method => :get, :loading => "new Element.show('spinner')", :loaded => "new Element.hide('spinner')" %>
+    <%%= f.select :resource_type, @resource_types, :include_blank => true, :selected => params[:<%= permission_singular %>] ? params[:<%= permission_singular %>][:resource_type] : @<%= permission_singular %>.resource_type %>
+    <%%= observe_field '<%= permission_singular %>_resource_type', :url => { :action => 'new', :format => 'js' }, :with => "'<%= permission_singular %>[resource_type]='+value", :method => :get, :loading => "new Element.show('spinner')", :loaded => "new Element.hide('spinner')" %>
   </p>
 
   <p id="resource_select">
+  <%% if @resources and @resources.empty? -%>
+    <b>Resource</b>
+    <p>None available.</p>
+  <%% elsif @resources -%>
+    <b>Resource</b><br/>
+    <%%= select("<%= permission_singular %>", "resource_id", @resources, :include_blank => true) %>
+  <%% elsif @controllers and @controllers.empty? -%>
+    <b>Controller</b>
+    <p>None available.</p>
+  <%% elsif @controllers -%>
+    <b>Controller</b><br/>
+    <%%= select("<%= permission_singular %>", "controller", @controllers, :include_blank => true) %>
+  <%% end -%>
   </p>
 
   <p>
