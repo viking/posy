@@ -9,4 +9,4 @@ Example:
 
 After generating:
     - Edit config/access_control.yml and add controllers you want users to have access to.
-    - Add "before_filter :login_required" to all controllers you wish to restrict access to.
+    - Add "prepend_before_filter :login_required" to all controllers you wish to restrict access to.

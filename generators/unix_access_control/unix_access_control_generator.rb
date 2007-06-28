@@ -1,6 +1,6 @@
 require 'ruby-debug'
 class UnixAccessControlGenerator < Rails::Generator::Base
-  default_options :skip_migration => false
+  default_options :skip_migration => false, :skip_in_place_modifications => false
 
   %w{user group membership permission session}.each do |thing|
     attr_reader "#{thing}_class", "#{thing}_singular", "#{thing}_plural",
@@ -128,14 +128,15 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       m.template "authenticated_test_helper.rb", File.join("lib", "authenticated_test_helper.rb")
       
       # add in routes by gsub'ing config/routes.rb
-      resources = [session_plural, permission_plural, membership_plural, user_plural, group_plural]
-      resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
-      m.method_missing("instance_eval") { logger.route "map.resources #{resource_list}" }  # </hack>
+      unless options[:skip_in_place_modifications]
+        resources = [session_plural, permission_plural, membership_plural, user_plural, group_plural]
+        resource_list = resources.map { |r| r.to_sym.inspect }.join(', ')
+        m.method_missing("instance_eval") { logger.route "map.resources #{resource_list}" }  # </hack>
 
-      sentinel = 'ActionController::Routing::Routes.draw do |map|'
-      unless options[:pretend]
-        m.gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
-          <<EOF
+        sentinel = 'ActionController::Routing::Routes.draw do |map|'
+        unless options[:pretend]
+          m.gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
+            <<EOF
 #{match}
   map.resources :#{session_plural}, :#{permission_plural}, :#{membership_plural}
   map.resources :#{user_plural} do |#{user_singular}|
@@ -146,15 +147,15 @@ class UnixAccessControlGenerator < Rails::Generator::Base
     #{group_singular}.resources :#{permission_plural}, :name_prefix => '#{group_singular}_'
   end
 EOF
+          end
         end
-      end
 
-      # modify app/controller/application.rb by gsub
-      m.method_missing("instance_eval") { logger.modify "app/controllers/application.rb" }
-      sentinel = "class ApplicationController < ActionController::Base"
-      unless options[:pretend]
-        m.gsub_file 'app/controllers/application.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
-          <<EOF
+        # modify app/controller/application.rb by gsub
+        m.method_missing("instance_eval") { logger.modify "app/controllers/application.rb" }
+        sentinel = "class ApplicationController < ActionController::Base"
+        unless options[:pretend]
+          m.gsub_file 'app/controllers/application.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
+            <<EOF
 #{match}
   include AuthenticatedSystem
 
@@ -165,23 +166,23 @@ EOF
     User.current_user = c.current_user == :false ? nil : c.current_user
   end
 EOF
+          end
         end
-      end
-      
-      # modify test/test_helper.rb by gsub
-      m.method_missing("instance_eval") { logger.modify "test/test_helper.rb" }
-      unless options[:pretend]
-        m.gsub_file 'test/test_helper.rb', /^(end)/mi do |match|
-          "  include AuthenticatedTestHelper\n#{match}"
+        
+        # modify test/test_helper.rb by gsub
+        m.method_missing("instance_eval") { logger.modify "test/test_helper.rb" }
+        unless options[:pretend]
+          m.gsub_file 'test/test_helper.rb', /^(end)/mi do |match|
+            "  include AuthenticatedTestHelper\n#{match}"
+          end
         end
-      end
 
-      # modify app/helpers/application_helper.rb by gsub
-      m.method_missing("instance_eval") { logger.modify "app/helpers/application_helper.rb" }
-      sentinel = "module ApplicationHelper"
-      unless options[:pretend]
-        m.gsub_file 'app/helpers/application_helper.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
-          <<EOF
+        # modify app/helpers/application_helper.rb by gsub
+        m.method_missing("instance_eval") { logger.modify "app/helpers/application_helper.rb" }
+        sentinel = "module ApplicationHelper"
+        unless options[:pretend]
+          m.gsub_file 'app/helpers/application_helper.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
+            <<EOF
 #{match}
   def resource_name(resource)
     resource.send(UnixAccessControl.name_method_for(resource.class))
@@ -199,6 +200,7 @@ EOF
     end
   end
 EOF
+          end
         end
       end
 
@@ -218,7 +220,9 @@ EOF
     def add_options!(opt)
       opt.separator ''
       opt.separator 'Options:'
-      opt.on("--skip-migration",
-             "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
+      opt.on("--skip-migrations",
+             "Don't generate migration files") { |v| options[:skip_migration] = v }
+      opt.on("--skip-in-place-modifications",
+             "Don't change files in-place") { |v| options[:skip_in_place_modifications] = v }
     end
 end
