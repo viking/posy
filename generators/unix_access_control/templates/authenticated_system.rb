@@ -228,7 +228,13 @@ module AuthenticatedSystem
     # See the DEFAULT_ACTION_PERMISSIONS constant for default behavior.
     #
     # About sticky <%= permission_plural %>:
-    #   
+    #   If preliminary access is granted for the <%= user_singular %>, sticky_actions is checked to see
+    #   whether or not the requested action is affected by sticky <%= permission_plural %>.  If it is,
+    #   then current_<%= permission_singular %> is first checked, and then current_resource is tested to
+    #   see if the <%= user_singular %> is the creator.
+    #
+    #   See the DEFAULT_STICKY_ACTIONS constant for the default list of actions that are
+    #   affected by stickiness.
     #
     # NOTE: controllers with additional actions should specify what <%= permission_singular %> is required
     #       to access those actions by using =chmod=; actions not specified are denied by default.
