@@ -1,4 +1,3 @@
-require 'ruby-debug'
 class UnixAccessControlGenerator < Rails::Generator::Base
   default_options :skip_migration => false, :skip_in_place_modifications => false
 

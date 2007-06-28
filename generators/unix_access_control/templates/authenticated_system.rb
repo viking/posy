@@ -1,4 +1,3 @@
-require 'ruby-debug'
 module AuthenticatedSystem
   DEFAULT_ACTION_PERMISSIONS = HashWithIndifferentAccess.new({
     'r' => %w{index show},
