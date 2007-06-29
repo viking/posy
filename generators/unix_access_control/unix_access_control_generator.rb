@@ -193,7 +193,7 @@ EOF
       h(resource)
     when ActiveRecord::Base
       link_to("\#{resource.send(UnixAccessControl.name_method_for(resource.class))} (\#{resource.class})",
-              :controller => resource.class.to_s.downcase.pluralize, :action => 'show', :id => resource.id)
+              :controller => resource.class.to_s.tableize, :action => 'show', :id => resource.id)
     else
       resource
     end
