@@ -138,6 +138,14 @@ module AuthenticatedSystem
     self.class.remove_resource_actions(*actions)
   end
 
+  def sticky_actions(*actions)
+    self.class.sticky_actions(*actions)
+  end
+
+  def remove_sticky_actions(*actions)
+    self.class.remove_sticky_actions(*actions)
+  end
+
   def resource_model_name(name = nil)
     self.class.resource_model_name(name)
   end
