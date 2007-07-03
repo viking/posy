@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-require 'ruby-debug'
 
 describe "rendering /<%= permission_plural %>/new" do
   before do

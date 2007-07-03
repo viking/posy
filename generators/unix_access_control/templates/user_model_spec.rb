@@ -1,6 +1,4 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require 'pp'
-require 'ruby-debug'
 
 module <%= user_class %>Helpers
   def create_<%= user_singular %>(options = {})
