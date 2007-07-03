@@ -209,6 +209,8 @@ EOF
       m.template "errors_denied.rhtml", File.join("app", "views", "errors", "denied.rhtml")
       m.template "access_control.yml", File.join("config", "access_control.yml")
       m.template "pocky_mock.rb", File.join("test", "mocks", "test", "pocky.rb")
+      m.template "ohagi_mock.rb", File.join("test", "mocks", "test", "ohagi.rb")
+      m.template "fake_model_mock.rb", File.join("test", "mocks", "test", "fake_model.rb")
       m.template "authenticated_system_spec.rb", File.join("spec", "libs", "authenticated_system_spec.rb")
       m.file "spinner.gif",  File.join("public", "images", "spinner.gif")
       m.file "scaffold.css", File.join("public", "stylesheets", "scaffold.css")

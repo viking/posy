@@ -47,4 +47,29 @@ class <%= permission_class %> < ActiveRecord::Base
   belongs_to :resource, :polymorphic => true
   belongs_to :creator, :class_name => "<%= user_class %>", :foreign_key => "created_by"
   belongs_to :updater, :class_name => "<%= user_class %>", :foreign_key => "updated_by"
+
+  def can_read?
+    self['can_read']
+  end
+  
+  def can_write?
+    self['can_write']
+  end
+
+  def can_read_and_write?
+    self['can_read'] && self['can_write']
+  end
+
+  def can_access?(access_mode)
+    case access_mode.to_s
+    when 'r'
+      self['can_read']
+    when 'w'
+      self['can_write']
+    when 'rw', 'wr', 'b'
+      self['can_read'] && self['can_write']
+    else
+      raise "bad access mode"
+    end 
+  end
 end

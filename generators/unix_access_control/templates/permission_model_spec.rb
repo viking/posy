@@ -69,6 +69,48 @@ describe <%= permission_class %> do
     <%= permission_singular %>1.should be_valid
     <%= permission_singular %>2.should_not be_valid
   end
+
+  it "can_read? should equal can_read" do
+    <%= permission_singular %> = <%= permission_class %>.new(:can_read => true)
+    <%= permission_singular %>.can_read?.should be_true
+    <%= permission_singular %>[:can_read] = false
+    <%= permission_singular %>.can_read?.should be_false
+  end
+
+  it "can_write? should equal can_write" do
+    <%= permission_singular %> = <%= permission_class %>.new(:can_write => true)
+    <%= permission_singular %>.can_write?.should be_true
+    <%= permission_singular %>[:can_write] = false
+    <%= permission_singular %>.can_write?.should be_false
+  end
+
+  it "can_read_and_write? should equal can_read && can_write" do
+    <%= permission_singular %> = <%= permission_class %>.new(:can_write => true, :can_read => false)
+    <%= permission_singular %>.can_read_and_write?.should be_false
+    <%= permission_singular %>[:can_read] = true
+    <%= permission_singular %>.can_read_and_write?.should be_true
+  end
+
+  it "can_access?('r') should equal can_read" do
+    <%= permission_singular %> = <%= permission_class %>.new(:can_read => true)
+    <%= permission_singular %>.can_access?('r').should be_true
+    <%= permission_singular %>[:can_read] = false
+    <%= permission_singular %>.can_access?('r').should be_false
+  end
+
+  it "can_access?('w') should equal can_write" do
+    <%= permission_singular %> = <%= permission_class %>.new(:can_write => true)
+    <%= permission_singular %>.can_access?('w').should be_true
+    <%= permission_singular %>[:can_write] = false
+    <%= permission_singular %>.can_access?('w').should be_false
+  end
+
+  it "can_access?('rw') should equal can_read && can_write" do
+    <%= permission_singular %> = <%= permission_class %>.new(:can_write => true, :can_read => false)
+    <%= permission_singular %>.can_access?('rw').should be_false
+    <%= permission_singular %>[:can_read] = true
+    <%= permission_singular %>.can_access?('rw').should be_true
+  end
 end
 
 describe "an existing <%= permission_singular %>", :shared => true do

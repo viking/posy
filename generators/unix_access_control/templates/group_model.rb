@@ -10,6 +10,9 @@ class <%= group_class %> < ActiveRecord::Base
       case resource
       when String
         find_by_controller(resource)
+      when Class
+        find :all, 
+          :conditions => ['resource_type = ?', resource.to_s]
       else
         find :first, 
           :conditions => ['resource_id = ? AND resource_type = ?', resource.id, resource.class.to_s]

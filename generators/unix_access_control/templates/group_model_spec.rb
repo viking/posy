@@ -151,3 +151,33 @@ describe "a <%= group_singular %> with one <%= permission_singular %>" do
     @<%= group_singular %>.<%= permission_plural %>[0].should eql(@perm)
   end
 end
+
+describe "a <%= group_singular %> with some <%= permission_plural %>" do
+  include <%= group_class %>Helpers
+  fixtures :<%= group_plural %>, :<%= user_plural %>, :<%= permission_plural %>
+
+  before(:each) do
+    UnixAccessControl.stub!(:controllers).and_return(%w{pockies})
+    <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
+    @<%= group_singular %>  = create_<%= group_singular %>
+    @pocky1 = Pocky.new(1)
+    @pocky2 = Pocky.new(2)
+    @perm1  = @<%= group_singular %>.<%= permission_plural %>.create(:resource => @pocky1)
+    @perm2  = @<%= group_singular %>.<%= permission_plural %>.create(:controller => "pockies")
+    @perm3  = @<%= group_singular %>.<%= permission_plural %>.create(:resource => @pocky2)
+  end
+
+  it_should_behave_like "an existing <%= group_singular %>"
+
+  it "should get <%= permission_plural %>.for(@pocky1)" do
+    @<%= group_singular %>.<%= permission_plural %>.for(@pocky1).should == @perm1 
+  end
+
+  it "should get <%= permission_plural %>.for('pockies')" do
+    @<%= group_singular %>.<%= permission_plural %>.for('pockies').should == @perm2
+  end
+
+  it "should get <%= permission_plural %>.for(Pocky)" do
+    @<%= group_singular %>.<%= permission_plural %>.for(Pocky).should == [@perm1, @perm3]
+  end
+end

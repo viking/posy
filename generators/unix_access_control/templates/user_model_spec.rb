@@ -1,5 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 require 'pp'
+require 'ruby-debug'
 
 module <%= user_class %>Helpers
   def create_<%= user_singular %>(options = {})
@@ -159,7 +160,7 @@ describe "a <%= user_singular %> that belongs in a <%= group_singular %> with ma
 
   # can't have too many tests =)
   it "should have read and write access to the vampires controller" do
-    @<%= user_singular %>.should have_access_to("vampires", "rw")
+    @<%= user_singular %>.should have_access_to("vampires", "b")
     @<%= user_singular %>.should have_read_and_write_access_to("vampires")
   end
 
@@ -174,7 +175,7 @@ describe "a <%= user_singular %> that belongs in a <%= group_singular %> with ma
   end
 
   it "should not have read and write access to the werewolves controller" do
-    @<%= user_singular %>.should_not have_access_to("werewolves", "rw")
+    @<%= user_singular %>.should_not have_access_to("werewolves", "b")
     @<%= user_singular %>.should_not have_read_and_write_access_to("werewolves")
   end
 
@@ -189,12 +190,12 @@ describe "a <%= user_singular %> that belongs in a <%= group_singular %> with ma
   end
 
   it "should not have read and write access to the unicorns controller" do
-    @<%= user_singular %>.should_not have_access_to("unicorns", "rw")
+    @<%= user_singular %>.should_not have_access_to("unicorns", "b")
     @<%= user_singular %>.should_not have_read_and_write_access_to("unicorns")
   end
 
   it "should have read and write access to pocky #1" do
-    @<%= user_singular %>.should have_access_to(@pocky[0], "rw")
+    @<%= user_singular %>.should have_access_to(@pocky[0], "b")
     @<%= user_singular %>.should have_read_and_write_access_to(@pocky[0])
   end
 
@@ -209,7 +210,7 @@ describe "a <%= user_singular %> that belongs in a <%= group_singular %> with ma
   end
 
   it "should not have read and write access to pocky #2" do
-    @<%= user_singular %>.should_not have_access_to(@pocky[1], "rw")
+    @<%= user_singular %>.should_not have_access_to(@pocky[1], "b")
     @<%= user_singular %>.should_not have_read_and_write_access_to(@pocky[1])
   end
 
@@ -224,7 +225,7 @@ describe "a <%= user_singular %> that belongs in a <%= group_singular %> with ma
   end
 
   it "should not have read and write access to pocky #3" do
-    @<%= user_singular %>.should_not have_access_to(@pocky[2], "rw")
+    @<%= user_singular %>.should_not have_access_to(@pocky[2], "b")
     @<%= user_singular %>.should_not have_read_and_write_access_to(@pocky[2])
   end
 end
@@ -241,5 +242,148 @@ describe "a <%= user_singular %> in the admin <%= group_singular %>" do
 
   it "should be an admin" do
     @<%= user_singular %>.should be_an_admin
+  end
+end
+
+class ::TestMonkey < ActiveRecord::Base
+end
+
+describe "a <%= user_singular %> in a <%= group_singular %> with several individual resource <%= permission_plural %>" do
+  include <%= user_class %>Helpers
+  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
+
+  before(:all) do
+    ActiveRecord::Base.connection.create_table(:test_monkeys, :force => true) do |t|
+      t.column :name, :string
+    end
+  end
+
+  before(:each) do
+    @<%= user_singular %>  = create_<%= user_singular %>
+    @<%= group_singular %> = <%= group_class %>.create(:name => 'jungle') 
+    @<%= user_singular %>.<%= membership_plural %>.create(:<%= group_singular %> => @<%= group_singular %>)
+
+    @monkeys = Array.new(5) { |i| TestMonkey.create(:name => "Monkey #{i+1}") }
+  end
+
+  it "should have 3 readable resources" do
+    @monkeys[0..2].each { |m| @<%= group_singular %>.<%= permission_plural %>.create(:resource => m, :can_read => true) }
+    resources = @<%= user_singular %>.resources(TestMonkey, :r)
+    resources.collect { |r| r.name }.should == @monkeys[0..2].collect { |m| m.name }
+  end
+
+  it "should have 3 writeable resources" do
+    @monkeys[0..2].each { |m| @<%= group_singular %>.<%= permission_plural %>.create(:resource => m, :can_write => true) }
+    @<%= user_singular %>.resources(TestMonkey, :w).length.should == 3
+  end
+
+  it "should have 3 read-and-writeable resources" do
+    @monkeys[0..2].each { |m| @<%= group_singular %>.<%= permission_plural %>.create(:resource => m, :can_read => true, :can_write => true) }
+    @<%= user_singular %>.resources(TestMonkey, :rw).length.should == 3
+    @<%= user_singular %>.resources(TestMonkey, :wr).length.should == 3
+    @<%= user_singular %>.resources(TestMonkey, :b).length.should == 3
+  end
+
+  after(:all) do
+    ActiveRecord::Base.connection.drop_table(:test_monkeys)
+  end
+end
+
+describe "a <%= user_singular %> in three <%= group_plural %>, each with one resource <%= permission_singular %>" do
+  include <%= user_class %>Helpers
+  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
+
+  before(:all) do
+    ActiveRecord::Base.connection.create_table(:test_monkeys, :force => true) do |t|
+      t.column :name, :string
+    end
+  end
+
+  before(:each) do
+    @<%= user_singular %>    = create_<%= user_singular %>
+    @monkeys = Array.new(5) { |i| TestMonkey.create(:name => "Monkey #{i+1}") }
+    @<%= group_plural %>  = Array.new(3) do |i|
+      <%= group_singular %> = <%= group_class %>.create(:name => "test <%= group_singular %> #{i}")
+      @<%= user_singular %>.<%= membership_plural %>.create(:<%= group_singular %> => <%= group_singular %>)
+      <%= group_singular %>
+    end
+  end
+
+  it "should have 3 readable resources" do
+    @<%= group_plural %>.each_with_index do |g, i|
+      perm = g.<%= permission_plural %>.create(:resource => @monkeys[i], :can_read => true)
+    end
+    @<%= user_singular %>.resources(TestMonkey, :r).length.should == 3
+  end
+
+  it "should have 3 writable resources" do
+    @<%= group_plural %>.each_with_index do |g, i|
+      perm = g.<%= permission_plural %>.create(:resource => @monkeys[i], :can_write => true)
+    end
+    @<%= user_singular %>.resources(TestMonkey, :w).length.should == 3
+  end
+
+  it "should have 3 read-and-writable resources" do
+    @<%= group_plural %>.each_with_index do |g, i|
+      perm = g.<%= permission_plural %>.create(:resource => @monkeys[i], :can_read => true, :can_write => true)
+    end
+    @<%= user_singular %>.resources(TestMonkey, :rw).length.should == 3
+    @<%= user_singular %>.resources(TestMonkey, :wr).length.should == 3
+    @<%= user_singular %>.resources(TestMonkey, :b).length.should == 3
+  end
+
+  after(:all) do
+    ActiveRecord::Base.connection.drop_table(:test_monkeys)
+  end
+end
+
+describe "a <%= user_singular %> with explicit access to some resources and a default controller <%= permission_singular %>" do
+  include <%= user_class %>Helpers
+  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
+
+  before(:all) do
+    ActiveRecord::Base.connection.create_table(:test_monkeys, :force => true) do |t|
+      t.column :name, :string
+    end
+  end
+
+  before(:each) do
+    @<%= user_singular %>    = create_<%= user_singular %>
+    @monkeys = Array.new(5) { |i| TestMonkey.create(:name => "Monkey #{i+1}") }
+    @<%= group_plural %>  = Array.new(3) do |i|
+      <%= group_singular %> = <%= group_class %>.create(:name => "test <%= group_singular %> #{i}")
+      @<%= user_singular %>.<%= membership_plural %>.create(:<%= group_singular %> => <%= group_singular %>)
+      <%= group_singular %>
+    end
+    UnixAccessControl.stub!(:controllers).and_return(%w{test_monkeys})
+  end
+
+  it "should have 5 readable resources when controller <%= permission_singular %> also has read access" do
+    (0..2).each do |i|
+      perm = @<%= group_plural %>[i].<%= permission_plural %>.create(:resource => @monkeys[i], :can_read => true)
+    end
+    @<%= group_plural %>[2].<%= permission_plural %>.create(:controller => 'test_monkeys', :can_read => true)
+    @<%= user_singular %>.resources(TestMonkey, :r).length.should == 5
+  end
+
+  it "should have 3 writeable resources when controller <%= permission_singular %> does not have write access" do
+    (0..2).each do |i|
+      perm = @<%= group_plural %>[i].<%= permission_plural %>.create(:resource => @monkeys[i], :can_write => true)
+    end
+    @<%= group_plural %>[2].<%= permission_plural %>.create(:controller => 'test_monkeys', :can_write => false)
+    @<%= user_singular %>.resources(TestMonkey, :w).length.should == 3
+  end
+
+  it "should have 4 readable resources when controller <%= permission_singular %> has read access and one resource is explicity denied" do
+    (0..2).each do |i|
+      perm = @<%= group_plural %>[i].<%= permission_plural %>.create(:resource => @monkeys[i], :can_read => true)
+    end
+    @<%= group_plural %>[0].<%= permission_plural %>.create(:resource => @monkeys[3], :can_read => false)
+    @<%= group_plural %>[2].<%= permission_plural %>.create(:controller => 'test_monkeys', :can_read => true)
+    @<%= user_singular %>.resources(TestMonkey, :r, true).length.should == 4
+  end
+
+  after(:all) do
+    ActiveRecord::Base.connection.drop_table(:test_monkeys)
   end
 end

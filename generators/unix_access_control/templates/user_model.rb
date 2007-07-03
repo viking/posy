@@ -21,7 +21,7 @@ class <%= user_class %> < ActiveRecord::Base
   belongs_to :creator, :class_name => "<%= user_class %>", :foreign_key => "created_by"
   belongs_to :updater, :class_name => "<%= user_class %>", :foreign_key => "updated_by"
 
-  # TODO: destroying <%= user_plural %> should be generally disabled unless the <%= user_singular %> was created
+  # TODO: destroying <%= user_plural %> should probably be disabled unless the <%= user_singular %> was created
   #       by mistake; <%= user_singular %> id's will probably be in lots of tables (like audit trails)
   #       that need to be maintained even if a <%= user_singular %>'s access to a resource is terminated
 
@@ -57,29 +57,94 @@ class <%= user_class %> < ActiveRecord::Base
   def <%= permission_plural %>(force_reload = false)
     unless @<%= permission_plural %> and !force_reload
       g = <%= group_plural %>.find(:all, :include => :<%= permission_plural %>)
-      @<%= permission_plural %> = g.collect { |<%= group_singular %>| <%= group_singular %>.<%= permission_plural %> }.flatten
+      @<%= permission_plural %> = <%= permission_class %>.find_by_sql([<<-end_of_sql, self.id])
+        SELECT p.*  FROM <%= user_plural %> u 
+                    JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id 
+                    JOIN <%= group_plural %> g ON g.id = m.<%= group_singular %>_id
+                    JOIN <%= permission_plural %> p ON g.id = p.<%= group_singular %>_id
+        WHERE u.id = ?
+      end_of_sql
     end
     @<%= permission_plural %>
   end
 
-  # TODO: add caching
   def controller_<%= permission_plural %>(force_reload = false)
-    <%= permission_plural %>(force_reload).select { |p| p.controller }
+    unless @controller_<%= permission_plural %> and !force_reload
+      @controller_<%= permission_plural %> = <%= permission_class %>.find_by_sql([<<-end_of_sql, self.id])
+        SELECT p.*  FROM <%= user_plural %> u 
+                    JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id 
+                    JOIN <%= group_plural %> g ON g.id = m.<%= group_singular %>_id
+                    JOIN <%= permission_plural %> p ON g.id = p.<%= group_singular %>_id
+        WHERE u.id = ? AND p.controller IS NOT NULL
+      end_of_sql
+    end
+    @controller_<%= permission_plural %>
   end
 
-  # TODO: add caching
   def resource_<%= permission_plural %>(force_reload = false)
-    <%= permission_plural %>(force_reload).select { |p| p.resource }
+    unless @resource_<%= permission_plural %> and !force_reload
+      @resource_<%= permission_plural %> = <%= permission_class %>.find_by_sql([<<-end_of_sql, self.id])
+        SELECT p.*  FROM <%= user_plural %> u 
+                    JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id 
+                    JOIN <%= group_plural %> g ON g.id = m.<%= group_singular %>_id
+                    JOIN <%= permission_plural %> p ON g.id = p.<%= group_singular %>_id
+        WHERE u.id = ? AND p.resource_id IS NOT NULL
+      end_of_sql
+    end
+    @resource_<%= permission_plural %>
+  end
+
+  # Return an array of all resources that the <%= user_singular %> has the specified access to.  This
+  # looks at the appropriate controller <%= permission_singular %> (if it exists) to get default <%= permission_plural %>.
+  #
+  # parameters:
+  #   klass       - a Class
+  #   access_mode - 'r', 'w', 'rw', or 'b'  (b == rw)
+  def resources(klass, access_mode, force_reload = false)
+    access_requirement, access_values = case access_mode.to_s
+      when 'r'
+        ["p.can_read = ?", [true]]
+      when 'w'
+        ["p.can_write = ?", [true]]
+      when 'rw', 'wr', 'b'
+        ["p.can_read = ? AND p.can_write = ?", [true, true]]
+      else
+        raise "bad access_mode"
+    end
+    
+    # FIXME: don't assume the controller name is klass.table_name 
+    controller_name = klass.table_name
+    table_name      = klass.table_name
+    <%= group_singular %>_ids_sql   = "(" + <%= membership_plural %>.collect { |m| m.<%= group_singular %>_id }.join(", ") + ")"
+
+    if self.can_access?(controller_name, access_mode)
+      # this means the <%= user_singular %> has default access to the whole lot of #{klass} resources
+      klass.find_by_sql([<<-end_of_sql, klass.to_s] + access_values)
+        SELECT  k.* FROM #{table_name} k
+                    LEFT JOIN <%= permission_plural %> p ON k.id = p.resource_id AND p.resource_type = ?
+        WHERE   (p.<%= group_singular %>_id IN #{<%= group_singular %>_ids_sql} AND #{access_requirement}) OR p.id IS NULL
+      end_of_sql
+
+      # same thing using find
+#      klass.find :all, 
+#        :joins => "LEFT JOIN <%= permission_plural %> perm ON perm.resource_id = #{table_name}.id AND perm.resource_type = '#{klass.to_s}'",
+#        :conditions => ["(perm.<%= group_singular %>_id IN (#{<%= group_singular %>_ids.join(", ")}) AND #{access_requirement}) OR perm.id IS NULL"] + access_values
+    else
+      klass.find_by_sql([<<-end_of_sql, klass.to_s] + access_values)
+        SELECT  k.* FROM #{table_name} k
+                    JOIN <%= permission_plural %> p ON k.id = p.resource_id AND p.resource_type = ? 
+        WHERE   p.<%= group_singular %>_id IN #{<%= group_singular %>_ids_sql} AND #{access_requirement}
+      end_of_sql
+    end
   end
 
   # returns true or false depending on whether or not the <%= user_singular %> can
   # access =thing= in the manner specified by =type= ('r', 'w', or 'rw')
   #
   # parameters:
-  #   thing       - a String (for controller), Project, or Form
-  #   access_mode - 'r', 'w', or 'rw'
-  #   project_id  - required if =thing= is a Form
-  def can_access?(thing, access_mode, project_id = nil)
+  #   thing       - a String (for controller) or ActiveRecord::Base descendant
+  #   access_mode - 'r', 'w', 'rw', or 'b'  (b == rw)
+  def can_access?(thing, access_mode)
     case thing
     when String, Symbol
       # controller
@@ -96,7 +161,7 @@ class <%= user_class %> < ActiveRecord::Base
       admin? || (perm && perm.can_read?)
     when 'w'
       admin? || (perm && perm.can_write?)
-    when 'rw', 'wr'
+    when 'rw', 'wr', 'b'
       admin? || (perm && perm.can_read? && perm.can_write?)
     else
       raise "bad access_mode"
