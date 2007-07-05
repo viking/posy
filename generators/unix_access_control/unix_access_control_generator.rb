@@ -113,13 +113,8 @@ class UnixAccessControlGenerator < Rails::Generator::Base
         end
         m.template "#{tplural}_functional_test.rb", File.join("test", "functional", funcfn)
 
-        # generic controller spec
-        if %w{user group}.include? thing 
-          m.template "generic_controller_spec.rb", File.join("spec", "controllers", cspecfn),
-            :assigns => {:thing_plural => tplural, :thing_singular => thing, :thing_class => thing.classify}
-        else
-          m.template "#{tplural}_controller_spec.rb", File.join("spec", "controllers", cspecfn)
-        end
+        # controller spec
+        m.template "#{tplural}_controller_spec.rb", File.join("spec", "controllers", cspecfn)
       end
 
       # lib templates

@@ -85,7 +85,7 @@ describe "a non-new <%= user_singular %>" do
   end
 end
 
-describe "a <%= user_singular %> that belongs in a <%= group_singular %> with one <%= permission_singular %>" do
+describe <%= user_class %>, "that belongs in a <%= group_singular %> with one <%= permission_singular %>" do
   include <%= user_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
 
@@ -120,7 +120,7 @@ describe "a <%= user_singular %> that belongs in a <%= group_singular %> with on
   end
 end
 
-describe "a <%= user_singular %> that belongs in a <%= group_singular %> with many <%= permission_plural %>" do
+describe <%= user_class %>, "that belongs in a <%= group_singular %> with many <%= permission_plural %>" do
   include <%= user_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
 
@@ -228,7 +228,7 @@ describe "a <%= user_singular %> that belongs in a <%= group_singular %> with ma
   end
 end
 
-describe "a <%= user_singular %> in the admin <%= group_singular %>" do
+describe <%= user_class %>, "in the admin <%= group_singular %>" do
   include <%= user_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
 
@@ -246,7 +246,7 @@ end
 class ::TestMonkey < ActiveRecord::Base
 end
 
-describe "a <%= user_singular %> in a <%= group_singular %> with several individual resource <%= permission_plural %>" do
+describe <%= user_class %>, "in a <%= group_singular %> with several individual resource <%= permission_plural %>" do
   include <%= user_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
 
@@ -287,7 +287,7 @@ describe "a <%= user_singular %> in a <%= group_singular %> with several individ
   end
 end
 
-describe "a <%= user_singular %> in three <%= group_plural %>, each with one resource <%= permission_singular %>" do
+describe <%= user_class %>, "in three <%= group_plural %>, each with one resource <%= permission_singular %>" do
   include <%= user_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
 
@@ -335,7 +335,7 @@ describe "a <%= user_singular %> in three <%= group_plural %>, each with one res
   end
 end
 
-describe "a <%= user_singular %> with explicit access to some resources and a default controller <%= permission_singular %>" do
+describe <%= user_class %>, "with explicit access to some resources and a default controller <%= permission_singular %>" do
   include <%= user_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
 

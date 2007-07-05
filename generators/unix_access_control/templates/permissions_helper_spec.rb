@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe "<%= permission_class %>sHelper#link_to_index" do
-  include <%= permission_class %>sHelper
+describe <%= permission_class %>sHelper, "#link_to_index" do
 
   it "should return <%= group_singular %> link when @<%= group_singular %> exists" do
     @<%= group_singular %> = mock_model(<%= group_class %>)
@@ -15,8 +14,7 @@ describe "<%= permission_class %>sHelper#link_to_index" do
   end
 end
 
-describe "<%= permission_class %>sHelper#link_to_new" do
-  include <%= permission_class %>sHelper
+describe <%= permission_class %>sHelper, "#link_to_new" do
 
   it "should return <%= group_singular %> link when @<%= group_singular %> exists" do
     @<%= group_singular %> = mock_model(<%= group_class %>)
@@ -30,8 +28,7 @@ describe "<%= permission_class %>sHelper#link_to_new" do
   end
 end
 
-describe "<%= permission_class %>sHelper#link_to_show" do
-  include <%= permission_class %>sHelper
+describe <%= permission_class %>sHelper, "#link_to_show" do
 
   before(:each) do
     @<%= permission_singular %> = mock_model(<%= permission_class %>)
@@ -49,8 +46,7 @@ describe "<%= permission_class %>sHelper#link_to_show" do
   end
 end
 
-describe "<%= permission_class %>sHelper#link_to_destroy" do
-  include <%= permission_class %>sHelper
+describe <%= permission_class %>sHelper, "#link_to_destroy" do
 
   before(:each) do
     @<%= permission_singular %> = mock_model(<%= permission_class %>)
@@ -68,8 +64,7 @@ describe "<%= permission_class %>sHelper#link_to_destroy" do
   end
 end
 
-describe "<%= permission_class %>sHelper#url_for_create" do
-  include <%= permission_class %>sHelper
+describe <%= permission_class %>sHelper, "#url_for_create" do
 
   it "should return <%= group_singular %> url when @<%= group_singular %> exists" do
     @<%= group_singular %> = mock_model(<%= group_class %>)
@@ -81,8 +76,7 @@ describe "<%= permission_class %>sHelper#url_for_create" do
   end
 end
 
-describe "<%= permission_class %>sHelper#url_for_update" do
-  include <%= permission_class %>sHelper
+describe <%= permission_class %>sHelper, "#url_for_update" do
 
   before(:each) do
     @<%= permission_singular %> = mock_model(<%= permission_class %>)

@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe "ApplicationHelper#resource_name" do
-  include ApplicationHelper
+describe ApplicationHelper, "#resource_name" do
   
   before(:each) do
     @pocky = Pocky.new
@@ -24,8 +23,7 @@ describe "ApplicationHelper#resource_name" do
   end
 end
 
-describe "ApplicationHelper#resource_link" do
-  include ApplicationHelper
+describe ApplicationHelper, "#resource_link" do
 
   it "should return escaped string when argument is a String" do
     resource_link("<weee!>").should == h("<weee!>")

@@ -240,95 +240,6 @@ describe PockyTestController, :behaviour_type => :controller do
     @controller.send(:current_<%= permission_singular %>).should be_nil
   end
 
-  # this is named funnily, but I don't care
-  it "current_<%= permission_singular %> should always return a resource <%= permission_singular %> if it exists" do
-    @controller.stub!(:action_name).and_return("show")
-    @controller.stub!(:current_resource).and_return(@pocky)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    <%= permission_singular %> = mock_model(<%= permission_class %>, :resource => @pocky)
-    @<%= user_singular %>.stub!(:<%= permission_plural %>).and_return([<%= permission_singular %>])
-
-    @controller.send(:current_<%= permission_singular %>).should == <%= permission_singular %>
-  end
-
-  it "current_<%= permission_singular %> should return a controller <%= permission_singular %> if a resource <%= permission_singular %> doesn't exist" do
-    @controller.stub!(:action_name).and_return("show")
-    @controller.stub!(:current_resource).and_return(nil)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    <%= permission_singular %> = mock_model(<%= permission_class %>, :controller => "pocky_test", :resource => nil)
-    @<%= user_singular %>.stub!(:<%= permission_plural %>).and_return([<%= permission_singular %>])
-
-    @controller.send(:current_<%= permission_singular %>).should == <%= permission_singular %>
-  end
-
-  it "current_<%= permission_singular %> should not even look for a resource <%= permission_singular %> if the action is not included in resource_actions" do
-    @controller.stub!(:action_name).and_return("index")   # index is not in resource_actions
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @<%= user_singular %>.stub!(:<%= permission_plural %>).and_return([])
-
-    @controller.should_not_receive(:current_resource)
-    @controller.send(:current_<%= permission_singular %>)
-  end
-
-  it "current_<%= permission_singular %> should return nil if the current <%= user_singular %> has no related <%= permission_plural %>" do
-    @controller.stub!(:action_name).and_return("show")
-    @controller.stub!(:current_resource).and_return(@pocky)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @<%= user_singular %>.stub!(:<%= permission_plural %>).and_return([])
-
-    @controller.send(:current_<%= permission_singular %>).should be_nil
-  end
-
-  it "<%= user_singular %>_can_read? should call <%= permission_class %>#can_read when current_<%= permission_singular %> is not nil" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    <%= permission_singular %>.should_receive(:can_read).and_return(true)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-
-    @controller.send(:<%= user_singular %>_can_read?).should be_true
-  end
-
-  it "<%= user_singular %>_can_read? should be false if current_<%= permission_singular %> is nil" do
-    @controller.stub!(:current_<%= permission_singular %>).and_return(nil)
-    @controller.send(:<%= user_singular %>_can_read?).should be_false
-  end
-
-  it "<%= user_singular %>_can_write? should call <%= permission_class %>#can_write when current_<%= permission_singular %> is not nil" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    <%= permission_singular %>.should_receive(:can_write).and_return(true)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-
-    @controller.send(:<%= user_singular %>_can_write?).should be_true
-  end
-
-  it "<%= user_singular %>_can_write? should be false if current_<%= permission_singular %> is nil" do
-    @controller.stub!(:current_<%= permission_singular %>).and_return(nil)
-    @controller.send(:<%= user_singular %>_can_write?).should be_false
-  end
-
-  it "<%= user_singular %>_can_read_and_write? should call <%= permission_class %>#can_read and can_write when current_<%= permission_singular %> is not nil" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    <%= permission_singular %>.should_receive(:can_read).and_return(true)
-    <%= permission_singular %>.should_receive(:can_write).and_return(false)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-
-    @controller.send(:<%= user_singular %>_can_read_and_write?).should be_false
-  end
-
-  it "<%= user_singular %>_can_read_and_write? should be false if current_<%= permission_singular %> is nil" do
-    @controller.stub!(:current_<%= permission_singular %>).and_return(nil)
-    @controller.send(:<%= user_singular %>_can_read_and_write?).should be_false
-  end
-
-  it "logged_in? should be true if current_<%= user_singular %> is not :false" do
-    @controller.stub!(:current_<%= user_singular %>).and_return("blah")
-    @controller.send(:logged_in?).should be_true
-  end
-
-  it "logged_in? should be false if current_<%= user_singular %> is :false" do
-    @controller.stub!(:current_<%= user_singular %>).and_return(:false)
-    @controller.send(:logged_in?).should be_false
-  end
-
   it "should set <%= session_singular %>[:<%= user_singular %>] if argument to current_<%= user_singular %>= is not a symbol" do
     @controller.send(:current_<%= user_singular %>=, @<%= user_singular %>)
     @controller.<%= session_singular %>[:<%= user_singular %>].should == @<%= user_singular %>.id
@@ -342,254 +253,6 @@ describe PockyTestController, :behaviour_type => :controller do
   it "should unset <%= session_singular %>[:<%= user_singular %>] if argument to current_<%= user_singular %>= is nil" do
     @controller.send(:current_<%= user_singular %>=, nil)
     @controller.<%= session_singular %>[:<%= user_singular %>].should be_nil
-  end
-
-  it "authorized? should return true if controller_name is '<%= session_plural %>'" do
-    @controller.stub!(:controller_name).and_return('<%= session_plural %>')
-    @controller.send(:authorized?).should be_true
-  end
-
-  it "authorized? should return true if current <%= user_singular %> is an admin" do
-    @<%= user_singular %>.stub!(:admin?).and_return(true)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-
-    @controller.send(:authorized?).should be_true
-  end
-
-  it "authorized? should return true if flash[:allow] is true" do
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:flash).and_return({:allow => true})
-
-    @controller.send(:authorized?).should be_true
-  end
-
-  it "authorized? should return false if current_<%= permission_singular %> is nil" do
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(nil)
-
-    @controller.send(:authorized?).should be_false
-  end
-
-  it "authorized? should call action_<%= permission_plural %>" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-
-    @controller.should_receive(:action_<%= permission_plural %>).and_return({'r' => [], 'w' => [], 'b' => []})
-    @controller.send(:authorized?)
-  end
-
-  it "authorized? should return false if action_<%= permission_plural %> doesn't know about the action" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => [], 'w' => [], 'b' => []})
-    @controller.stub!(:action_name).and_return('foo')
-
-    @controller.send(:authorized?).should be_false
-  end
-
-  it "authorized? should call <%= user_singular %>_can_read? if the action requires read <%= permission_plural %>" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
-    @controller.stub!(:action_name).and_return('foo')
-    
-    @controller.should_receive(:<%= user_singular %>_can_read?).and_return(false)
-    @controller.send(:authorized?)
-  end
-
-  it "authorized? should call <%= user_singular %>_can_write? if the action requires write <%= permission_plural %>" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => [], 'w' => ['foo'], 'b' => []})
-    @controller.stub!(:action_name).and_return('foo')
-    
-    @controller.should_receive(:<%= user_singular %>_can_write?).and_return(false)
-    @controller.send(:authorized?)
-  end
-
-  it "authorized? should call <%= user_singular %>_can_read_and_write? if the action requires read and write <%= permission_plural %>" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => [], 'w' => [], 'b' => ['foo']})
-    @controller.stub!(:action_name).and_return('foo')
-    
-    @controller.should_receive(:<%= user_singular %>_can_read_and_write?).and_return(false)
-    @controller.send(:authorized?)
-  end
-
-  it "authorized? should call sticky_actions if preliminary access is granted" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
-    @controller.stub!(:action_name).and_return('foo')
-    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
-
-    @controller.should_receive(:sticky_actions).and_return([])
-    @controller.send(:authorized?)
-  end
-
-  it "authorized? should call <%= permission_singular %>_is_sticky? if preliminary access is granted and sticky_actions includes the requested action" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
-    @controller.stub!(:action_name).and_return('foo')
-    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
-    @controller.stub!(:sticky_actions).and_return(['foo'])
-
-    @controller.should_receive(:<%= permission_singular %>_is_sticky?).and_return(false)
-    @controller.send(:authorized?)
-  end
-
-  it "authorized? should return true if preliminary access is granted and the action is not sticky" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
-    @controller.stub!(:action_name).and_return('foo')
-    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
-    @controller.stub!(:sticky_actions).and_return([])
-
-    @controller.send(:authorized?).should be_true
-  end
-
-  it "authorized? should call current_resource if preliminary access is granted and the action is sticky" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
-    @controller.stub!(:action_name).and_return('foo')
-    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
-    @controller.stub!(:sticky_actions).and_return(['foo'])
-    @controller.stub!(:<%= permission_singular %>_is_sticky?).and_return(true)
-
-    @controller.should_receive(:current_resource).and_return(nil)
-    @controller.send(:authorized?)
-  end
-
-  it "authorized? should be false if current_resource is nil" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
-    @controller.stub!(:action_name).and_return('foo')
-    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
-    @controller.stub!(:sticky_actions).and_return(['foo'])
-    @controller.stub!(:<%= permission_singular %>_is_sticky?).and_return(true)
-    @controller.stub!(:current_resource).and_return(nil)
-
-    @controller.send(:authorized?).should be_false
-  end
-
-  it "authorized? should be true if the current resource's creator is the current <%= user_singular %>" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
-    @controller.stub!(:action_name).and_return('foo')
-    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
-    @controller.stub!(:sticky_actions).and_return(['foo'])
-    @controller.stub!(:<%= permission_singular %>_is_sticky?).and_return(true)
-    @controller.stub!(:current_resource).and_return(@pocky)
-    @pocky.stub!(:created_by).and_return(@<%= user_singular %>.id)
-
-    @controller.send(:authorized?).should be_true
-  end
-
-  it "authorized? should be false if the current resource's creator is not the current <%= user_singular %>" do
-    <%= permission_singular %> = mock_model(<%= permission_class %>)
-    @<%= user_singular %>.stub!(:admin?).and_return(false)
-    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
-    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
-    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
-    @controller.stub!(:action_name).and_return('foo')
-    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
-    @controller.stub!(:sticky_actions).and_return(['foo'])
-    @controller.stub!(:<%= permission_singular %>_is_sticky?).and_return(true)
-    @controller.stub!(:current_resource).and_return(@pocky)
-    @pocky.stub!(:created_by).and_return(@<%= user_singular %>.id + 1)
-
-    @controller.send(:authorized?).should be_false
-  end
-
-  it "login_required should call get_auth_data" do
-    @controller.should_receive(:get_auth_data).and_return([nil, nil])
-    @controller.stub!(:access_denied)
-    @controller.send(:login_required)
-  end
-
-  it "login_required should set current_<%= user_singular %> if get_auth_data returns a valid <%= user_singular %>name and password" do
-    @controller.stub!(:get_auth_data).and_return(['foo', 'bar'])
-    @controller.stub!(:authorized?).and_return(true)
-    <%= user_class %>.stub!(:authenticate).and_return(@<%= user_singular %>)
-    @controller.send(:login_required)
-
-    @controller.current_<%= user_singular %>.should == @<%= user_singular %>
-  end
-
-  it "login_required should set current_<%= user_singular %> to :false if get_auth_data returns an invalid <%= user_singular %>name and password" do
-    @controller.stub!(:get_auth_data).and_return(['foo', 'bar'])
-    @controller.stub!(:access_denied)
-    <%= user_class %>.stub!(:authenticate).and_return(false)
-    @controller.send(:login_required)
-
-    @controller.current_<%= user_singular %>.should == :false
-  end
-
-  it "login_required should not set current_<%= user_singular %> get_auth_data returns no <%= user_singular %>name or password" do
-    @controller.stub!(:get_auth_data).and_return([nil, nil])
-    @controller.stub!(:access_denied)
-    @controller.should_not_receive(:current_<%= user_singular %>=)
-    @controller.send(:login_required)
-  end
-
-  it "login_required should not call get_auth_data if current_<%= user_singular %> is set" do
-    @controller.send(:current_<%= user_singular %>=, @<%= user_singular %>)
-    @controller.stub!(:authorized?).and_return(true)
-    @controller.should_not_receive(:get_auth_data)
-    @controller.send(:login_required)
-  end
-
-  it "login_required should not call authorized? if logged_in? is false" do
-    @controller.send(:current_<%= user_singular %>=, @<%= user_singular %>)
-    @controller.stub!(:logged_in?).and_return(false)
-    @controller.stub!(:access_denied)
-
-    @controller.should_not_receive(:authorized?)
-    @controller.send(:login_required)
-  end
-
-  it "login_required should call access_denied if <%= user_singular %> is unauthorized" do
-    @controller.send(:current_<%= user_singular %>=, @<%= user_singular %>)
-    @controller.stub!(:authorized?).and_return(false)
-
-    @controller.should_receive(:access_denied)
-    @controller.send(:login_required)
-  end
-
-  it "login_required should return true if <%= user_singular %> is authorized" do
-    @controller.send(:current_<%= user_singular %>=, @<%= user_singular %>)
-    @controller.stub!(:authorized?).and_return(true)
-    @controller.send(:login_required).should be_true
   end
 
   it "should render errors/denied if logged in and unauthorized" do
@@ -617,43 +280,392 @@ describe PockyTestController, :behaviour_type => :controller do
     get :foo, :format => "xml"
     response.should have_text("Couldn't authenticate you")
   end
+end
 
-  it "store_location should set <%= session_singular %>[:return_to] to request_uri" do
+describe PockyTestController, "#current_<%= permission_singular %>", :behaviour_type => :controller do
+  before(:each) do
+    @<%= user_singular %> = mock_model(<%= user_class %>)
+    @pocky = Pocky.new
+    <%= user_class %>.stub!(:find_by_id).and_return(@<%= user_singular %>)
+    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
+    @controller.stub!(:action_name).and_return("show")
+  end
+
+  it "should always return a resource <%= permission_singular %> if it exists" do
+    @controller.stub!(:current_resource).and_return(@pocky)
+    <%= permission_singular %> = mock_model(<%= permission_class %>, :resource => @pocky)
+    @<%= user_singular %>.stub!(:<%= permission_plural %>).and_return([<%= permission_singular %>])
+
+    @controller.send(:current_<%= permission_singular %>).should == <%= permission_singular %>
+  end
+
+  it "should return a controller <%= permission_singular %> if a resource <%= permission_singular %> doesn't exist" do
+    @controller.stub!(:current_resource).and_return(nil)
+    <%= permission_singular %> = mock_model(<%= permission_class %>, :controller => "pocky_test", :resource => nil)
+    @<%= user_singular %>.stub!(:<%= permission_plural %>).and_return([<%= permission_singular %>])
+
+    @controller.send(:current_<%= permission_singular %>).should == <%= permission_singular %>
+  end
+
+  it "should not even look for a resource <%= permission_singular %> if the action is not included in resource_actions" do
+    @controller.stub!(:action_name).and_return("index")   # index is not in resource_actions
+    @<%= user_singular %>.stub!(:<%= permission_plural %>).and_return([])
+
+    @controller.should_not_receive(:current_resource)
+    @controller.send(:current_<%= permission_singular %>)
+  end
+
+  it "should return nil if the current <%= user_singular %> has no related <%= permission_plural %>" do
+    @controller.stub!(:current_resource).and_return(@pocky)
+    @<%= user_singular %>.stub!(:<%= permission_plural %>).and_return([])
+
+    @controller.send(:current_<%= permission_singular %>).should be_nil
+  end
+end
+
+describe PockyTestController, "#<%= user_singular %>_can_read?", :behaviour_type => :controller do
+  before(:each) do
+    @<%= user_singular %> = mock_model(<%= user_class %>)
+    @pocky = Pocky.new
+    <%= user_class %>.stub!(:find_by_id).and_return(@<%= user_singular %>)
+  end
+
+  it "should call <%= permission_class %>#can_read when current_<%= permission_singular %> is not nil" do
+    <%= permission_singular %> = mock_model(<%= permission_class %>)
+    <%= permission_singular %>.should_receive(:can_read).and_return(true)
+    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
+
+    @controller.send(:<%= user_singular %>_can_read?).should be_true
+  end
+
+  it "should be false if current_<%= permission_singular %> is nil" do
+    @controller.stub!(:current_<%= permission_singular %>).and_return(nil)
+    @controller.send(:<%= user_singular %>_can_read?).should be_false
+  end
+end
+
+describe PockyTestController, "#<%= user_singular %>_can_write?", :behaviour_type => :controller do
+  before(:each) do
+    @<%= user_singular %> = mock_model(<%= user_class %>)
+    @pocky = Pocky.new
+    <%= user_class %>.stub!(:find_by_id).and_return(@<%= user_singular %>)
+  end
+
+  it "should call <%= permission_class %>#can_write when current_<%= permission_singular %> is not nil" do
+    <%= permission_singular %> = mock_model(<%= permission_class %>)
+    <%= permission_singular %>.should_receive(:can_write).and_return(true)
+    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
+
+    @controller.send(:<%= user_singular %>_can_write?).should be_true
+  end
+
+  it "should be false if current_<%= permission_singular %> is nil" do
+    @controller.stub!(:current_<%= permission_singular %>).and_return(nil)
+    @controller.send(:<%= user_singular %>_can_write?).should be_false
+  end
+end
+
+describe PockyTestController, "#<%= user_singular %>_can_read_and_write?", :behaviour_type => :controller do
+  before(:each) do
+    @<%= user_singular %> = mock_model(<%= user_class %>)
+    @pocky = Pocky.new
+    <%= user_class %>.stub!(:find_by_id).and_return(@<%= user_singular %>)
+  end
+
+  it "should call <%= permission_class %>#can_read and can_write when current_<%= permission_singular %> is not nil" do
+    <%= permission_singular %> = mock_model(<%= permission_class %>)
+    <%= permission_singular %>.should_receive(:can_read).and_return(true)
+    <%= permission_singular %>.should_receive(:can_write).and_return(false)
+    @controller.stub!(:current_<%= permission_singular %>).and_return(<%= permission_singular %>)
+
+    @controller.send(:<%= user_singular %>_can_read_and_write?).should be_false
+  end
+
+  it "should be false if current_<%= permission_singular %> is nil" do
+    @controller.stub!(:current_<%= permission_singular %>).and_return(nil)
+    @controller.send(:<%= user_singular %>_can_read_and_write?).should be_false
+  end
+end
+
+describe PockyTestController, "#logged_in?", :behaviour_type => :controller do
+  before(:each) do
+    @<%= user_singular %> = mock_model(<%= user_class %>)
+    @pocky = Pocky.new
+    <%= user_class %>.stub!(:find_by_id).and_return(@<%= user_singular %>)
+  end
+
+  it "should be true if current_<%= user_singular %> is not :false" do
+    @controller.stub!(:current_<%= user_singular %>).and_return("blah")
+    @controller.send(:logged_in?).should be_true
+  end
+
+  it "should be false if current_<%= user_singular %> is :false" do
+    @controller.stub!(:current_<%= user_singular %>).and_return(:false)
+    @controller.send(:logged_in?).should be_false
+  end
+end
+
+describe PockyTestController, "#authorized?", :behaviour_type => :controller do
+  before(:each) do
+    @<%= user_singular %> = mock_model(<%= user_class %>)
+    @<%= permission_singular %> = mock_model(<%= permission_class %>)
+    @controller.stub!(:action_name).and_return('foo')
+    @controller.stub!(:current_<%= user_singular %>).and_return(@<%= user_singular %>)
+    @controller.stub!(:current_<%= permission_singular %>).and_return(@<%= permission_singular %>)
+  end
+
+  it "should return true if controller_name is '<%= session_plural %>'" do
+    @controller.stub!(:controller_name).and_return('<%= session_plural %>')
+    @controller.send(:authorized?).should be_true
+  end
+
+  it "should return true if current <%= user_singular %> is an admin" do
+    @<%= user_singular %>.stub!(:admin?).and_return(true)
+
+    @controller.send(:authorized?).should be_true
+  end
+
+  it "should return true if flash[:allow] is true" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:flash).and_return({:allow => true})
+
+    @controller.send(:authorized?).should be_true
+  end
+
+  it "should return false if current_<%= permission_singular %> is nil" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:current_<%= permission_singular %>).and_return(nil)
+
+    @controller.send(:authorized?).should be_false
+  end
+
+  it "should call action_<%= permission_plural %>" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+
+    @controller.should_receive(:action_<%= permission_plural %>).and_return({'r' => [], 'w' => [], 'b' => []})
+    @controller.send(:authorized?)
+  end
+
+  it "should return false if action_<%= permission_plural %> doesn't know about the action" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => [], 'w' => [], 'b' => []})
+
+    @controller.send(:authorized?).should be_false
+  end
+
+  it "should call <%= user_singular %>_can_read? if the action requires read <%= permission_plural %>" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
+    
+    @controller.should_receive(:<%= user_singular %>_can_read?).and_return(false)
+    @controller.send(:authorized?)
+  end
+
+  it "should call <%= user_singular %>_can_write? if the action requires write <%= permission_plural %>" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => [], 'w' => ['foo'], 'b' => []})
+    
+    @controller.should_receive(:<%= user_singular %>_can_write?).and_return(false)
+    @controller.send(:authorized?)
+  end
+
+  it "should call <%= user_singular %>_can_read_and_write? if the action requires read and write <%= permission_plural %>" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => [], 'w' => [], 'b' => ['foo']})
+    
+    @controller.should_receive(:<%= user_singular %>_can_read_and_write?).and_return(false)
+    @controller.send(:authorized?)
+  end
+
+  it "should call sticky_actions if preliminary access is granted" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
+    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
+
+    @controller.should_receive(:sticky_actions).and_return([])
+    @controller.send(:authorized?)
+  end
+
+  it "should call <%= permission_singular %>_is_sticky? if preliminary access is granted and sticky_actions includes the requested action" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
+    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
+    @controller.stub!(:sticky_actions).and_return(['foo'])
+
+    @controller.should_receive(:<%= permission_singular %>_is_sticky?).and_return(false)
+    @controller.send(:authorized?)
+  end
+
+  it "should return true if preliminary access is granted and the action is not sticky" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
+    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
+    @controller.stub!(:sticky_actions).and_return([])
+
+    @controller.send(:authorized?).should be_true
+  end
+
+  it "should call current_resource if preliminary access is granted and the action is sticky" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
+    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
+    @controller.stub!(:sticky_actions).and_return(['foo'])
+    @controller.stub!(:<%= permission_singular %>_is_sticky?).and_return(true)
+
+    @controller.should_receive(:current_resource).and_return(nil)
+    @controller.send(:authorized?)
+  end
+
+  it "should be false if current_resource is nil" do
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
+    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
+    @controller.stub!(:sticky_actions).and_return(['foo'])
+    @controller.stub!(:<%= permission_singular %>_is_sticky?).and_return(true)
+    @controller.stub!(:current_resource).and_return(nil)
+
+    @controller.send(:authorized?).should be_false
+  end
+
+  it "should be true if the current resource's creator is the current <%= user_singular %>" do
+    pocky = Pocky.new
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
+    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
+    @controller.stub!(:sticky_actions).and_return(['foo'])
+    @controller.stub!(:<%= permission_singular %>_is_sticky?).and_return(true)
+    @controller.stub!(:current_resource).and_return(pocky)
+    pocky.stub!(:created_by).and_return(@<%= user_singular %>.id)
+
+    @controller.send(:authorized?).should be_true
+  end
+
+  it "should be false if the current resource's creator is not the current <%= user_singular %>" do
+    pocky = Pocky.new
+    @<%= user_singular %>.stub!(:admin?).and_return(false)
+    @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
+    @controller.stub!(:<%= user_singular %>_can_read?).and_return(true)
+    @controller.stub!(:sticky_actions).and_return(['foo'])
+    @controller.stub!(:<%= permission_singular %>_is_sticky?).and_return(true)
+    @controller.stub!(:current_resource).and_return(pocky)
+    pocky.stub!(:created_by).and_return(@<%= user_singular %>.id + 1)
+
+    @controller.send(:authorized?).should be_false
+  end
+end
+
+describe PockyTestController, "#login_required", :behaviour_type => :controller do
+  before(:each) do
+    @<%= user_singular %> = mock_model(<%= user_class %>)
+    <%= user_class %>.stub!(:find_by_id).and_return(@<%= user_singular %>)
+  end
+
+  it "should call get_auth_data" do
+    @controller.should_receive(:get_auth_data).and_return([nil, nil])
+    @controller.stub!(:access_denied)
+    @controller.send(:login_required)
+  end
+
+  it "should set current_<%= user_singular %> if get_auth_data returns a valid <%= user_singular %>name and password" do
+    @controller.stub!(:get_auth_data).and_return(['foo', 'bar'])
+    @controller.stub!(:authorized?).and_return(true)
+    <%= user_class %>.stub!(:authenticate).and_return(@<%= user_singular %>)
+    @controller.send(:login_required)
+
+    @controller.current_<%= user_singular %>.should == @<%= user_singular %>
+  end
+
+  it "should set current_<%= user_singular %> to :false if get_auth_data returns an invalid <%= user_singular %>name and password" do
+    @controller.stub!(:get_auth_data).and_return(['foo', 'bar'])
+    @controller.stub!(:access_denied)
+    <%= user_class %>.stub!(:authenticate).and_return(false)
+    @controller.send(:login_required)
+
+    @controller.current_<%= user_singular %>.should == :false
+  end
+
+  it "should not set current_<%= user_singular %> get_auth_data returns no <%= user_singular %>name or password" do
+    @controller.stub!(:get_auth_data).and_return([nil, nil])
+    @controller.stub!(:access_denied)
+    @controller.should_not_receive(:current_<%= user_singular %>=)
+    @controller.send(:login_required)
+  end
+
+  it "should not call get_auth_data if current_<%= user_singular %> is set" do
+    @controller.send(:current_<%= user_singular %>=, @<%= user_singular %>)
+    @controller.stub!(:authorized?).and_return(true)
+    @controller.should_not_receive(:get_auth_data)
+    @controller.send(:login_required)
+  end
+
+  it "should not call authorized? if logged_in? is false" do
+    @controller.send(:current_<%= user_singular %>=, @<%= user_singular %>)
+    @controller.stub!(:logged_in?).and_return(false)
+    @controller.stub!(:access_denied)
+
+    @controller.should_not_receive(:authorized?)
+    @controller.send(:login_required)
+  end
+
+  it "should call access_denied if <%= user_singular %> is unauthorized" do
+    @controller.send(:current_<%= user_singular %>=, @<%= user_singular %>)
+    @controller.stub!(:authorized?).and_return(false)
+
+    @controller.should_receive(:access_denied)
+    @controller.send(:login_required)
+  end
+
+  it "should return true if <%= user_singular %> is authorized" do
+    @controller.send(:current_<%= user_singular %>=, @<%= user_singular %>)
+    @controller.stub!(:authorized?).and_return(true)
+    @controller.send(:login_required).should be_true
+  end
+end
+
+describe PockyTestController, "#store_location", :behaviour_type => :controller do
+
+  it "should set <%= session_singular %>[:return_to] to request_uri" do
     get :bar
     @controller.send(:store_location)
     @controller.<%= session_singular %>[:return_to].should == request.request_uri
   end
+end
 
-  it "redirect_back_or_default should redirect to the url in <%= session_singular %>[:return_to] if it exists" do
+describe PockyTestController, "#redirect_back_or_default", :behaviour_type => :controller do
+
+  it "should redirect to the url in <%= session_singular %>[:return_to] if it exists" do
     @controller.<%= session_singular %>[:return_to] = '/pocky_test/foo'
     get :redirect_back
     response.should redirect_to('/pocky_test/foo')
   end
 
-  it "redirect_back_or_default should redirect to a default if <%= session_singular %>[:return_to] doesn't exist" do
+  it "should redirect to a default if <%= session_singular %>[:return_to] doesn't exist" do
     get :redirect_back
     response.should redirect_to('/pocky_test/bar')
   end
 
-  it "redirect_back_or_default should unset <%= session_singular %>[:return_to]" do
+  it "should unset <%= session_singular %>[:return_to]" do
     @controller.<%= session_singular %>[:return_to] = '/pocky_test/foo'
     get :redirect_back
     @controller.<%= session_singular %>[:return_to].should be_nil
   end
+end
 
-  it "get_auth_data should decoded auth string in X-HTTP_AUTHORIZATION" do
+describe PockyTestController, "#get_auth_data", :behaviour_type => :controller do
+
+  it "should decode auth string in X-HTTP_AUTHORIZATION" do
     get :bar
     request.env['X-HTTP_AUTHORIZATION'] = "Basic YWRtaW46dGVzdA=="  # admin:test
     @controller.send(:get_auth_data).should == %w{admin test}
   end
 
-  it "get_auth_data should decoded auth string in HTTP_AUTHORIZATION" do
+  it "should decode auth string in HTTP_AUTHORIZATION" do
     get :bar
     request.env['HTTP_AUTHORIZATION'] = "Basic YWRtaW46dGVzdA=="  # admin:test
     @controller.send(:get_auth_data).should == %w{admin test}
   end
 
-  it "get_auth_data should decoded auth string in Authorization" do
+  it "should decode auth string in Authorization" do
     get :bar
     request.env['Authorization'] = "Basic YWRtaW46dGVzdA=="  # admin:test
     @controller.send(:get_auth_data).should == %w{admin test}

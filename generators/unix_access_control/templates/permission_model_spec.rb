@@ -69,43 +69,51 @@ describe <%= permission_class %> do
     <%= permission_singular %>1.should be_valid
     <%= permission_singular %>2.should_not be_valid
   end
+end
 
-  it "can_read? should equal can_read" do
+describe <%= permission_class %>, "#can_read?" do
+  it "should equal can_read" do
     <%= permission_singular %> = <%= permission_class %>.new(:can_read => true)
     <%= permission_singular %>.can_read?.should be_true
     <%= permission_singular %>[:can_read] = false
     <%= permission_singular %>.can_read?.should be_false
   end
+end
 
-  it "can_write? should equal can_write" do
+describe <%= permission_class %>, "#can_write?" do
+  it "should equal can_write" do
     <%= permission_singular %> = <%= permission_class %>.new(:can_write => true)
     <%= permission_singular %>.can_write?.should be_true
     <%= permission_singular %>[:can_write] = false
     <%= permission_singular %>.can_write?.should be_false
   end
+end
 
-  it "can_read_and_write? should equal can_read && can_write" do
+describe <%= permission_class %>, "#can_read_and_write?" do
+  it "should equal can_read && can_write" do
     <%= permission_singular %> = <%= permission_class %>.new(:can_write => true, :can_read => false)
     <%= permission_singular %>.can_read_and_write?.should be_false
     <%= permission_singular %>[:can_read] = true
     <%= permission_singular %>.can_read_and_write?.should be_true
   end
+end
 
-  it "can_access?('r') should equal can_read" do
+describe <%= permission_class %>, "#can_access?" do
+  it "should equal can_read when called with 'r'" do
     <%= permission_singular %> = <%= permission_class %>.new(:can_read => true)
     <%= permission_singular %>.can_access?('r').should be_true
     <%= permission_singular %>[:can_read] = false
     <%= permission_singular %>.can_access?('r').should be_false
   end
 
-  it "can_access?('w') should equal can_write" do
+  it "should equal can_write when called with 'w'" do
     <%= permission_singular %> = <%= permission_class %>.new(:can_write => true)
     <%= permission_singular %>.can_access?('w').should be_true
     <%= permission_singular %>[:can_write] = false
     <%= permission_singular %>.can_access?('w').should be_false
   end
 
-  it "can_access?('rw') should equal can_read && can_write" do
+  it "should equal can_read && can_write when called with 'rw'" do
     <%= permission_singular %> = <%= permission_class %>.new(:can_write => true, :can_read => false)
     <%= permission_singular %>.can_access?('rw').should be_false
     <%= permission_singular %>[:can_read] = true
@@ -113,7 +121,7 @@ describe <%= permission_class %> do
   end
 end
 
-describe "an existing <%= permission_singular %>", :shared => true do
+describe "a non-new <%= permission_singular %>", :shared => true do
   it "should update" do
     @<%= permission_singular %>.update_attributes(:can_read => false, :can_write => true).should be_true
   end
@@ -131,7 +139,7 @@ describe "an existing <%= permission_singular %>", :shared => true do
   end
 end
 
-describe "an existing resource <%= permission_singular %>" do
+describe "a non-new resource <%= permission_singular %>" do
   include <%= permission_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>
 
@@ -141,7 +149,7 @@ describe "an existing resource <%= permission_singular %>" do
     @<%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :resource => @pocky)
   end
 
-  it_should_behave_like "an existing <%= permission_singular %>"
+  it_should_behave_like "a non-new <%= permission_singular %>"
 
   it "should not allow duplicate <%= permission_plural %> on update" do
     another_<%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:malfoys), :resource => @pocky)
@@ -153,7 +161,7 @@ describe "an existing resource <%= permission_singular %>" do
   end
 end
 
-describe "an existing controller <%= permission_singular %>" do
+describe "a non-new controller <%= permission_singular %>" do
   include <%= permission_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>
 
@@ -167,7 +175,7 @@ describe "an existing controller <%= permission_singular %>" do
     @<%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :controller => @controller)
   end
 
-  it_should_behave_like "an existing <%= permission_singular %>"
+  it_should_behave_like "a non-new <%= permission_singular %>"
 
   it "should not allow duplicate <%= permission_plural %> on update" do
     another_<%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:malfoys), :controller => @controller)

@@ -96,7 +96,7 @@ describe "a permanent <%= group_singular %>" do
   end
 end
 
-describe "a <%= group_singular %> with two <%= user_plural %>" do
+describe <%= group_class %>, "with two <%= user_plural %>" do
   include <%= group_class %>Helpers
   fixtures :<%= group_plural %>, :<%= user_plural %>
 
@@ -135,7 +135,7 @@ describe "a <%= group_singular %> with two <%= user_plural %>" do
   end
 end
 
-describe "a <%= group_singular %> with one <%= permission_singular %>" do
+describe <%= group_class %>, "with one <%= permission_singular %>" do
   include <%= group_class %>Helpers
   fixtures :<%= group_plural %>, :<%= user_plural %>, :<%= permission_plural %>
 
@@ -152,7 +152,7 @@ describe "a <%= group_singular %> with one <%= permission_singular %>" do
   end
 end
 
-describe "a <%= group_singular %> with some <%= permission_plural %>" do
+describe <%= group_class %>, "with some <%= permission_plural %>" do
   include <%= group_class %>Helpers
   fixtures :<%= group_plural %>, :<%= user_plural %>, :<%= permission_plural %>
 

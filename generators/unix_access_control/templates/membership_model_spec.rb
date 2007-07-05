@@ -52,7 +52,7 @@ describe <%= membership_class %> do
   end
 end
 
-describe "an existing <%= membership_singular %>" do
+describe "a non-new <%= membership_singular %>" do
   include <%= membership_class %>Helpers
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
 
