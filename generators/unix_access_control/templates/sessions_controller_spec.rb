@@ -1,5 +1,17 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+describe <%= session_plural_class %>Controller, "#route_for" do
+
+  it "should map { :controller => '<%= session_plural %>', :action => 'new' } to /<%= session_plural %>/new" do
+    route_for(:controller => "<%= session_plural %>", :action => "new").should == "/<%= session_plural %>/new"
+  end
+  
+  it "should map { :controller => '<%= session_plural %>', :action => 'destroy', :id => 1} to /<%= session_plural %>/1" do
+    route_for(:controller => "<%= session_plural %>", :action => "destroy", :id => 1).should == "/<%= session_plural %>/1"
+  end
+  
+end
+
 describe <%= session_plural_class %>Controller do
   fixtures :<%= user_plural %>
 

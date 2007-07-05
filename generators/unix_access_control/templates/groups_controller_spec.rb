@@ -1,5 +1,33 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+describe <%= group_plural_class %>Controller, "#route_for" do
+
+  it "should map { :controller => '<%= group_plural %>', :action => 'index' } to /<%= group_plural %>" do
+    route_for(:controller => "<%= group_plural %>", :action => "index").should == "/<%= group_plural %>"
+  end
+  
+  it "should map { :controller => '<%= group_plural %>', :action => 'new' } to /<%= group_plural %>/new" do
+    route_for(:controller => "<%= group_plural %>", :action => "new").should == "/<%= group_plural %>/new"
+  end
+  
+  it "should map { :controller => '<%= group_plural %>', :action => 'show', :id => 1 } to /<%= group_plural %>/1" do
+    route_for(:controller => "<%= group_plural %>", :action => "show", :id => 1).should == "/<%= group_plural %>/1"
+  end
+  
+  it "should map { :controller => '<%= group_plural %>', :action => 'edit', :id => 1 } to /<%= group_plural %>/1;edit" do
+    route_for(:controller => "<%= group_plural %>", :action => "edit", :id => 1).should == "/<%= group_plural %>/1;edit"
+  end
+  
+  it "should map { :controller => '<%= group_plural %>', :action => 'update', :id => 1} to /<%= group_plural %>/1" do
+    route_for(:controller => "<%= group_plural %>", :action => "update", :id => 1).should == "/<%= group_plural %>/1"
+  end
+  
+  it "should map { :controller => '<%= group_plural %>', :action => 'destroy', :id => 1} to /<%= group_plural %>/1" do
+    route_for(:controller => "<%= group_plural %>", :action => "destroy", :id => 1).should == "/<%= group_plural %>/1"
+  end
+  
+end
+
 describe <%= group_plural_class %>Controller, "when no one is logged in" do
 
   it "should redirect to /<%= session_plural %>/new on GET to index" do

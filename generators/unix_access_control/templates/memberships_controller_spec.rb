@@ -1,5 +1,25 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+describe <%= membership_plural_class %>Controller, "#route_for" do
+
+  it "should map { :controller => '<%= membership_plural %>', :action => 'index' } to /<%= membership_plural %>" do
+    route_for(:controller => "<%= membership_plural %>", :action => "index").should == "/<%= membership_plural %>"
+  end
+  
+  it "should map { :controller => '<%= membership_plural %>', :action => 'new' } to /<%= membership_plural %>/new" do
+    route_for(:controller => "<%= membership_plural %>", :action => "new").should == "/<%= membership_plural %>/new"
+  end
+  
+  it "should map { :controller => '<%= membership_plural %>', :action => 'show', :id => 1 } to /<%= membership_plural %>/1" do
+    route_for(:controller => "<%= membership_plural %>", :action => "show", :id => 1).should == "/<%= membership_plural %>/1"
+  end
+  
+  it "should map { :controller => '<%= membership_plural %>', :action => 'destroy', :id => 1} to /<%= membership_plural %>/1" do
+    route_for(:controller => "<%= membership_plural %>", :action => "destroy", :id => 1).should == "/<%= membership_plural %>/1"
+  end
+  
+end
+
 describe <%= membership_plural_class %>Controller, "when not logged in" do
 
   it "should redirect to /<%= session_plural %>/new on GET to index" do
