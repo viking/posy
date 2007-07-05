@@ -1,2 +1,2 @@
-module <%= group_class %>sHelper
+module <%= group_plural_class %>Helper
 end

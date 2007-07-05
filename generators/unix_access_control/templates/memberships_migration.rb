@@ -1,4 +1,4 @@
-class Create<%= membership_class %>s < ActiveRecord::Migration
+class Create<%= membership_plural_class %> < ActiveRecord::Migration
   def self.up
     create_table :<%= membership_plural %> do |t|
       t.column :<%= group_singular %>_id, :integer

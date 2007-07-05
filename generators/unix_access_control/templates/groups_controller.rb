@@ -1,4 +1,4 @@
-class <%= group_class %>sController < ApplicationController
+class <%= group_plural_class %>Controller < ApplicationController
   prepend_before_filter :login_required
 
   # GET /<%= group_plural %>

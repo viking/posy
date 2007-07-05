@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe <%= session_class %>sController do
+describe <%= session_plural_class %>Controller do
   fixtures :<%= user_plural %>
 
   it "should successfully GET /<%= session_plural %>/new" do

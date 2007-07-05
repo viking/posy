@@ -2,10 +2,9 @@ class UnixAccessControlGenerator < Rails::Generator::Base
   default_options :skip_migration => false, :skip_in_place_modifications => false
 
   %w{user group membership permission session}.each do |thing|
-    attr_reader "#{thing}_class", "#{thing}_singular", "#{thing}_plural",
-                "#{thing}_model_file_name", "#{thing}_controller_file_name",
-                "#{thing}_migrate_file_name", "#{thing}_unit_test_file_name",
-                "#{thing}_fixture_file_name", "#{thing}_functional_test_file_name",
+    attr_reader "#{thing}_class", "#{thing}_plural_class", "#{thing}_singular",
+                "#{thing}_plural", "#{thing}_model_file_name", "#{thing}_controller_file_name",
+                "#{thing}_migrate_file_name", "#{thing}_fixture_file_name", 
                 "#{thing}_helper_file_name", "#{thing}_model_spec_file_name",
                 "#{thing}_controller_spec_file_name", "#{thing}_helper_spec_file_name"
   end
@@ -25,14 +24,13 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       instance_variable_set("@#{thing}_singular", fn)
       instance_variable_set("@#{thing}_plural", fnplural)
       instance_variable_set("@#{thing}_class", fn.classify)
+      instance_variable_set("@#{thing}_plural_class", fnplural.capitalize)
       instance_variable_set("@#{thing}_model_file_name", "#{fn}.rb")
       instance_variable_set("@#{thing}_controller_file_name", "#{fnplural}_controller.rb")
       instance_variable_set("@#{thing}_helper_file_name", "#{fnplural}_helper.rb")
       instance_variable_set("@#{thing}_migrate_file_name", "create_#{fnplural}")
-      instance_variable_set("@#{thing}_unit_test_file_name", "#{fn}_test.rb")
       instance_variable_set("@#{thing}_model_spec_file_name", "#{fn}_spec.rb")
       instance_variable_set("@#{thing}_fixture_file_name", "#{fnplural}.yml")
-      instance_variable_set("@#{thing}_functional_test_file_name", "#{fnplural}_controller_test.rb")
       instance_variable_set("@#{thing}_controller_spec_file_name", "#{fnplural}_controller_spec.rb")
       instance_variable_set("@#{thing}_helper_spec_file_name", "#{fnplural}_helper_spec.rb")
     end
@@ -47,8 +45,6 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       m.directory File.join("app", "views", "layouts")
       m.directory File.join("app", "views", "errors")
       m.directory File.join("db", "migrate")
-      m.directory File.join("test", "unit")
-      m.directory File.join("test", "functional")
       m.directory File.join("test", "fixtures")
       m.directory File.join("test", "mocks", "test")
       m.directory File.join("spec", "models")
@@ -70,8 +66,6 @@ class UnixAccessControlGenerator < Rails::Generator::Base
         ctrlfn    = instance_variable_get("@#{thing}_controller_file_name") 
         helpfn    = instance_variable_get("@#{thing}_helper_file_name") 
         migratefn = instance_variable_get("@#{thing}_migrate_file_name") 
-        unitfn    = instance_variable_get("@#{thing}_unit_test_file_name") 
-        funcfn    = instance_variable_get("@#{thing}_functional_test_file_name") 
         fixfn     = instance_variable_get("@#{thing}_fixture_file_name") 
         mspecfn   = instance_variable_get("@#{thing}_model_spec_file_name")
         cspecfn   = instance_variable_get("@#{thing}_controller_spec_file_name")
@@ -106,12 +100,10 @@ class UnixAccessControlGenerator < Rails::Generator::Base
 
         # tests
         unless thing == "session"
-          m.template "#{thing}_unit_test.rb", File.join("test", "unit", unitfn)
           m.template "#{thing}_model_spec.rb", File.join("spec", "models", mspecfn)
           m.template "#{tplural}.yml", File.join("test", "fixtures", fixfn)
           m.template "#{tplural}.yml", File.join("spec", "fixtures", fixfn)
         end
-        m.template "#{tplural}_functional_test.rb", File.join("test", "functional", funcfn)
 
         # controller spec
         m.template "#{tplural}_controller_spec.rb", File.join("spec", "controllers", cspecfn)

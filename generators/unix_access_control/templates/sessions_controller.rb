@@ -1,5 +1,5 @@
 # This controller handles the login/logout function of the site.  
-class <%= session_class %>sController < ApplicationController
+class <%= session_plural_class %>Controller < ApplicationController
   # render new.rhtml
   def new
   end

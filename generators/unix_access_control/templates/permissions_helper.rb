@@ -1,4 +1,4 @@
-module <%= permission_class %>sHelper
+module <%= permission_plural_class %>Helper
   def link_to_index(name, html_options = nil, *parameters_for_method_reference)
     if @<%= group_singular %>
       link_to(name, <%= group_singular %>_<%= permission_plural %>_path(@<%= group_singular %>), html_options, *parameters_for_method_reference)

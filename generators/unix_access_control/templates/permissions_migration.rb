@@ -1,4 +1,4 @@
-class Create<%= permission_class %>s < ActiveRecord::Migration
+class Create<%= permission_plural_class %> < ActiveRecord::Migration
   def self.up
     create_table :<%= permission_plural %> do |t|
       t.column :<%= group_singular %>_id, :integer

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe <%= user_class %>sController, "when no one is logged in" do
+describe <%= user_plural_class %>Controller, "when no one is logged in" do
 
   it "should redirect to /<%= session_plural %>/new on GET to index" do
     get :index
@@ -38,7 +38,7 @@ describe <%= user_class %>sController, "when no one is logged in" do
   end
 end
 
-describe <%= user_class %>sController, "handling GET /<%= user_plural %> as admin" do
+describe <%= user_plural_class %>Controller, "handling GET /<%= user_plural %> as admin" do
 
   include AuthenticatedTestHelper
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
@@ -59,7 +59,7 @@ describe <%= user_class %>sController, "handling GET /<%= user_plural %> as admi
   end
 end
 
-describe <%= user_class %>sController, "handling GET /<%= user_plural %>/1 as admin" do
+describe <%= user_plural_class %>Controller, "handling GET /<%= user_plural %>/1 as admin" do
 
   include AuthenticatedTestHelper
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
@@ -81,7 +81,7 @@ describe <%= user_class %>sController, "handling GET /<%= user_plural %>/1 as ad
   end
 end
 
-describe <%= user_class %>sController, "handling GET /<%= user_plural %>/new as admin" do
+describe <%= user_plural_class %>Controller, "handling GET /<%= user_plural %>/new as admin" do
 
   include AuthenticatedTestHelper
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
@@ -103,7 +103,7 @@ describe <%= user_class %>sController, "handling GET /<%= user_plural %>/new as 
   end
 end
 
-describe <%= user_class %>sController, "handling GET /<%= user_plural %>/1;edit as admin" do
+describe <%= user_plural_class %>Controller, "handling GET /<%= user_plural %>/1;edit as admin" do
 
   include AuthenticatedTestHelper
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
@@ -125,7 +125,7 @@ describe <%= user_class %>sController, "handling GET /<%= user_plural %>/1;edit 
   end
 end
 
-describe <%= user_class %>sController, "handling POST /<%= user_plural %> as admin" do
+describe <%= user_plural_class %>Controller, "handling POST /<%= user_plural %> as admin" do
 
   include AuthenticatedTestHelper
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
@@ -154,7 +154,7 @@ describe <%= user_class %>sController, "handling POST /<%= user_plural %> as adm
   end
 end
 
-describe <%= user_class %>sController, "handling PUT /<%= user_plural %>/1 as admin" do
+describe <%= user_plural_class %>Controller, "handling PUT /<%= user_plural %>/1 as admin" do
 
   include AuthenticatedTestHelper
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
@@ -183,7 +183,7 @@ describe <%= user_class %>sController, "handling PUT /<%= user_plural %>/1 as ad
   end
 end
 
-describe <%= user_class %>sController, "handling DELETE /<%= user_plural %>/1 as admin" do
+describe <%= user_plural_class %>Controller, "handling DELETE /<%= user_plural %>/1 as admin" do
 
   include AuthenticatedTestHelper
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>

@@ -1,4 +1,4 @@
-class Create<%= group_class %>s < ActiveRecord::Migration
+class Create<%= group_plural_class %> < ActiveRecord::Migration
   class <%= group_class %> < ActiveRecord::Base
   end
   

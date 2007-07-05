@@ -1,2 +1,2 @@
-module <%= user_class %>sHelper
+module <%= user_plural_class %>Helper
 end

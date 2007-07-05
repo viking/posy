@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe <%= membership_class %>sHelper, "#link_to_index" do
+describe <%= membership_plural_class %>Helper, "#link_to_index" do
 
   it "should return <%= user_singular %> link when @<%= user_singular %> exists" do
     @<%= user_singular %> = mock_model(<%= user_class %>)
@@ -20,7 +20,7 @@ describe <%= membership_class %>sHelper, "#link_to_index" do
   end
 end
 
-describe <%= membership_class %>sHelper, "#link_to_new" do
+describe <%= membership_plural_class %>Helper, "#link_to_new" do
 
   it "should return <%= user_singular %> link when @<%= user_singular %> exists" do
     @<%= user_singular %> = mock_model(<%= user_class %>)
@@ -40,7 +40,7 @@ describe <%= membership_class %>sHelper, "#link_to_new" do
   end
 end
 
-describe <%= membership_class %>sHelper, "#link_to_show" do
+describe <%= membership_plural_class %>Helper, "#link_to_show" do
 
   before(:each) do
     @<%= membership_singular %> = mock_model(<%= membership_class %>)
@@ -64,7 +64,7 @@ describe <%= membership_class %>sHelper, "#link_to_show" do
   end
 end
 
-describe <%= membership_class %>sHelper, "#link_to_destroy" do
+describe <%= membership_plural_class %>Helper, "#link_to_destroy" do
 
   before(:each) do
     @<%= membership_singular %> = mock_model(<%= membership_class %>)
@@ -88,7 +88,7 @@ describe <%= membership_class %>sHelper, "#link_to_destroy" do
   end
 end
 
-describe <%= membership_class %>sHelper, "#url_for_create" do
+describe <%= membership_plural_class %>Helper, "#url_for_create" do
 
   it "should return <%= user_singular %> url when @<%= user_singular %> exists" do
     @<%= user_singular %> = mock_model(<%= user_class %>)

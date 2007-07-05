@@ -1,4 +1,4 @@
-class Create<%= user_class %>s < ActiveRecord::Migration
+class Create<%= user_plural_class %> < ActiveRecord::Migration
   def self.up
     create_table "<%= user_plural %>", :force => true do |t|
       t.column :login,             :string

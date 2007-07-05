@@ -1,4 +1,4 @@
-class Create<%= session_class %>s < ActiveRecord::Migration
+class Create<%= session_plural_class %> < ActiveRecord::Migration
   def self.up
     create_table :<%= session_plural %> do |t|
       t.column :<%= session_singular %>_id, :string
