@@ -1,0 +1,5 @@
+- add permission test to check model validity (similar to controllers)
+- change access_control.yml comment to reflect change above
+- add integration tests
+- change class methods in AuthenticedSystem to set_*
+- make access finders instead of User#resources
