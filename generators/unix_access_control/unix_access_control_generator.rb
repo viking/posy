@@ -52,7 +52,7 @@ class UnixAccessControlGenerator < Rails::Generator::Base
       m.directory File.join("spec", "helpers")
       m.directory File.join("spec", "views")
       m.directory File.join("spec", "fixtures")
-      m.directory File.join("spec", "libs")
+      m.directory File.join("spec", "lib")
       m.directory File.join("public", "images")
       m.directory File.join("public", "stylesheets")
       m.directory "lib"
@@ -198,7 +198,7 @@ EOF
       m.template "pocky_mock.rb", File.join("test", "mocks", "test", "pocky.rb")
       m.template "ohagi_mock.rb", File.join("test", "mocks", "test", "ohagi.rb")
       m.template "fake_model_mock.rb", File.join("test", "mocks", "test", "fake_model.rb")
-      m.template "authenticated_system_spec.rb", File.join("spec", "libs", "authenticated_system_spec.rb")
+      m.template "authenticated_system_spec.rb", File.join("spec", "lib", "authenticated_system_spec.rb")
       m.file "spinner.gif",  File.join("public", "images", "spinner.gif")
       m.file "scaffold.css", File.join("public", "stylesheets", "scaffold.css")
     end
