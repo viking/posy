@@ -10,7 +10,7 @@
 #  Dog: name
 #  default: name
 
-# put the models you want to show up in /permissions/new here
+# put the models you want to show up in /<%= permission_plural %>/new here
 #models:
 #  - Dog
 #  - Cat

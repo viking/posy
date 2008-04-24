@@ -11,9 +11,9 @@ module <%= membership_plural_class %>Helper
 
   def link_to_new(name, html_options = nil, *parameters_for_method_reference)
     if @<%= user_singular %>
-      link_to(name, <%= user_singular %>_new_<%= membership_singular %>_path(@<%= user_singular %>), html_options, *parameters_for_method_reference)
+      link_to(name, new_<%= user_singular %>_<%= membership_singular %>_path(@<%= user_singular %>), html_options, *parameters_for_method_reference)
     elsif @<%= group_singular %>
-      link_to(name, <%= group_singular %>_new_<%= membership_singular %>_path(@<%= group_singular %>), html_options, *parameters_for_method_reference)
+      link_to(name, new_<%= group_singular %>_<%= membership_singular %>_path(@<%= group_singular %>), html_options, *parameters_for_method_reference)
     else
       link_to(name, new_<%= membership_singular %>_path, html_options, *parameters_for_method_reference)
     end

@@ -14,8 +14,8 @@ describe <%= group_plural_class %>Controller, "#route_for" do
     route_for(:controller => "<%= group_plural %>", :action => "show", :id => 1).should == "/<%= group_plural %>/1"
   end
   
-  it "should map { :controller => '<%= group_plural %>', :action => 'edit', :id => 1 } to /<%= group_plural %>/1;edit" do
-    route_for(:controller => "<%= group_plural %>", :action => "edit", :id => 1).should == "/<%= group_plural %>/1;edit"
+  it "should map { :controller => '<%= group_plural %>', :action => 'edit', :id => 1 } to /<%= group_plural %>/1/edit" do
+    route_for(:controller => "<%= group_plural %>", :action => "edit", :id => 1).should == "/<%= group_plural %>/1/edit"
   end
   
   it "should map { :controller => '<%= group_plural %>', :action => 'update', :id => 1} to /<%= group_plural %>/1" do
@@ -131,7 +131,7 @@ describe <%= group_plural_class %>Controller, "handling GET /<%= group_plural %>
   end
 end
 
-describe <%= group_plural_class %>Controller, "handling GET /<%= group_plural %>/1;edit as admin" do
+describe <%= group_plural_class %>Controller, "handling GET /<%= group_plural %>/1/edit as admin" do
 
   include AuthenticatedTestHelper
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
@@ -144,11 +144,11 @@ describe <%= group_plural_class %>Controller, "handling GET /<%= group_plural %>
     get :edit, :id => "1"
   end
 
-  it "should GET /<%= group_plural %>/1;edit successfully" do
+  it "should GET /<%= group_plural %>/1/edit successfully" do
     response.should be_success
   end
 
-  it "should have a @<%= group_singular %> after GET /<%= group_plural %>/1;edit" do
+  it "should have a @<%= group_singular %> after GET /<%= group_plural %>/1/edit" do
     assigns[:<%= group_singular %>].should == @<%= group_singular %>
   end
 end

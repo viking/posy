@@ -59,7 +59,7 @@
 </table>
 <br/>
 
-<%%= link_to 'Add <%= user_singular %>', <%= group_singular %>_new_<%= membership_singular %>_path(@<%= group_singular %>) %> |
+<%%= link_to 'Add <%= user_singular %>', new_<%= group_singular %>_<%= membership_singular %>_path(@<%= group_singular %>) %> |
 <%%= link_to '<%= membership_class %> index', <%= group_singular %>_<%= membership_plural %>_path(@<%= group_singular %>) %>
 
 <br/>
@@ -80,12 +80,12 @@
     <td><%%=h <%= permission_singular %>.can_write ? "yes" : "no" %></td>
     <td><%%=h <%= permission_singular %>.is_sticky ? "yes" : "no" %></td>
     <td><%%= link_to 'Show', <%= group_singular %>_<%= permission_singular %>_url(@<%= group_singular %>, <%= permission_singular %>) %></td>
-    <td><%%= link_to 'Edit', <%= group_singular %>_edit_<%= permission_singular %>_url(@<%= group_singular %>, <%= permission_singular %>) %></td>
+    <td><%%= link_to 'Edit', edit_<%= group_singular %>_<%= permission_singular %>_url(@<%= group_singular %>, <%= permission_singular %>) %></td>
     <td><%%= link_to 'Destroy', <%= group_singular %>_<%= permission_singular %>_url(@<%= group_singular %>, <%= permission_singular %>), :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <%% end %>
 </table>
 <br/>
 
-<%%= link_to 'Add <%= permission_singular %>', <%= group_singular %>_new_<%= permission_singular %>_path(@<%= group_singular %>) %> |
+<%%= link_to 'Add <%= permission_singular %>', new_<%= group_singular %>_<%= permission_singular %>_path(@<%= group_singular %>) %> |
 <%%= link_to '<%= permission_class %> index', <%= group_singular %>_<%= permission_plural %>_path(@<%= group_singular %>) %>

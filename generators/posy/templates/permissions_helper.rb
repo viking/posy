@@ -9,7 +9,7 @@ module <%= permission_plural_class %>Helper
 
   def link_to_new(name, html_options = nil, *parameters_for_method_reference)
     if @<%= group_singular %>
-      link_to(name, <%= group_singular %>_new_<%= permission_singular %>_path(@<%= group_singular %>), html_options, *parameters_for_method_reference)
+      link_to(name, new_<%= group_singular %>_<%= permission_singular %>_path(@<%= group_singular %>), html_options, *parameters_for_method_reference)
     else
       link_to(name, new_<%= permission_singular %>_path, html_options, *parameters_for_method_reference)
     end
@@ -25,7 +25,7 @@ module <%= permission_plural_class %>Helper
 
   def link_to_edit(name, <%= permission_singular %>, html_options = nil, *parameters_for_method_reference)
     if @<%= group_singular %>
-      link_to(name, <%= group_singular %>_edit_<%= permission_singular %>_path(@<%= group_singular %>, <%= permission_singular %>), html_options, *parameters_for_method_reference)
+      link_to(name, edit_<%= group_singular %>_<%= permission_singular %>_path(@<%= group_singular %>, <%= permission_singular %>), html_options, *parameters_for_method_reference)
     else
       link_to(name, edit_<%= permission_singular %>_path(<%= permission_singular %>), html_options, *parameters_for_method_reference)
     end

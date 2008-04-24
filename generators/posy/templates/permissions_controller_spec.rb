@@ -14,8 +14,8 @@ describe <%= permission_plural_class %>Controller, "#route_for" do
     route_for(:controller => "<%= permission_plural %>", :action => "show", :id => 1).should == "/<%= permission_plural %>/1"
   end
   
-  it "should map { :controller => '<%= permission_plural %>', :action => 'edit', :id => 1 } to /<%= permission_plural %>/1;edit" do
-    route_for(:controller => "<%= permission_plural %>", :action => "edit", :id => 1).should == "/<%= permission_plural %>/1;edit"
+  it "should map { :controller => '<%= permission_plural %>', :action => 'edit', :id => 1 } to /<%= permission_plural %>/1/edit" do
+    route_for(:controller => "<%= permission_plural %>", :action => "edit", :id => 1).should == "/<%= permission_plural %>/1/edit"
   end
   
   it "should map { :controller => '<%= permission_plural %>', :action => 'update', :id => 1} to /<%= permission_plural %>/1" do
@@ -109,7 +109,7 @@ describe <%= permission_plural_class %>Controller, "handling GET /<%= permission
   end
 end
 
-describe <%= permission_plural_class %>Controller, "handling GET /<%= permission_plural %>/1;edit as admin" do
+describe <%= permission_plural_class %>Controller, "handling GET /<%= permission_plural %>/1/edit as admin" do
 
   include AuthenticatedTestHelper
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
@@ -407,7 +407,7 @@ describe <%= permission_plural_class %>Controller, "handling GET /<%= group_plur
   end
 end
 
-describe <%= permission_plural_class %>Controller, "handling GET /<%= group_plural %>/1/<%= permission_plural %>/1;edit as admin" do
+describe <%= permission_plural_class %>Controller, "handling GET /<%= group_plural %>/1/<%= permission_plural %>/1/edit as admin" do
 
   include AuthenticatedTestHelper
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
