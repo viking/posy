@@ -31,7 +31,7 @@ class <%= permission_class %> < ActiveRecord::Base
       r.errors.add(a, 'cannot exist if resource_id exists')
 
     # make sure this controller exists
-    elsif !UnixAccessControl.controllers.include?(v)
+    elsif !Posy.controllers.include?(v)
       r.errors.add(a, 'is not valid')
 
     # cannot have more than one <%= group_singular %>/controller combo

@@ -1,4 +1,4 @@
-class UnixAccessControlGenerator < Rails::Generator::Base
+class PosyGenerator < Rails::Generator::Base
   default_options :skip_migration => false, :skip_in_place_modifications => false
 
   %w{user group membership permission session}.each do |thing|
@@ -171,7 +171,7 @@ EOF
             <<EOF
 #{match}
   def resource_name(resource)
-    resource.send(UnixAccessControl.name_method_for(resource.class))
+    resource.send(Posy.name_method_for(resource.class))
   end
 
   def resource_link(resource)
@@ -179,7 +179,7 @@ EOF
     when String
       h(resource)
     when ActiveRecord::Base
-      link_to("\#{resource.send(UnixAccessControl.name_method_for(resource.class))} (\#{resource.class})",
+      link_to("\#{resource.send(Posy.name_method_for(resource.class))} (\#{resource.class})",
               :controller => resource.class.to_s.tableize, :action => 'show', :id => resource.id)
     else
       resource

@@ -3,7 +3,7 @@ Description:
     control scheme.
 
 Example:
-    ./script/generate unix_access_control [user-model] [ [group-model] [ [membership-model] [ [permission-model] [session-model] ] ] ]
+    ./script/generate posy [user-model] [ [group-model] [ [membership-model] [ [permission-model] [session-model] ] ] ]
 
     This will create scaffolding for users, groups, memberships, permissions, and sessions.
 

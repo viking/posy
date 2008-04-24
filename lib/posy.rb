@@ -1,4 +1,4 @@
-module UnixAccessControl
+module Posy
   mattr_accessor :configuration_file
   @@configuration_file = File.join(RAILS_ROOT, 'config', 'access_control.yml')
 

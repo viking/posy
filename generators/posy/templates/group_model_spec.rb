@@ -157,7 +157,7 @@ describe <%= group_class %>, "with some <%= permission_plural %>" do
   fixtures :<%= group_plural %>, :<%= user_plural %>, :<%= permission_plural %>
 
   before(:each) do
-    UnixAccessControl.stub!(:controllers).and_return(%w{pockies})
+    Posy.stub!(:controllers).and_return(%w{pockies})
     <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
     @<%= group_singular %>  = create_<%= group_singular %>
     @pocky1 = Pocky.new(1)

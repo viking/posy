@@ -142,7 +142,7 @@ describe <%= permission_plural_class %>Controller, "handling GET /<%= permission
     @resource_types = %w{Lion Tiger Bear}
     <%= permission_class %>.stub!(:new).and_return(@<%= permission_singular %>)
     <%= group_class %>.stub!(:find).and_return([])
-    UnixAccessControl.stub!(:models).and_return(@resource_types)
+    Posy.stub!(:models).and_return(@resource_types)
   end
 
   it "should be successful" do
@@ -170,8 +170,8 @@ describe <%= permission_plural_class %>Controller, "handling GET /<%= permission
     assigns[:resource_types].should == ['Controller'] + @resource_types
   end
 
-  it "should call UnixAccessControl.models" do
-    UnixAccessControl.should_receive(:models).and_return(@resource_types)
+  it "should call Posy.models" do
+    Posy.should_receive(:models).and_return(@resource_types)
     get :new
   end
 end
@@ -200,7 +200,7 @@ describe <%= permission_plural_class %>Controller, "handling GET /<%= permission
   end
 
   it "should set @controllers when params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
-    UnixAccessControl.stub!(:controllers).and_return(%w{vampires})
+    Posy.stub!(:controllers).and_return(%w{vampires})
     
     get :new, :format => 'js', :<%= permission_singular %> => { :resource_type => 'Controller' }
     assigns[:controllers].should == %w{vampires}
@@ -229,7 +229,7 @@ describe <%= permission_plural_class %>Controller, "handling POST /<%= permissio
     <%= group_class %>.stub!(:find).and_return([])
     @<%= permission_singular %>.stub!(:save).and_return(true)
     @<%= permission_singular %>.stub!(:controller).and_return(nil)
-    UnixAccessControl.stub!(:models).and_return(@resource_types)
+    Posy.stub!(:models).and_return(@resource_types)
   end
   
   it "should redirect to /<%= permission_plural %>/:id when valid" do
@@ -268,7 +268,7 @@ describe <%= permission_plural_class %>Controller, "handling POST /<%= permissio
 
   it "should set @controllers when invalid and params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
     @<%= permission_singular %>.stub!(:save).and_return(false)
-    UnixAccessControl.stub!(:controllers).and_return(%w{vampires})
+    Posy.stub!(:controllers).and_return(%w{vampires})
     
     post :create, :<%= permission_singular %> => { :resource_type => 'Controller' }
     assigns[:controllers].should == %w{vampires}
@@ -494,7 +494,7 @@ describe <%= permission_plural_class %>Controller, "handling GET /<%= group_plur
   end
 
   it "should set @controllers when params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
-    UnixAccessControl.stub!(:controllers).and_return(%w{vampires})
+    Posy.stub!(:controllers).and_return(%w{vampires})
     
     get :new, :format => 'js', :<%= group_singular %>_id => '1', :<%= permission_singular %> => { :resource_type => 'Controller' }
     assigns[:controllers].should == %w{vampires}
@@ -555,7 +555,7 @@ describe <%= permission_plural_class %>Controller, "handling POST /<%= group_plu
 
   it "should set @controllers when invalid and params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
     @<%= permission_singular %>.stub!(:save).and_return(false)
-    UnixAccessControl.stub!(:controllers).and_return(%w{vampires})
+    Posy.stub!(:controllers).and_return(%w{vampires})
     
     post :create, :<%= permission_singular %> => { :resource_type => 'Controller' }
     assigns[:controllers].should == %w{vampires}

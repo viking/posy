@@ -1,6 +1,6 @@
 require 'test/unit'
 
-class UnixAccessControlTest < Test::Unit::TestCase
+class PosyTest < Test::Unit::TestCase
   # Replace this with your real tests.
   def test_this_plugin
     flunk

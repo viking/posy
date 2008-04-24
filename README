@@ -1,4 +1,4 @@
-UnixAccessControl
+Posy
 =================
 
 This plugin contains a generator to create a unix access control scheme.  Each user
@@ -8,7 +8,7 @@ permissions.  Also contained in this plugin is the userstamp plugin, which will
 stamp user id's on records that have created_by and updated_by fields.
 
 To use the generator with the default names, run:
-  ./script/generate unix_access_control
+  ./script/generate posy
 
 You can also specify what names you want to use for users, groups, memberships,
 permissions, and sessions.  Check out the USAGE file in the generators directory for 

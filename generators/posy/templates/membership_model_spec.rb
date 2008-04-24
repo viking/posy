@@ -14,7 +14,7 @@ describe <%= membership_class %> do
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= membership_plural %>, :<%= permission_plural %>
 
   before(:all) do
-    UnixAccessControl.send(:class_variable_set, "@@configuration", { 'controllers' => %w{vampires werewolves} })  # </hax>
+    Posy.send(:class_variable_set, "@@configuration", { 'controllers' => %w{vampires werewolves} })  # </hax>
   end
 
   it "should create" do

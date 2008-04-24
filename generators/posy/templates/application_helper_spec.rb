@@ -4,12 +4,12 @@ describe ApplicationHelper, "#resource_name" do
   
   before(:each) do
     @pocky = Pocky.new
-    UnixAccessControl.stub!(:name_method_for).and_return('name')
+    Posy.stub!(:name_method_for).and_return('name')
     @pocky.stub!(:name).and_return("teh p0cky")
   end
 
-  it "should call UnixAccessControl.name_method_for" do
-    UnixAccessControl.should_receive(:name_method_for).and_return('name')
+  it "should call Posy.name_method_for" do
+    Posy.should_receive(:name_method_for).and_return('name')
     resource_name(@pocky)
   end
 
@@ -30,7 +30,7 @@ describe ApplicationHelper, "#resource_link" do
   end
 
   it "should return link to resource when argument is an ActiveRecord" do
-    UnixAccessControl.stub!(:name_method_for).and_return('name')
+    Posy.stub!(:name_method_for).and_return('name')
     pocky = Pocky.new
     pocky.stub!(:name).and_return("teh p0cky")
 

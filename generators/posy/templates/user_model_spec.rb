@@ -90,7 +90,7 @@ describe <%= user_class %>, "that belongs in a <%= group_singular %> with one <%
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
 
   before(:all) do
-    UnixAccessControl.send(:class_variable_set, "@@configuration", { 'controllers' => ['vampires'] })  # </hax>
+    Posy.send(:class_variable_set, "@@configuration", { 'controllers' => ['vampires'] })  # </hax>
   end
 
   before(:each) do
@@ -125,7 +125,7 @@ describe <%= user_class %>, "that belongs in a <%= group_singular %> with many <
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
 
   before(:all) do
-    UnixAccessControl.send(:class_variable_set, "@@configuration", { 'controllers' => %w{vampires werewolves unicorns} })  # </hax>
+    Posy.send(:class_variable_set, "@@configuration", { 'controllers' => %w{vampires werewolves unicorns} })  # </hax>
   end
 
   before(:each) do
@@ -353,7 +353,7 @@ describe <%= user_class %>, "with explicit access to some resources and a defaul
       @<%= user_singular %>.<%= membership_plural %>.create(:<%= group_singular %> => <%= group_singular %>)
       <%= group_singular %>
     end
-    UnixAccessControl.stub!(:controllers).and_return(%w{test_monkeys})
+    Posy.stub!(:controllers).and_return(%w{test_monkeys})
   end
 
   it "should have 5 readable resources when controller <%= permission_singular %> also has read access" do

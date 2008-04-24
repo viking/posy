@@ -15,7 +15,7 @@ describe <%= permission_class %> do
   fixtures :<%= group_plural %>, :<%= permission_plural %>
 
   before(:all) do
-    UnixAccessControl.send(:class_variable_set, "@@configuration", { 'controllers' => ['vampires'] })  # </hax>
+    Posy.send(:class_variable_set, "@@configuration", { 'controllers' => ['vampires'] })  # </hax>
   end
 
   it "should create with a resource" do
@@ -166,7 +166,7 @@ describe "a non-new controller <%= permission_singular %>" do
   fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>
 
   before(:all) do
-    UnixAccessControl.send(:class_variable_set, "@@configuration", { 'controllers' => ['vampires'] })  # </hax>
+    Posy.send(:class_variable_set, "@@configuration", { 'controllers' => ['vampires'] })  # </hax>
   end
 
   before(:each) do

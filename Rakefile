@@ -5,17 +5,17 @@ require 'rake/rdoctask'
 desc 'Default: run unit tests.'
 task :default => :test
 
-desc 'Test the unix_access_control plugin.'
+desc 'Test the posy plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.pattern = 'test/**/*_test.rb'
   t.verbose = true
 end
 
-desc 'Generate documentation for the unix_access_control plugin.'
+desc 'Generate documentation for the posy plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'UnixAccessControl'
+  rdoc.title    = 'Posy'
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')

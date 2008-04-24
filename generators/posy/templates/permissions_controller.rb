@@ -42,7 +42,7 @@ class <%= permission_plural_class %>Controller < ApplicationController
       @<%= group_plural %> = <%= group_class %>.find(:all)
       @<%= permission_singular %> = <%= permission_class %>.new
     end
-    @resource_types = ['Controller'] + UnixAccessControl.models
+    @resource_types = ['Controller'] + Posy.models
 
     respond_to do |format|
       format.html # new.rhtml
@@ -90,7 +90,7 @@ class <%= permission_plural_class %>Controller < ApplicationController
         format.xml  { head :created, :location => <%= permission_singular %>_url(@<%= permission_singular %>) }
       else
         format.html do
-          @resource_types = ['Controller'] + UnixAccessControl.models
+          @resource_types = ['Controller'] + Posy.models
           setup_resources_or_controllers
           render :action => "new"
         end
@@ -158,7 +158,7 @@ class <%= permission_plural_class %>Controller < ApplicationController
       type = params[:<%= permission_singular %>][:resource_type]  rescue nil
       case type
       when 'Controller'
-        @controllers = UnixAccessControl.controllers 
+        @controllers = Posy.controllers 
       when /[A-Z]\w+/
         @resources = type.constantize.find(:all).collect { |x| [x.name, x.id] }
       end
