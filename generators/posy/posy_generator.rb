@@ -6,7 +6,8 @@ class PosyGenerator < Rails::Generator::Base
                 "#{thing}_plural", "#{thing}_model_file_name", "#{thing}_controller_file_name",
                 "#{thing}_migrate_file_name", "#{thing}_fixture_file_name", 
                 "#{thing}_helper_file_name", "#{thing}_model_spec_file_name",
-                "#{thing}_controller_spec_file_name", "#{thing}_helper_spec_file_name"
+                "#{thing}_controller_spec_file_name", "#{thing}_routing_spec_file_name",
+                "#{thing}_helper_spec_file_name"
   end
   
   def initialize(runtime_args, runtime_options = {})
@@ -32,6 +33,7 @@ class PosyGenerator < Rails::Generator::Base
       instance_variable_set("@#{thing}_model_spec_file_name", "#{fn}_spec.rb")
       instance_variable_set("@#{thing}_fixture_file_name", "#{fnplural}.yml")
       instance_variable_set("@#{thing}_controller_spec_file_name", "#{fnplural}_controller_spec.rb")
+      instance_variable_set("@#{thing}_routing_spec_file_name", "#{fnplural}_routing_spec.rb")
       instance_variable_set("@#{thing}_helper_spec_file_name", "#{fnplural}_helper_spec.rb")
     end
   end
@@ -69,6 +71,7 @@ class PosyGenerator < Rails::Generator::Base
         fixfn     = instance_variable_get("@#{thing}_fixture_file_name") 
         mspecfn   = instance_variable_get("@#{thing}_model_spec_file_name")
         cspecfn   = instance_variable_get("@#{thing}_controller_spec_file_name")
+        rspecfn   = instance_variable_get("@#{thing}_routing_spec_file_name")
         hspecfn   = instance_variable_get("@#{thing}_helper_spec_file_name")
 
         m.template "#{thing}_model.rb", File.join("app", "models", modelfn) unless thing == "session"
@@ -107,6 +110,7 @@ class PosyGenerator < Rails::Generator::Base
 
         # controller spec
         m.template "#{tplural}_controller_spec.rb", File.join("spec", "controllers", cspecfn)
+        m.template "#{tplural}_routing_spec.rb", File.join("spec", "controllers", rspecfn)  unless thing == "session"
       end
 
       # lib templates
