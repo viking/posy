@@ -42,7 +42,7 @@ module AuthenticatedSystem
     #
     # NOTE: It doesn't make sense to have an action in sticky_actions that also isn't in
     #       resource_actions, because access will always be denied (since authorized? will
-    #       check for current_resource, which will be nil).
+    #       check for current_resource, which would be nil for a non-resource action).
     #
     def sticky_actions(*actions)
       return read_inheritable_attribute(:sticky_actions)    if actions.empty?
@@ -65,6 +65,35 @@ module AuthenticatedSystem
         @resource_model_name = name.to_s.classify
       end
       @resource_model_name ||= controller_name.singularize.classify
+    end
+
+    # Specify options for parent/child <%= permission_singular %> relationships.  You must set this
+    # if you want a controller to look for parent <%= permission_plural %>.  This should be a list of
+    # arrays of controller names like so:
+    #
+    # access_hierarchies [:cats, :dogs, :ferrets], [:dogs, :cats]
+    #
+    # Using the above example, if you surfed to the following url:
+    #   /cats/1/dogs/2/ferrets
+    #
+    # I would first look for the resource <%= permission_singular %> for cat 1.  If that didn't exist,
+    # I would look for the controller <%= permission_singular %> for cats.  Next, I'd look for the resource
+    # <%= permission_singular %> for dog 2 where the first <%= permission_singular %> is the parent, and so on.  If at
+    # any point in the chain no <%= permission_singular %> can be found, it goes to the next array in the 
+    # access hierarchy list.  This way, precedence is established.
+    #
+    # NOTE: It is up to you to make sure the controllers are in the correct order.  The
+    # authorization method is not smart enough to figure out the correct order via the
+    # url.  For example, if your hierarchy is set up like this,
+    #   access_hierarchies [:cats, :dogs]
+    #
+    # and you went to /dogs/1/cats/1, it would first look for the cat <%= permission_singular %> BEFORE
+    # the dog <%= permission_singular %>.
+    #
+    def access_hierarchies(*args) 
+      return read_inheritable_attribute(:access_hierarchies)  if args.empty?
+      args.collect! { |a| a.collect { |b| b.to_s } }
+      write_inheritable_attribute(:access_hierarchies, args)
     end
 
     # Use this method to set what <%= permission_plural %> are needed to perform what actions.
@@ -150,6 +179,10 @@ module AuthenticatedSystem
     self.class.resource_model_name(name)
   end
 
+  def access_hierarchies(*args)
+    self.class.access_hierarchies(*args)
+  end
+
   # Accesses the current <%= user_singular %> from the <%= session_singular %>.
   # NOTE: this is public so that the <%= user_plural %>tamp filter can access it
   def current_<%= user_singular %>
@@ -175,14 +208,16 @@ module AuthenticatedSystem
       @current_resource
     end
 
-    # This will grab the associated <%= permission_singular %> for the selected action.  If params[:id] exists,
-    # it will try to grab the <%= permission_singular %> for the associated resource FIRST, and if that doesn't
-    # exist it will try to get the <%= permission_singular %> for the associated controller.
+    # This will grab the associated <%= permission_singular %> for the selected action.  Access hierarchies
+    # take highest precedence.  Next, if params[:id] exists, it will try to grab the 
+    # <%= permission_singular %> for the associated resource.  Finally, if that doesn't exist it will try to
+    # get the <%= permission_singular %> for the associated controller.
     #
     # You can use the following methods to tweak how this works:
     #   resource_actions:        use to add additional actions that use resources
     #   remove_resource_actions: use to remove actions that use resources
     #   resource_model_name:     use to change the model name of the resource
+    #   access_hierarchies:      for nested <%= permission_plural %>
     #   
     def current_<%= permission_singular %>
       unless defined? @current_<%= permission_singular %> 
@@ -192,11 +227,29 @@ module AuthenticatedSystem
         end
         perms = current_<%= user_singular %>.<%= permission_plural %>
 
+        # try access hierarchies first!
+        parent = nil
+        access_hierarchies.each do |arr|
+          arr.each do |controller|
+            id = params["#{controller.singularize}_id"]
+            next  unless id
+            type = "#{controller}_controller".classify.constantize.resource_model_name
+
+            # try to find parent resource <%= permission_singular %> first; then controller <%= permission_singular %>
+            perm   = perms.detect { |p| p.resource_id == id.to_i && p.resource_type == type && p.parent == parent }
+            perm ||= perms.detect { |p| p.controller == controller && p.parent == parent }
+            parent = perm
+
+            break unless parent
+          end
+          break if parent
+        end
+
         # grab the current resource <%= permission_singular %>
         if resource_actions.include?(action_name) and !current_resource.nil?
-          @current_<%= permission_singular %> = perms.detect { |p| p.resource == current_resource } 
+          @current_<%= permission_singular %> = perms.detect { |p| p.resource == current_resource && p.parent == parent } 
         end
-        @current_<%= permission_singular %> ||= perms.detect { |p| p.controller == controller_name }
+        @current_<%= permission_singular %> ||= perms.detect { |p| p.controller == controller_name && p.parent == parent }
       end
       @current_<%= permission_singular %>
     end
@@ -354,6 +407,10 @@ module AuthenticatedSystem
       # default sticky_actions array
       unless base.inheritable_attributes[:sticky_actions]
         base.write_inheritable_attribute(:sticky_actions, DEFAULT_STICKY_ACTIONS.dup)
+      end
+
+      unless base.inheritable_attributes[:access_hierarchies]
+        base.write_inheritable_attribute(:access_hierarchies, [])
       end
     end
 

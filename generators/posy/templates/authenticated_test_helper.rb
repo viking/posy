@@ -1,8 +1,9 @@
 module AuthenticatedTestHelper
   # Sets the current <%= user_singular %> in the <%= session_singular %> from the <%= user_singular %> fixtures.
   def login_as(<%= user_singular %>)
-    @request.<%= session_singular %>[:<%= user_singular %>] = <%= user_singular %> ? <%= user_plural %>(<%= user_singular %>).id : nil   if @request
-    <%= user_class %>.current_<%= user_singular %> = <%= user_singular %> ? <%= user_plural %>(<%= user_singular %>) : nil
+    <%= user_singular %> = <%= user_singular %>.is_a?(Symbol) ? <%= user_plural %>(<%= user_singular %>) : <%= user_singular %>
+    @request.<%= session_singular %>[:<%= user_singular %>] = <%= user_singular %> ? <%= user_singular %>.id : nil   if @request
+    <%= user_class %>.current_<%= user_singular %> = <%= user_singular %> ? <%= user_singular %> : nil
   end
 
   def content_type(type)
