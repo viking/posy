@@ -90,10 +90,10 @@ class PosyGenerator < Rails::Generator::Base
 
         # view specs
         m.directory File.join("spec", "views", tplural)
-        m.template "#{tplural}_index_view_spec.rb", File.join("spec", "views", tplural, "index_view_spec.rb")  unless thing == "session"
-        m.template "#{tplural}_show_view_spec.rb",  File.join("spec", "views", tplural, "show_view_spec.rb")   unless thing == "session"
-        m.template "#{tplural}_edit_view_spec.rb",  File.join("spec", "views", tplural, "edit_view_spec.rb")   unless %w{membership session}.include?(thing)
-        m.template "#{tplural}_new_view_spec.rb",   File.join("spec", "views", tplural, "new_view_spec.rb")
+        m.template "#{tplural}_index_view_spec.rb", File.join("spec", "views", tplural, "index_spec.rb")  unless thing == "session"
+        m.template "#{tplural}_show_view_spec.rb",  File.join("spec", "views", tplural, "show_spec.rb")   unless thing == "session"
+        m.template "#{tplural}_edit_view_spec.rb",  File.join("spec", "views", tplural, "edit_spec.rb")   unless %w{membership session}.include?(thing)
+        m.template "#{tplural}_new_view_spec.rb",   File.join("spec", "views", tplural, "new_spec.rb")
 
         # helper
         m.template "#{tplural}_helper.rb", File.join("app", "helpers", helpfn)
