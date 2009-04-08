@@ -79,7 +79,7 @@ module AuthenticatedSystem
     # I would first look for the resource <%= permission_singular %> for cat 1.  If that didn't exist,
     # I would look for the controller <%= permission_singular %> for cats.  Next, I'd look for the resource
     # <%= permission_singular %> for dog 2 where the first <%= permission_singular %> is the parent, and so on.  If at
-    # any point in the chain no <%= permission_singular %> can be found, it goes to the next array in the 
+    # any point in the chain no <%= permission_singular %> can be found, it goes to the next array in the
     # access hierarchy list.  This way, precedence is established.
     #
     # NOTE: It is up to you to make sure the controllers are in the correct order.  The
@@ -90,7 +90,7 @@ module AuthenticatedSystem
     # and you went to /dogs/1/cats/1, it would first look for the cat <%= permission_singular %> BEFORE
     # the dog <%= permission_singular %>.
     #
-    def access_hierarchies(*args) 
+    def access_hierarchies(*args)
       return read_inheritable_attribute(:access_hierarchies)  if args.empty?
       args.collect! { |a| a.collect { |b| b.to_s } }
       write_inheritable_attribute(:access_hierarchies, args)
@@ -116,7 +116,7 @@ module AuthenticatedSystem
     def chmod(<%= permission_singular %>, *actions)
       # parse <%= permission_singular %> string
       perms = { 'add' => [], 'del' => [], 'set' => [] }
-      mode  = "set" 
+      mode  = "set"
       <%= permission_singular %>.split(//).each do |p|
         case p
         when '+'
@@ -196,7 +196,7 @@ module AuthenticatedSystem
           @current_resource = nil
           return @current_resource
         end
-        
+
         begin
           model = resource_model_name.constantize
           @current_resource = model.find_by_id(params[:id]) # returns nil if not found
@@ -209,7 +209,7 @@ module AuthenticatedSystem
     end
 
     # This will grab the associated <%= permission_singular %> for the selected action.  Access hierarchies
-    # take highest precedence.  Next, if params[:id] exists, it will try to grab the 
+    # take highest precedence.  Next, if params[:id] exists, it will try to grab the
     # <%= permission_singular %> for the associated resource.  Finally, if that doesn't exist it will try to
     # get the <%= permission_singular %> for the associated controller.
     #
@@ -218,9 +218,9 @@ module AuthenticatedSystem
     #   remove_resource_actions: use to remove actions that use resources
     #   resource_model_name:     use to change the model name of the resource
     #   access_hierarchies:      for nested <%= permission_plural %>
-    #   
+    #
     def current_<%= permission_singular %>
-      unless defined? @current_<%= permission_singular %> 
+      unless defined? @current_<%= permission_singular %>
         if current_<%= user_singular %> == :false
           @current_<%= permission_singular %> = nil
           return @current_<%= permission_singular %>
@@ -247,7 +247,7 @@ module AuthenticatedSystem
 
         # grab the current resource <%= permission_singular %>
         if resource_actions.include?(action_name) and !current_resource.nil?
-          @current_<%= permission_singular %> = perms.detect { |p| p.resource == current_resource && p.parent == parent } 
+          @current_<%= permission_singular %> = perms.detect { |p| p.resource == current_resource && p.parent == parent }
         end
         @current_<%= permission_singular %> ||= perms.detect { |p| p.controller == controller_name && p.parent == parent }
       end
@@ -275,13 +275,13 @@ module AuthenticatedSystem
     def logged_in?
       current_<%= user_singular %> != :false
     end
-    
+
     # Store the given <%= user_singular %> in the <%= session_singular %>.
     def current_<%= user_singular %>=(new_<%= user_singular %>)
       <%= session_singular %>[:<%= user_singular %>] = (new_<%= user_singular %>.nil? || new_<%= user_singular %>.is_a?(Symbol)) ? nil : new_<%= user_singular %>.id
       @current_<%= user_singular %> = new_<%= user_singular %>
     end
-    
+
     # Check if the <%= user_singular %> is authorized.  You can specify one-time <%= permission_plural %> via:
     #     flash[:allow] = true
     #
@@ -344,7 +344,7 @@ module AuthenticatedSystem
       end
       logged_in? && authorized? ? true : access_denied
     end
-    
+
     # Redirect as appropriate when an access request fails.
     #
     # The default action is to redirect to the login screen.
@@ -370,22 +370,22 @@ module AuthenticatedSystem
         end
       end
       false
-    end  
-    
+    end
+
     # Store the URI of the current request in the <%= session_singular %>.
     #
     # We can return to this location by calling #redirect_back_or_default.
     def store_location
       <%= session_singular %>[:return_to] = request.request_uri
     end
-    
+
     # Redirect to the URI stored by the most recent store_location call or
     # to the passed default.
     def redirect_back_or_default(default)
       <%= session_singular %>[:return_to] ? redirect_to_url(<%= session_singular %>[:return_to]) : redirect_to(default)
       <%= session_singular %>[:return_to] = nil
     end
-    
+
     # Inclusion hook to make a few methods available as ActionView helper methods.
     def self.included(base)
       base.send :helper_method, :current_<%= user_singular %>, :logged_in?, :current_<%= permission_singular %>,
@@ -420,6 +420,6 @@ module AuthenticatedSystem
     def get_auth_data
       auth_key  = @@http_auth_headers.detect { |h| request.env.has_key?(h) }
       auth_data = request.env[auth_key].to_s.split unless auth_key.blank?
-      return auth_data && auth_data[0] == 'Basic' ? Base64.decode64(auth_data[1]).split(':')[0..1] : [nil, nil] 
+      return auth_data && auth_data[0] == 'Basic' ? Base64.decode64(auth_data[1]).split(':')[0..1] : [nil, nil]
     end
 end

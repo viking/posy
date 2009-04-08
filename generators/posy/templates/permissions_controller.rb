@@ -73,7 +73,7 @@ class <%= permission_plural_class %>Controller < ApplicationController
       @<%= group_plural %> = <%= group_class %>.find(:all)
       @<%= permission_singular %> = <%= permission_class %>.new(params[:<%= permission_singular %>])
     end
-    
+
     # remove resource_type if 'Controller'
     @<%= permission_singular %>.resource_type = nil   if @<%= permission_singular %>.controller
 
@@ -158,7 +158,7 @@ class <%= permission_plural_class %>Controller < ApplicationController
       type = params[:<%= permission_singular %>][:resource_type]  rescue nil
       case type
       when 'Controller'
-        @controllers = Posy.controllers 
+        @controllers = Posy.controllers
       when /[A-Z]\w+/
         @resources = type.constantize.find(:all).collect { |x| [x.name, x.id] }
       end

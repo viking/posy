@@ -191,7 +191,7 @@ describe "a non-new controller <%= permission_singular %>" do
 
   before(:each) do
     <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
-    @controller = "vampires" 
+    @controller = "vampires"
     @<%= permission_singular %> = create_<%= permission_singular %>(:<%= group_singular %> => <%= group_plural %>(:weasleys), :controller => @controller)
   end
 

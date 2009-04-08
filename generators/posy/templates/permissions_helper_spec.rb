@@ -2,17 +2,17 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe <%= permission_plural_class %>Helper do
   include <%= permission_plural_class %>Helper
-  
+
   describe "#link_to_index" do
 
     it "should return <%= group_singular %> link when @<%= group_singular %> exists" do
       @<%= group_singular %> = mock_model(<%= group_class %>)
-      link_to_index("foo").should == 
+      link_to_index("foo").should ==
         link_to("foo", :controller => '<%= permission_plural %>', :action => 'index', :<%= group_singular %>_id => @<%= group_singular %>.id, :only_path => true)
     end
 
     it "should return normal link when @<%= group_singular %> doesn't exist" do
-      link_to_index("foo").should == 
+      link_to_index("foo").should ==
         link_to("foo", :controller => '<%= permission_plural %>', :action => 'index', :only_path => true)
     end
   end
@@ -21,12 +21,12 @@ describe <%= permission_plural_class %>Helper do
 
     it "should return <%= group_singular %> link when @<%= group_singular %> exists" do
       @<%= group_singular %> = mock_model(<%= group_class %>)
-      link_to_new("foo").should == 
+      link_to_new("foo").should ==
         link_to("foo", :controller => '<%= permission_plural %>', :action => 'new', :<%= group_singular %>_id => @<%= group_singular %>.id, :only_path => true)
     end
 
     it "should return normal link when @<%= group_singular %> doesn't exist" do
-      link_to_new("foo").should == 
+      link_to_new("foo").should ==
         link_to("foo", :controller => '<%= permission_plural %>', :action => 'new', :only_path => true)
     end
   end
@@ -39,12 +39,12 @@ describe <%= permission_plural_class %>Helper do
 
     it "should return <%= group_singular %> link when @<%= group_singular %> exists" do
       @<%= group_singular %> = mock_model(<%= group_class %>)
-      link_to_show("foo", @<%= permission_singular %>).should == 
+      link_to_show("foo", @<%= permission_singular %>).should ==
         link_to("foo", :controller => '<%= permission_plural %>', :action => 'show', :<%= group_singular %>_id => @<%= group_singular %>.id, :id => @<%= permission_singular %>.id, :only_path => true)
     end
 
     it "should return normal link when @<%= group_singular %> doesn't exist" do
-      link_to_show("foo", @<%= permission_singular %>).should == 
+      link_to_show("foo", @<%= permission_singular %>).should ==
         link_to("foo", :controller => '<%= permission_plural %>', :action => 'show', :id => @<%= permission_singular %>.id, :only_path => true)
     end
   end
@@ -57,12 +57,12 @@ describe <%= permission_plural_class %>Helper do
 
     it "should return <%= group_singular %> link when @<%= group_singular %> exists" do
       @<%= group_singular %> = mock_model(<%= group_class %>)
-      link_to_destroy("foo", @<%= permission_singular %>).should == 
+      link_to_destroy("foo", @<%= permission_singular %>).should ==
         link_to("foo", { :controller => '<%= permission_plural %>', :action => 'destroy', :<%= group_singular %>_id => @<%= group_singular %>.id, :id => @<%= permission_singular %>.id, :only_path => true }, :method => :delete)
     end
 
     it "should return normal link when @<%= group_singular %> doesn't exist" do
-      link_to_destroy("foo", @<%= permission_singular %>).should == 
+      link_to_destroy("foo", @<%= permission_singular %>).should ==
         link_to("foo", { :controller => '<%= permission_plural %>', :action => 'destroy', :id => @<%= permission_singular %>.id, :only_path => true }, :method => :delete)
     end
   end

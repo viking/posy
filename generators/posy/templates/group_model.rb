@@ -11,10 +11,10 @@ class <%= group_class %> < ActiveRecord::Base
       when String
         find_by_controller(resource)
       when Class
-        find :all, 
+        find :all,
           :conditions => ['resource_type = ?', resource.to_s]
       else
-        find :first, 
+        find :first,
           :conditions => ['resource_id = ? AND resource_type = ?', resource.id, resource.class.to_s]
       end
     end
@@ -31,7 +31,7 @@ class <%= group_class %> < ActiveRecord::Base
   def before_destroy
     raise "can't destroy permanent <%= group_singular %>"   if self['permanent']
   end
-  
+
   def include?(<%= user_singular %>)
     unless <%= user_singular %>.is_a?(<%= user_class %>) or <%= user_singular %>.is_a?(Fixnum)
       raise TypeError, "not a <%= user_class %> or Fixnum"

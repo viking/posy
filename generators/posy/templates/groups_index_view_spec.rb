@@ -7,7 +7,7 @@ describe "rendering /<%= group_plural %>/index" do
     })
     assigns[:<%= group_plural %>] = Array.new(3) { |i| @<%= group_singular %> }
   end
- 
+
   it "should not raise an error" do
     lambda { render '<%= group_plural %>/index' }.should_not raise_error
   end

@@ -152,7 +152,7 @@ describe "rendering /<%= permission_plural %>/new.rjs when @resources is set and
     render '/<%= permission_plural %>/new.rjs'
     response.should have_rjs(:replace_html, :resource_select) do
       with_tag("b", "Resource")
-      with_tag("p", "None available.") 
+      with_tag("p", "None available.")
     end
   end
 end
@@ -190,7 +190,7 @@ describe "rendering /<%= permission_plural %>/new.rjs when @controllers is set a
     render '/<%= permission_plural %>/new.rjs'
     response.should have_rjs(:replace_html, :resource_select) do
       with_tag("b", "Controller")
-      with_tag("p", "None available.") 
+      with_tag("p", "None available.")
     end
   end
 end

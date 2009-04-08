@@ -42,7 +42,7 @@
     <th>Description</th>
     <th>Permanent</th>
   </tr>
-  
+
 <%% for <%= group_singular %> in @<%= user_singular %>.<%= group_plural %> %>
   <tr>
     <td><%%=h <%= group_singular %>.name %></td>
@@ -56,5 +56,5 @@
 </table>
 <br/>
 
-<%%= link_to 'Add <%= group_singular %>', new_<%= user_singular %>_<%= membership_singular %>_path(@<%= user_singular %>) %> | 
+<%%= link_to 'Add <%= group_singular %>', new_<%= user_singular %>_<%= membership_singular %>_path(@<%= user_singular %>) %> |
 <%%= link_to '<%= membership_class %> index', <%= user_singular %>_<%= membership_plural %>_path(@<%= user_singular %>) %>

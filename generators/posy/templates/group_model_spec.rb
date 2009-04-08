@@ -3,8 +3,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 module <%= group_class %>Helpers
   def create_<%= group_singular %>(options = {})
     <%= group_class %>.create({
-      :name => 'foo', 
-      :description => 'the foo <%= group_singular %>', 
+      :name => 'foo',
+      :description => 'the foo <%= group_singular %>',
       :permanent => false
     }.merge(options))
   end
@@ -170,7 +170,7 @@ describe <%= group_class %>, "with some <%= permission_plural %>" do
   it_should_behave_like "an existing <%= group_singular %>"
 
   it "should get <%= permission_plural %>.for(@pocky1)" do
-    @<%= group_singular %>.<%= permission_plural %>.for(@pocky1).should == @perm1 
+    @<%= group_singular %>.<%= permission_plural %>.for(@pocky1).should == @perm1
   end
 
   it "should get <%= permission_plural %>.for('pockies')" do

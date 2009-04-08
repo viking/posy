@@ -11,7 +11,7 @@ To use the generator with the default names, run:
   ./script/generate posy
 
 You can also specify what names you want to use for users, groups, memberships,
-permissions, and sessions.  Check out the USAGE file in the generators directory for 
+permissions, and sessions.  Check out the USAGE file in the generators directory for
 more information.
 
 After using the generator, edit the config/access_control.yml file and add the names

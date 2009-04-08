@@ -16,7 +16,7 @@ describe "rendering /<%= permission_plural %>/index" do
     @<%= permission_plural %> = [@controller_<%= permission_singular %>, @resource_<%= permission_singular %>]
     assigns[:<%= permission_plural %>] = @<%= permission_plural %>
   end
- 
+
   it "should not raise an error" do
     lambda { render '/<%= permission_plural %>/index' }.should_not raise_error
   end
@@ -44,7 +44,7 @@ describe "rendering /<%= permission_plural %>/index when @<%= group_singular %> 
     assigns[:<%= permission_plural %>] = @<%= permission_plural %>
     assigns[:<%= group_singular %>] = @<%= group_singular %>
   end
- 
+
   it "should not raise an error" do
     lambda { render '/<%= permission_plural %>/index' }.should_not raise_error
   end

@@ -5,37 +5,37 @@ describe <%= user_plural_class %>Controller do
   describe "when no one is logged in" do
     it "should redirect to /<%= session_plural %>/new on GET to index" do
       get :index
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on GET to new" do
       get :new
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on GET to show" do
       get :show, :id => "1"
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on GET to edit" do
       get :edit, :id => "1"
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on POST to create" do
       post :create
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on PUT to update" do
       put :update, :id => "1"
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on DELETE to destroy" do
       delete :destroy, :id => "1"
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
   end
 
@@ -61,7 +61,7 @@ describe <%= user_plural_class %>Controller do
       end
 
       it "should set @<%= user_plural %>" do
-        assigns[:<%= user_plural %>].should == [@<%= user_singular %>] 
+        assigns[:<%= user_plural %>].should == [@<%= user_singular %>]
       end
     end
 

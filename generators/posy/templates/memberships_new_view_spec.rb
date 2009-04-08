@@ -10,7 +10,7 @@ describe "rendering /<%= membership_plural %>/new" do
     assigns[:<%= user_plural %>]  = @<%= user_plural %>
     assigns[:<%= group_plural %>] = @<%= group_plural %>
   end
-  
+
   it "should not raise an error" do
     lambda { render '<%= membership_plural %>/new' }.should_not raise_error
   end

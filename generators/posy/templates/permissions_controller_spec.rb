@@ -5,37 +5,37 @@ describe <%= permission_plural_class %>Controller do
 
     it "should redirect to /<%= session_plural %>/new on GET to index" do
       get :index
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on GET to new" do
       get :new
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on GET to show" do
       get :show, :id => "1"
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on GET to edit" do
       get :edit, :id => "1"
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on POST to create" do
       post :create
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on PUT to update" do
       put :update, :id => "1"
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on DELETE to destroy" do
       delete :destroy, :id => "1"
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
   end
 
@@ -126,7 +126,7 @@ describe <%= permission_plural_class %>Controller do
 
       it "should set @<%= group_plural %>" do
         get :new
-        assigns[:<%= group_plural %>].should == [@<%= group_singular %>] 
+        assigns[:<%= group_plural %>].should == [@<%= group_singular %>]
       end
 
       it "should set @resource_types" do
@@ -159,7 +159,7 @@ describe <%= permission_plural_class %>Controller do
 
       it "should set @controllers when params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
         Posy.stub!(:controllers).and_return(%w{vampires})
-        
+
         get :new, :format => 'js', :<%= permission_singular %> => { :resource_type => 'Controller' }
         assigns[:controllers].should == %w{vampires}
       end
@@ -184,7 +184,7 @@ describe <%= permission_plural_class %>Controller do
         @<%= permission_singular %>.stub!(:controller).and_return(nil)
         Posy.stub!(:models).and_return(@resource_types)
       end
-      
+
       it "should redirect to /<%= permission_plural %>/:id when valid" do
         post :create
         response.should redirect_to(<%= permission_singular %>_url(@<%= permission_singular %>))
@@ -209,7 +209,7 @@ describe <%= permission_plural_class %>Controller do
 
       it "should set @<%= group_plural %>" do
         post :create
-        assigns[:<%= group_plural %>].should == [@<%= group_singular %>] 
+        assigns[:<%= group_plural %>].should == [@<%= group_singular %>]
       end
 
       it "should set @<%= permission_singular %>'s resource_type to nil when @<%= permission_singular %>.controller exists" do
@@ -222,7 +222,7 @@ describe <%= permission_plural_class %>Controller do
       it "should set @controllers when invalid and params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
         @<%= permission_singular %>.stub!(:save).and_return(false)
         Posy.stub!(:controllers).and_return(%w{vampires})
-        
+
         post :create, :<%= permission_singular %> => { :resource_type => 'Controller' }
         assigns[:controllers].should == %w{vampires}
       end
@@ -245,7 +245,7 @@ describe <%= permission_plural_class %>Controller do
         @<%= permission_singular %>.stub!(:update_attributes).and_return(true)
         @<%= permission_singular %>.stub!(:controller).and_return(nil)
       end
-      
+
       it "should redirect to /<%= permission_plural %>/:id when valid" do
         put :update, :id => "1", :<%= permission_singular %> => { }
         response.should redirect_to(<%= permission_singular %>_url(@<%= permission_singular %>))
@@ -263,11 +263,11 @@ describe <%= permission_plural_class %>Controller do
       end
 
       it "should remove all parameters except can_read, can_write, and is_sticky" do
-        put :update, :id => "1", :<%= permission_singular %> => { 
-          :partical => "man", 
-          :triangle => "man", 
-          :can_read => true, 
-          :can_write => true, 
+        put :update, :id => "1", :<%= permission_singular %> => {
+          :partical => "man",
+          :triangle => "man",
+          :can_read => true,
+          :can_write => true,
           :is_sticky => true
         }
         @controller.params[:<%= permission_singular %>].keys.sort.should == %w{can_read can_write is_sticky}
@@ -407,7 +407,7 @@ describe <%= permission_plural_class %>Controller do
 
       it "should set @controllers when params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
         Posy.stub!(:controllers).and_return(%w{vampires})
-        
+
         get :new, :format => 'js', :<%= group_singular %>_id => '1', :<%= permission_singular %> => { :resource_type => 'Controller' }
         assigns[:controllers].should == %w{vampires}
       end
@@ -430,7 +430,7 @@ describe <%= permission_plural_class %>Controller do
         @<%= permission_singular %>.stub!(:save).and_return(true)
         @<%= permission_singular %>.stub!(:controller).and_return(nil)
       end
-      
+
       it "should redirect to /<%= group_plural %>/1/<%= permission_plural %>/:id when valid" do
         post :create, :<%= group_singular %>_id => '1'
         response.should redirect_to(<%= group_singular %>_<%= permission_singular %>_url(@<%= group_singular %>, @<%= permission_singular %>))
@@ -462,7 +462,7 @@ describe <%= permission_plural_class %>Controller do
       it "should set @controllers when invalid and params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
         @<%= permission_singular %>.stub!(:save).and_return(false)
         Posy.stub!(:controllers).and_return(%w{vampires})
-        
+
         post :create, :<%= permission_singular %> => { :resource_type => 'Controller' }
         assigns[:controllers].should == %w{vampires}
       end
@@ -486,7 +486,7 @@ describe <%= permission_plural_class %>Controller do
         @<%= permission_singular %>.stub!(:update_attributes).and_return(true)
         @<%= permission_singular %>.stub!(:controller).and_return(nil)
       end
-      
+
       it "should redirect to /<%= group_plural %>/1/<%= permission_plural %>/:id when valid" do
         put :update, :id => "1", :<%= group_singular %>_id => '1', :<%= permission_singular %> => { }
         response.should redirect_to(<%= group_singular %>_<%= permission_singular %>_url(@<%= group_singular %>, @<%= permission_singular %>))
@@ -509,11 +509,11 @@ describe <%= permission_plural_class %>Controller do
       end
 
       it "should remove all parameters except can_read, can_write, and is_sticky" do
-        put :update, :id => "1", :<%= group_singular %>_id => '1', :<%= permission_singular %> => { 
-          :partical => "man", 
-          :triangle => "man", 
-          :can_read => true, 
-          :can_write => true, 
+        put :update, :id => "1", :<%= group_singular %>_id => '1', :<%= permission_singular %> => {
+          :partical => "man",
+          :triangle => "man",
+          :can_read => true,
+          :can_write => true,
           :is_sticky => true
         }
         @controller.params[:<%= permission_singular %>].keys.sort.should == %w{can_read can_write is_sticky}

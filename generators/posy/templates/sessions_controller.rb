@@ -1,4 +1,4 @@
-# This controller handles the login/logout function of the site.  
+# This controller handles the login/logout function of the site.
 class <%= session_plural_class %>Controller < ApplicationController
   skip_before_filter :login_required
 

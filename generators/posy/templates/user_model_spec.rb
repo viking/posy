@@ -258,7 +258,7 @@ describe <%= user_class %>, "in a <%= group_singular %> with several individual 
 
   before(:each) do
     @<%= user_singular %>  = create_<%= user_singular %>
-    @<%= group_singular %> = <%= group_class %>.create(:name => 'jungle') 
+    @<%= group_singular %> = <%= group_class %>.create(:name => 'jungle')
     @<%= user_singular %>.<%= membership_plural %>.create(:<%= group_singular %> => @<%= group_singular %>)
 
     @monkeys = Array.new(5) { |i| TestMonkey.create(:name => "Monkey #{i+1}") }

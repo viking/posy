@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ApplicationHelper do
-  include ApplicationHelper 
-  
+  include ApplicationHelper
+
   describe "#resource_name" do
     before(:each) do
       @pocky = Pocky.new

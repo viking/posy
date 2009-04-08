@@ -7,8 +7,8 @@ admin:
   created_by: 1
   updated_by: 1
   deleted: false
-  updated_at: <%%= Time.now.to_s :db %> 
-  created_at: <%%= Time.now.to_s :db %> 
+  updated_at: <%%= Time.now.to_s :db %>
+  created_at: <%%= Time.now.to_s :db %>
   accessed_at:
 
 george:
@@ -20,8 +20,8 @@ george:
   created_by: 1
   updated_by: 1
   deleted: false
-  updated_at: <%%= Time.now.to_s :db %> 
-  created_at: <%%= Time.now.to_s :db %> 
+  updated_at: <%%= Time.now.to_s :db %>
+  created_at: <%%= Time.now.to_s :db %>
   accessed_at:
 
 fred:
@@ -33,8 +33,8 @@ fred:
   created_by: 1
   updated_by: 1
   deleted: false
-  updated_at: <%%= Time.now.to_s :db %> 
-  created_at: <%%= Time.now.to_s :db %> 
+  updated_at: <%%= Time.now.to_s :db %>
+  created_at: <%%= Time.now.to_s :db %>
   accessed_at:
 
 ginny:
@@ -46,8 +46,8 @@ ginny:
   created_by: 1
   updated_by: 1
   deleted: false
-  updated_at: <%%= Time.now.to_s :db %> 
-  created_at: <%%= Time.now.to_s :db %> 
+  updated_at: <%%= Time.now.to_s :db %>
+  created_at: <%%= Time.now.to_s :db %>
   accessed_at:
 
 draco:

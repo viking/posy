@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe "rendering /<%= user_plural %>/edit" do
   before do
     @<%= user_singular %> = mock_model(<%= user_class %>, {
-      :login => "foo", :email => "foo@bar.com", 
+      :login => "foo", :email => "foo@bar.com",
       :password => nil, :password_confirmation => nil
     })
     assigns[:<%= user_singular %>] = @<%= user_singular %>

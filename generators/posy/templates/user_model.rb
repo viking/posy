@@ -49,7 +49,7 @@ class <%= user_class %> < ActiveRecord::Base
     @@admin_<%= group_singular %> ||= <%= group_class %>.find_by_name('admin')
     @@admin_<%= group_singular %>.include?(<%= user_singular %>)
   end
-    
+
   def admin?
     self.class.admin?(self)
   end
@@ -58,8 +58,8 @@ class <%= user_class %> < ActiveRecord::Base
     unless @<%= permission_plural %> and !force_reload
       g = <%= group_plural %>.find(:all, :include => :<%= permission_plural %>)
       @<%= permission_plural %> = <%= permission_class %>.find_by_sql([<<-end_of_sql, self.id])
-        SELECT p.*  FROM <%= user_plural %> u 
-                    JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id 
+        SELECT p.*  FROM <%= user_plural %> u
+                    JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id
                     JOIN <%= group_plural %> g ON g.id = m.<%= group_singular %>_id
                     JOIN <%= permission_plural %> p ON g.id = p.<%= group_singular %>_id
         WHERE u.id = ?
@@ -71,8 +71,8 @@ class <%= user_class %> < ActiveRecord::Base
   def controller_<%= permission_plural %>(force_reload = false)
     unless @controller_<%= permission_plural %> and !force_reload
       @controller_<%= permission_plural %> = <%= permission_class %>.find_by_sql([<<-end_of_sql, self.id])
-        SELECT p.*  FROM <%= user_plural %> u 
-                    JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id 
+        SELECT p.*  FROM <%= user_plural %> u
+                    JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id
                     JOIN <%= group_plural %> g ON g.id = m.<%= group_singular %>_id
                     JOIN <%= permission_plural %> p ON g.id = p.<%= group_singular %>_id
         WHERE u.id = ? AND p.controller IS NOT NULL
@@ -84,8 +84,8 @@ class <%= user_class %> < ActiveRecord::Base
   def resource_<%= permission_plural %>(force_reload = false)
     unless @resource_<%= permission_plural %> and !force_reload
       @resource_<%= permission_plural %> = <%= permission_class %>.find_by_sql([<<-end_of_sql, self.id])
-        SELECT p.*  FROM <%= user_plural %> u 
-                    JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id 
+        SELECT p.*  FROM <%= user_plural %> u
+                    JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id
                     JOIN <%= group_plural %> g ON g.id = m.<%= group_singular %>_id
                     JOIN <%= permission_plural %> p ON g.id = p.<%= group_singular %>_id
         WHERE u.id = ? AND p.resource_id IS NOT NULL
@@ -111,8 +111,8 @@ class <%= user_class %> < ActiveRecord::Base
       else
         raise "bad access_mode"
     end
-    
-    # FIXME: don't assume the controller name is klass.table_name 
+
+    # FIXME: don't assume the controller name is klass.table_name
     controller_name = klass.table_name
     table_name      = klass.table_name
     <%= group_singular %>_ids_sql   = "(" + <%= membership_plural %>.collect { |m| m.<%= group_singular %>_id }.join(", ") + ")"
@@ -126,13 +126,13 @@ class <%= user_class %> < ActiveRecord::Base
       end_of_sql
 
       # same thing using find
-#      klass.find :all, 
+#      klass.find :all,
 #        :joins => "LEFT JOIN <%= permission_plural %> perm ON perm.resource_id = #{table_name}.id AND perm.resource_type = '#{klass.to_s}'",
 #        :conditions => ["(perm.<%= group_singular %>_id IN (#{<%= group_singular %>_ids.join(", ")}) AND #{access_requirement}) OR perm.id IS NULL"] + access_values
     else
       klass.find_by_sql([<<-end_of_sql, klass.to_s] + access_values)
         SELECT  k.* FROM #{table_name} k
-                    JOIN <%= permission_plural %> p ON k.id = p.resource_id AND p.resource_type = ? 
+                    JOIN <%= permission_plural %> p ON k.id = p.resource_id AND p.resource_type = ?
         WHERE   p.<%= group_singular %>_id IN #{<%= group_singular %>_ids_sql} AND #{access_requirement}
       end_of_sql
     end
@@ -191,13 +191,13 @@ class <%= user_class %> < ActiveRecord::Base
   end
 
   protected
-    # before filter 
+    # before filter
     def encrypt_password
       return if password.blank?
       self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
       self.crypted_password = encrypt(password)
     end
-    
+
     def password_required?
       crypted_password.blank? || !password.blank?
     end

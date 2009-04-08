@@ -17,7 +17,7 @@ describe "a controller that uses AuthenticatedSystem" do
   end
 
   it "should have default action_<%= permission_plural %>" do
-    @klass.action_<%= permission_plural %>.should == AuthenticatedSystem::DEFAULT_ACTION_PERMISSIONS 
+    @klass.action_<%= permission_plural %>.should == AuthenticatedSystem::DEFAULT_ACTION_PERMISSIONS
   end
 
   it "should update action_<%= permission_plural %>" do
@@ -26,7 +26,7 @@ describe "a controller that uses AuthenticatedSystem" do
   end
 
   it "should have default resource_actions" do
-    @klass.resource_actions.should == AuthenticatedSystem::DEFAULT_RESOURCE_ACTIONS 
+    @klass.resource_actions.should == AuthenticatedSystem::DEFAULT_RESOURCE_ACTIONS
   end
 
   it "should add resource_actions" do
@@ -49,7 +49,7 @@ describe "a controller that uses AuthenticatedSystem" do
   end
 
   it "should have default sticky_actions" do
-    @klass.sticky_actions.should == AuthenticatedSystem::DEFAULT_STICKY_ACTIONS 
+    @klass.sticky_actions.should == AuthenticatedSystem::DEFAULT_STICKY_ACTIONS
   end
 
   it "should add sticky_actions" do
@@ -160,7 +160,7 @@ describe "calling chmod in a controller that uses AuthenticatedSystem" do
   it "should raise an error for malformed <%= permission_singular %> strings" do
     lambda { @klass.chmod("foo", :pants) }.should raise_error
   end
-  
+
   it "should set <%= permission_plural %> for 'foo'" do
     @klass.chmod("rw", :foo)
     @klass.action_<%= permission_plural %>['r'].should include('foo')
@@ -201,7 +201,7 @@ class PockyTestController < ActionController::Base
 
   def foo
   end
-  
+
   def bar
   end
 
@@ -468,7 +468,7 @@ describe PockyTestController, :type => :controller do
     it "should call <%= user_singular %>_can_read? if the action requires read <%= permission_plural %>" do
       @<%= user_singular %>.stub!(:admin?).and_return(false)
       @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => ['foo'], 'w' => [], 'b' => []})
-      
+
       @controller.should_receive(:<%= user_singular %>_can_read?).and_return(false)
       @controller.send(:authorized?)
     end
@@ -476,7 +476,7 @@ describe PockyTestController, :type => :controller do
     it "should call <%= user_singular %>_can_write? if the action requires write <%= permission_plural %>" do
       @<%= user_singular %>.stub!(:admin?).and_return(false)
       @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => [], 'w' => ['foo'], 'b' => []})
-      
+
       @controller.should_receive(:<%= user_singular %>_can_write?).and_return(false)
       @controller.send(:authorized?)
     end
@@ -484,7 +484,7 @@ describe PockyTestController, :type => :controller do
     it "should call <%= user_singular %>_can_read_and_write? if the action requires read and write <%= permission_plural %>" do
       @<%= user_singular %>.stub!(:admin?).and_return(false)
       @controller.stub!(:action_<%= permission_plural %>).and_return({'r' => [], 'w' => [], 'b' => ['foo']})
-      
+
       @controller.should_receive(:<%= user_singular %>_can_read_and_write?).and_return(false)
       @controller.send(:authorized?)
     end
@@ -861,7 +861,7 @@ describe "controller structure with an access hierarchy", :type => :controller d
         @params = { :one_test_id => "1", :two_test_id => "1" }
         @grandparent = @one_perm
         @parent = @<%= group_singular %>.<%= permission_plural %>.create({
-          :resource => @two, :can_read => true, 
+          :resource => @two, :can_read => true,
           :parent => @grandparent
         })
         @child = @<%= group_singular %>.<%= permission_plural %>.create({

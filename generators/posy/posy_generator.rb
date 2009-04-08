@@ -4,12 +4,12 @@ class PosyGenerator < Rails::Generator::Base
   %w{user group membership permission session}.each do |thing|
     attr_reader "#{thing}_class", "#{thing}_plural_class", "#{thing}_singular",
                 "#{thing}_plural", "#{thing}_model_file_name", "#{thing}_controller_file_name",
-                "#{thing}_migrate_file_name", "#{thing}_fixture_file_name", 
+                "#{thing}_migrate_file_name", "#{thing}_fixture_file_name",
                 "#{thing}_helper_file_name", "#{thing}_model_spec_file_name",
                 "#{thing}_controller_spec_file_name", "#{thing}_routing_spec_file_name",
                 "#{thing}_helper_spec_file_name"
   end
-  
+
   def initialize(runtime_args, runtime_options = {})
     super
 
@@ -64,11 +64,11 @@ class PosyGenerator < Rails::Generator::Base
       %w{user group membership permission session}.each do |thing|
         tplural = thing.pluralize
 
-        modelfn   = instance_variable_get("@#{thing}_model_file_name") 
-        ctrlfn    = instance_variable_get("@#{thing}_controller_file_name") 
-        helpfn    = instance_variable_get("@#{thing}_helper_file_name") 
-        migratefn = instance_variable_get("@#{thing}_migrate_file_name") 
-        fixfn     = instance_variable_get("@#{thing}_fixture_file_name") 
+        modelfn   = instance_variable_get("@#{thing}_model_file_name")
+        ctrlfn    = instance_variable_get("@#{thing}_controller_file_name")
+        helpfn    = instance_variable_get("@#{thing}_helper_file_name")
+        migratefn = instance_variable_get("@#{thing}_migrate_file_name")
+        fixfn     = instance_variable_get("@#{thing}_fixture_file_name")
         mspecfn   = instance_variable_get("@#{thing}_model_spec_file_name")
         cspecfn   = instance_variable_get("@#{thing}_controller_spec_file_name")
         rspecfn   = instance_variable_get("@#{thing}_routing_spec_file_name")
@@ -116,7 +116,7 @@ class PosyGenerator < Rails::Generator::Base
       # lib templates
       m.template "authenticated_system.rb", File.join("lib", "authenticated_system.rb")
       m.template "authenticated_test_helper.rb", File.join("lib", "authenticated_test_helper.rb")
-      
+
       # add in routes by gsub'ing config/routes.rb
       unless options[:skip_in_place_modifications]
         resources = [session_plural, permission_plural, membership_plural, user_plural, group_plural]
@@ -158,7 +158,7 @@ EOF
 EOF
           end
         end
-        
+
         # modify test/test_helper.rb by gsub
         m.method_missing("instance_eval") { logger.modify "test/test_helper.rb" }
         unless options[:pretend]

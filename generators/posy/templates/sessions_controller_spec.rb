@@ -5,11 +5,11 @@ describe <%= session_plural_class %>Controller, "#route_for" do
   it "should map { :controller => '<%= session_plural %>', :action => 'new' } to /<%= session_plural %>/new" do
     route_for(:controller => "<%= session_plural %>", :action => "new").should == "/<%= session_plural %>/new"
   end
-  
+
   it "should map { :controller => '<%= session_plural %>', :action => 'destroy', :id => 1} to /<%= session_plural %>/1" do
     route_for(:controller => "<%= session_plural %>", :action => "destroy", :id => 1).should == "/<%= session_plural %>/1"
   end
-  
+
 end
 
 describe <%= session_plural_class %>Controller do
@@ -37,7 +37,7 @@ describe <%= session_plural_class %>Controller do
 
   it "should not set <%= session_singular %>[:<%= user_singular %>] on invalid POST to /<%= session_plural %>" do
     post :create, :login => 'admin', :password => 'bad password'
-    <%= session_singular %>[:<%= user_singular %>].should be_nil 
+    <%= session_singular %>[:<%= user_singular %>].should be_nil
   end
 
   it "should redirect on DELETE to /<%= session_plural %>" do

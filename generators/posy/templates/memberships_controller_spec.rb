@@ -6,27 +6,27 @@ describe <%= membership_plural_class %>Controller do
 
     it "should redirect to /<%= session_plural %>/new on GET to index" do
       get :index
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on GET to new" do
       get :new
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on GET to show" do
       get :show, :id => "1"
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on POST to create" do
       post :create
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
 
     it "should redirect to /<%= session_plural %>/new on DELETE to destroy" do
       delete :destroy, :id => "1"
-      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new") 
+      response.should redirect_to(:controller => "<%= session_plural %>", :action => "new")
     end
   end
 
@@ -40,7 +40,7 @@ describe <%= membership_plural_class %>Controller do
       @<%= group_singular %> = mock_model(<%= group_class %>)
       @<%= user_singular %>  = mock_model(<%= user_class %>)
     end
-    
+
     describe "handling GET /<%= membership_plural %>" do
 
       before(:each) do
@@ -53,7 +53,7 @@ describe <%= membership_plural_class %>Controller do
       end
 
       it "should set @<%= membership_plural %>" do
-        assigns[:<%= membership_plural %>].should == [@<%= membership_singular %>] 
+        assigns[:<%= membership_plural %>].should == [@<%= membership_singular %>]
       end
     end
 
@@ -156,11 +156,11 @@ describe <%= membership_plural_class %>Controller do
       end
 
       it "should set @<%= membership_plural %>" do
-        assigns[:<%= membership_plural %>].should == [@<%= membership_singular %>] 
+        assigns[:<%= membership_plural %>].should == [@<%= membership_singular %>]
       end
 
       it "should set @<%= group_singular %>" do
-        assigns[:<%= group_singular %>].should == @<%= group_singular %> 
+        assigns[:<%= group_singular %>].should == @<%= group_singular %>
       end
     end
 
@@ -211,7 +211,7 @@ describe <%= membership_plural_class %>Controller do
       end
 
       it "should have @<%= user_plural %>" do
-        assigns[:<%= user_plural %>].should == [@<%= user_singular %>] 
+        assigns[:<%= user_plural %>].should == [@<%= user_singular %>]
       end
     end
 
@@ -253,7 +253,7 @@ describe <%= membership_plural_class %>Controller do
 
       it "should set @<%= user_plural %>" do
         do_post
-        assigns[:<%= user_plural %>].should == [@<%= user_singular %>] 
+        assigns[:<%= user_plural %>].should == [@<%= user_singular %>]
       end
     end
 
@@ -296,11 +296,11 @@ describe <%= membership_plural_class %>Controller do
       end
 
       it "should set @<%= membership_plural %>" do
-        assigns[:<%= membership_plural %>].should == [@<%= membership_singular %>] 
+        assigns[:<%= membership_plural %>].should == [@<%= membership_singular %>]
       end
 
       it "should set @<%= user_singular %>" do
-        assigns[:<%= user_singular %>].should == @<%= user_singular %> 
+        assigns[:<%= user_singular %>].should == @<%= user_singular %>
       end
     end
 
@@ -351,7 +351,7 @@ describe <%= membership_plural_class %>Controller do
       end
 
       it "should have @<%= group_plural %>" do
-        assigns[:<%= group_plural %>].should == [@<%= group_singular %>] 
+        assigns[:<%= group_plural %>].should == [@<%= group_singular %>]
       end
     end
 
@@ -393,7 +393,7 @@ describe <%= membership_plural_class %>Controller do
 
       it "should set @<%= group_plural %>" do
         do_post
-        assigns[:<%= group_plural %>].should == [@<%= group_singular %>] 
+        assigns[:<%= group_plural %>].should == [@<%= group_singular %>]
       end
     end
 

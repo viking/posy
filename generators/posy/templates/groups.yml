@@ -11,7 +11,7 @@ admin:
 weasleys:
   id: 2
   name: weasleys
-  description: the weasley family 
+  description: the weasley family
   permanent: false
   created_by: 1
   updated_by: 1
@@ -21,7 +21,7 @@ weasleys:
 malfoys:
   id: 3
   name: malfoys
-  description: the malfoy family 
+  description: the malfoy family
   permanent: false
   created_by: 1
   updated_by: 1
@@ -31,7 +31,7 @@ malfoys:
 potters:
   id: 4
   name: potters
-  description: the potter family 
+  description: the potter family
   permanent: false
   created_by: 1
   updated_by: 1
