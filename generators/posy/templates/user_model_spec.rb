@@ -272,14 +272,14 @@ describe <%= user_class %>, "in a <%= group_singular %> with several individual 
 
   it "should have 3 writeable resources" do
     @monkeys[0..2].each { |m| @<%= group_singular %>.<%= permission_plural %>.create(:resource => m, :can_write => true) }
-    @<%= user_singular %>.resources(TestMonkey, :w).length.should == 3
+    @<%= user_singular %>.should have(3).resources(TestMonkey, :w)
   end
 
   it "should have 3 read-and-writeable resources" do
     @monkeys[0..2].each { |m| @<%= group_singular %>.<%= permission_plural %>.create(:resource => m, :can_read => true, :can_write => true) }
-    @<%= user_singular %>.resources(TestMonkey, :rw).length.should == 3
-    @<%= user_singular %>.resources(TestMonkey, :wr).length.should == 3
-    @<%= user_singular %>.resources(TestMonkey, :b).length.should == 3
+    @<%= user_singular %>.should have(3).resources(TestMonkey, :rw)
+    @<%= user_singular %>.should have(3).resources(TestMonkey, :wr)
+    @<%= user_singular %>.should have(3).resources(TestMonkey, :b)
   end
 
   after(:all) do
@@ -311,23 +311,23 @@ describe <%= user_class %>, "in three <%= group_plural %>, each with one resourc
     @<%= group_plural %>.each_with_index do |g, i|
       perm = g.<%= permission_plural %>.create(:resource => @monkeys[i], :can_read => true)
     end
-    @<%= user_singular %>.resources(TestMonkey, :r).length.should == 3
+    @<%= user_singular %>.should have(3).resources(TestMonkey, :r)
   end
 
   it "should have 3 writable resources" do
     @<%= group_plural %>.each_with_index do |g, i|
       perm = g.<%= permission_plural %>.create(:resource => @monkeys[i], :can_write => true)
     end
-    @<%= user_singular %>.resources(TestMonkey, :w).length.should == 3
+    @<%= user_singular %>.should have(3).resources(TestMonkey, :w)
   end
 
   it "should have 3 read-and-writable resources" do
     @<%= group_plural %>.each_with_index do |g, i|
       perm = g.<%= permission_plural %>.create(:resource => @monkeys[i], :can_read => true, :can_write => true)
     end
-    @<%= user_singular %>.resources(TestMonkey, :rw).length.should == 3
-    @<%= user_singular %>.resources(TestMonkey, :wr).length.should == 3
-    @<%= user_singular %>.resources(TestMonkey, :b).length.should == 3
+    @<%= user_singular %>.should have(3).resources(TestMonkey, :rw)
+    @<%= user_singular %>.should have(3).resources(TestMonkey, :wr)
+    @<%= user_singular %>.should have(3).resources(TestMonkey, :b)
   end
 
   after(:all) do
@@ -361,7 +361,7 @@ describe <%= user_class %>, "with explicit access to some resources and a defaul
       perm = @<%= group_plural %>[i].<%= permission_plural %>.create(:resource => @monkeys[i], :can_read => true)
     end
     @<%= group_plural %>[2].<%= permission_plural %>.create(:controller => 'test_monkeys', :can_read => true)
-    @<%= user_singular %>.resources(TestMonkey, :r).length.should == 5
+    @<%= user_singular %>.should have(5).resources(TestMonkey, :r)
   end
 
   it "should have 3 writeable resources when controller <%= permission_singular %> does not have write access" do
@@ -369,7 +369,7 @@ describe <%= user_class %>, "with explicit access to some resources and a defaul
       perm = @<%= group_plural %>[i].<%= permission_plural %>.create(:resource => @monkeys[i], :can_write => true)
     end
     @<%= group_plural %>[2].<%= permission_plural %>.create(:controller => 'test_monkeys', :can_write => false)
-    @<%= user_singular %>.resources(TestMonkey, :w).length.should == 3
+    @<%= user_singular %>.should have(3).resources(TestMonkey, :w)
   end
 
   it "should have 4 readable resources when controller <%= permission_singular %> has read access and one resource is explicity denied" do
@@ -378,7 +378,7 @@ describe <%= user_class %>, "with explicit access to some resources and a defaul
     end
     @<%= group_plural %>[0].<%= permission_plural %>.create(:resource => @monkeys[3], :can_read => false)
     @<%= group_plural %>[2].<%= permission_plural %>.create(:controller => 'test_monkeys', :can_read => true)
-    @<%= user_singular %>.resources(TestMonkey, :r, true).length.should == 4
+    @<%= user_singular %>.should have(4).resources(TestMonkey, :r, true)
   end
 
   after(:all) do
