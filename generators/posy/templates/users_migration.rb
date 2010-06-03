@@ -12,8 +12,6 @@ class Create<%= user_plural_class %> < ActiveRecord::Migration
       t.column :updated_by,        :integer
       t.column :deleted,           :boolean, :default => false
     end
-
-    <%= user_class %>.create(:login => "admin", :email => "admin@foobar.com", :password => "admin", :password_confirmation => "admin")
   end
 
   def self.down

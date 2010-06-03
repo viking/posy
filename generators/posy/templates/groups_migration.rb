@@ -1,7 +1,4 @@
 class Create<%= group_plural_class %> < ActiveRecord::Migration
-  class <%= group_class %> < ActiveRecord::Base
-  end
-  
   def self.up
     create_table :<%= group_plural %> do |t|
       t.column :name,        :string
@@ -12,7 +9,6 @@ class Create<%= group_plural_class %> < ActiveRecord::Migration
       t.column :created_by,  :integer
       t.column :updated_by,  :integer
     end
-    g = <%= group_class %>.create(:name => 'admin', :description => 'administration <%= group_singular %>', :permanent => true)
   end
 
   def self.down

@@ -14,8 +14,6 @@ class Create<%= permission_plural_class %> < ActiveRecord::Migration
       t.column :created_by, :integer
       t.column :updated_by, :integer
     end
-
-    <%= user_class %>.find_by_login('admin').<%= membership_plural %>.create(:<%= group_singular %> => <%= group_class %>.find_by_name('admin'))
   end
 
   def self.down
