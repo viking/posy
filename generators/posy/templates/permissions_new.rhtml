@@ -19,13 +19,13 @@
   </p>
 
   <p id="resource_select">
-  <%% if @resources and @resources.empty? -%>
+  <%% if @resources && @resources.empty? -%>
     <b>Resource</b>
     <p>None available.</p>
   <%% elsif @resources -%>
     <b>Resource</b><br/>
     <%%= select("<%= permission_singular %>", "resource_id", @resources, :include_blank => true) %>
-  <%% elsif @controllers and @controllers.empty? -%>
+  <%% elsif @controllers && @controllers.empty? -%>
     <b>Controller</b>
     <p>None available.</p>
   <%% elsif @controllers -%>

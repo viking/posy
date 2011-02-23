@@ -29,8 +29,8 @@ module ActiveRecord
     # After we update those attributes we continue by running the normal <tt>create</tt> method where the object
     # is actually validated and saved.
     def create_with_user
-      if record_userstamps and user_model.current_user != nil
-        write_attribute(:created_by, user_model.current_user.id.to_i) if respond_to?(:created_by) and self.created_by.nil?
+      if record_userstamps && user_model.current_user != nil
+        write_attribute(:created_by, user_model.current_user.id.to_i) if respond_to?(:created_by) && self.created_by.nil?
         write_attribute(:updated_by, user_model.current_user.id.to_i) if respond_to?(:updated_by)
       end
       create_without_user
@@ -43,7 +43,7 @@ module ActiveRecord
     # After we update those attributes we continue by running the normal <tt>update</tt> method where the object
     # is actually validated and saved.
     def update_with_user
-      if record_userstamps and user_model.current_user != nil
+      if record_userstamps && user_model.current_user != nil
         write_attribute(:updated_by, user_model.current_user.id.to_i) if respond_to?(:updated_by)
       end
       update_without_user

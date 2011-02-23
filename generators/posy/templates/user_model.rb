@@ -55,7 +55,7 @@ class <%= user_class %> < ActiveRecord::Base
   end
 
   def <%= permission_plural %>(force_reload = false)
-    unless @<%= permission_plural %> and !force_reload
+    unless @<%= permission_plural %> && !force_reload
       g = <%= group_plural %>.find(:all, :include => :<%= permission_plural %>)
       @<%= permission_plural %> = <%= permission_class %>.find_by_sql([<<-end_of_sql, self.id])
         SELECT p.*  FROM <%= user_plural %> u
@@ -69,7 +69,7 @@ class <%= user_class %> < ActiveRecord::Base
   end
 
   def controller_<%= permission_plural %>(force_reload = false)
-    unless @controller_<%= permission_plural %> and !force_reload
+    unless @controller_<%= permission_plural %> && !force_reload
       @controller_<%= permission_plural %> = <%= permission_class %>.find_by_sql([<<-end_of_sql, self.id])
         SELECT p.*  FROM <%= user_plural %> u
                     JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id
@@ -82,7 +82,7 @@ class <%= user_class %> < ActiveRecord::Base
   end
 
   def resource_<%= permission_plural %>(force_reload = false)
-    unless @resource_<%= permission_plural %> and !force_reload
+    unless @resource_<%= permission_plural %> && !force_reload
       @resource_<%= permission_plural %> = <%= permission_class %>.find_by_sql([<<-end_of_sql, self.id])
         SELECT p.*  FROM <%= user_plural %> u
                     JOIN <%= membership_plural %> m ON u.id = m.<%= user_singular %>_id

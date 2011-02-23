@@ -33,7 +33,7 @@ class <%= group_class %> < ActiveRecord::Base
   end
 
   def include?(<%= user_singular %>)
-    unless <%= user_singular %>.is_a?(<%= user_class %>) or <%= user_singular %>.is_a?(Fixnum)
+    unless <%= user_singular %>.is_a?(<%= user_class %>) || <%= user_singular %>.is_a?(Fixnum)
       raise TypeError, "not a <%= user_class %> or Fixnum"
     end
 

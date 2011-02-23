@@ -246,7 +246,7 @@ module AuthenticatedSystem
         end
 
         # grab the current resource <%= permission_singular %>
-        if resource_actions.include?(action_name) and !current_resource.nil?
+        if resource_actions.include?(action_name) && !current_resource.nil?
           @current_<%= permission_singular %> = perms.detect { |p| p.resource == current_resource && p.parent == parent }
         end
         @current_<%= permission_singular %> ||= perms.detect { |p| p.controller == controller_name && p.parent == parent }
@@ -302,7 +302,7 @@ module AuthenticatedSystem
     # NOTE: this method gets run AFTER logged_in?, so assume the <%= user_singular %> is logged in
     def authorized?
       return true   if controller_name == '<%= session_plural %>'
-      return true   if current_<%= user_singular %>.admin? or flash[:allow]
+      return true   if current_<%= user_singular %>.admin? || flash[:allow]
       return false  unless current_<%= permission_singular %>
 
       ap     = action_<%= permission_plural %>
@@ -312,7 +312,7 @@ module AuthenticatedSystem
       bools << <%= user_singular %>_can_read_and_write?   if ap['b'].include?(action_name)
       if bools.any?
         # handle sticky <%= permission_plural %>
-        if sticky_actions.include?(action_name) and <%= permission_singular %>_is_sticky?
+        if sticky_actions.include?(action_name) && <%= permission_singular %>_is_sticky?
           # make sure the <%= user_singular %> is the owner
           current_resource ? current_resource.created_by == current_<%= user_singular %>.id : false
         else

@@ -15,7 +15,7 @@ class <%= membership_class %> < ActiveRecord::Base
 
   protected
     def unique_<%= permission_plural %>
-      return  unless <%= user_singular %>_id and <%= group_singular %>_id
+      return  unless <%= user_singular %>_id && <%= group_singular %>_id
 
       # get a list of all resources for the specified <%= group_singular %>
       resources = <%= group_singular %>.<%= permission_plural %>.collect do |perm|

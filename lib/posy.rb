@@ -4,7 +4,7 @@ module Posy
 
   @@configuration = nil
   def self.configuration
-    if @@configuration.nil? and File.exist?(@@configuration_file)
+    if @@configuration.nil? && File.exist?(@@configuration_file)
       @@configuration = YAML.load(ERB.new(IO.read(configuration_file)).result)
     end
     @@configuration ||= {}
