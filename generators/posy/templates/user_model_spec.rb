@@ -47,7 +47,7 @@ end
 
 describe "a non-new <%= user_singular %>" do
   include <%= user_class %>Helpers
-  fixtures :<%= user_plural %>
+  fixtures :<%= user_plural %>, :<%= group_plural %>, :<%= permission_plural %>, :<%= membership_plural %>
 
   before(:each) do
     <%= user_class %>.current_<%= user_singular %> = <%= user_plural %>(:admin)
