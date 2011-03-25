@@ -44,7 +44,7 @@ describe <%= membership_plural_class %>Controller do
     describe "handling GET /<%= membership_plural %>" do
 
       before(:each) do
-        <%= membership_class %>.stub!(:find).and_return([@<%= membership_singular %>])
+        <%= membership_class %>.stub(:find).and_return([@<%= membership_singular %>])
         get :index
       end
 
@@ -60,7 +60,7 @@ describe <%= membership_plural_class %>Controller do
     describe "handling GET /<%= membership_plural %>/1" do
 
       before(:each) do
-        <%= membership_class %>.stub!(:find).and_return(@<%= membership_singular %>)
+        <%= membership_class %>.stub(:find).and_return(@<%= membership_singular %>)
         get :show, :id => "1"
       end
 
@@ -76,9 +76,9 @@ describe <%= membership_plural_class %>Controller do
     describe "handling GET /<%= membership_plural %>/new" do
 
       before(:each) do
-        <%= membership_class %>.stub!(:new).and_return(@<%= membership_singular %>)
-        <%= user_class %>.stub!(:find).and_return([@<%= user_singular %>])
-        <%= group_class %>.stub!(:find).and_return([@<%= group_singular %>])
+        <%= membership_class %>.stub(:new).and_return(@<%= membership_singular %>)
+        <%= user_class %>.stub(:find).and_return([@<%= user_singular %>])
+        <%= group_class %>.stub(:find).and_return([@<%= group_singular %>])
 
         get :new
       end
@@ -103,8 +103,8 @@ describe <%= membership_plural_class %>Controller do
     describe "handling POST /<%= membership_plural %>" do
 
       before(:each) do
-        <%= membership_class %>.stub!(:new).and_return(@<%= membership_singular %>)
-        @<%= membership_singular %>.stub!(:save).and_return(true)
+        <%= membership_class %>.stub(:new).and_return(@<%= membership_singular %>)
+        @<%= membership_singular %>.stub(:save).and_return(true)
       end
 
       it "should redirect to /<%= membership_plural %>/:id when valid" do
@@ -113,7 +113,7 @@ describe <%= membership_plural_class %>Controller do
       end
 
       it "should render 'new' when invalid" do
-        @<%= membership_singular %>.stub!(:save).and_return(false)
+        @<%= membership_singular %>.stub(:save).and_return(false)
         post :create
         response.should render_template("new")
       end
@@ -127,8 +127,8 @@ describe <%= membership_plural_class %>Controller do
     describe "handling DELETE /<%= membership_plural %>/1" do
 
       before(:each) do
-        <%= membership_class %>.stub!(:find).and_return(@<%= membership_singular %>)
-        @<%= membership_singular %>.stub!(:destroy).and_return(@<%= membership_singular %>)
+        <%= membership_class %>.stub(:find).and_return(@<%= membership_singular %>)
+        @<%= membership_singular %>.stub(:destroy).and_return(@<%= membership_singular %>)
 
         delete :destroy, :id => '1'
       end
@@ -145,8 +145,8 @@ describe <%= membership_plural_class %>Controller do
     describe "handling GET /<%= group_plural %>/1/<%= membership_plural %>" do
 
       before(:each) do
-        @<%= group_singular %>.stub!(:<%= membership_plural %>).and_return([@<%= membership_singular %>])
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
+        @<%= group_singular %>.stub(:<%= membership_plural %>).and_return([@<%= membership_singular %>])
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
 
         get :index, :<%= group_singular %>_id => "1"
       end
@@ -167,9 +167,9 @@ describe <%= membership_plural_class %>Controller do
     describe "handling GET /<%= group_plural %>/1/<%= membership_plural %>/1" do
 
       before(:each) do
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
         @<%= membership_singular %>_association = stub("association", :find => @<%= membership_singular %>)
-        @<%= group_singular %>.stub!(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
+        @<%= group_singular %>.stub(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
 
         get :show, :id => "1", :<%= group_singular %>_id => "1"
       end
@@ -190,10 +190,10 @@ describe <%= membership_plural_class %>Controller do
     describe "handling GET /<%= group_plural %>/1/<%= membership_plural %>/new" do
 
       before(:each) do
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
-        <%= user_class %>.stub!(:find).and_return([@<%= user_singular %>])
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
+        <%= user_class %>.stub(:find).and_return([@<%= user_singular %>])
         @<%= membership_singular %>_association = stub("association", :build => @<%= membership_singular %>)
-        @<%= group_singular %>.stub!(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
+        @<%= group_singular %>.stub(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
 
         get :new, :<%= group_singular %>_id => "1"
       end
@@ -218,11 +218,11 @@ describe <%= membership_plural_class %>Controller do
     describe "handling POST /<%= group_plural %>/1/<%= membership_plural %>" do
 
       before(:each) do
-        @<%= membership_singular %>.stub!(:save).and_return(true)
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
-        <%= user_class %>.stub!(:find).and_return([@<%= user_singular %>])
+        @<%= membership_singular %>.stub(:save).and_return(true)
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
+        <%= user_class %>.stub(:find).and_return([@<%= user_singular %>])
         @<%= membership_singular %>_association = stub("association", :build => @<%= membership_singular %>)
-        @<%= group_singular %>.stub!(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
+        @<%= group_singular %>.stub(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
       end
 
       def do_post
@@ -235,7 +235,7 @@ describe <%= membership_plural_class %>Controller do
       end
 
       it "should render 'new' when invalid" do
-        @<%= membership_singular %>.stub!(:save).and_return(false)
+        @<%= membership_singular %>.stub(:save).and_return(false)
 
         do_post
         response.should render_template("new")
@@ -262,9 +262,9 @@ describe <%= membership_plural_class %>Controller do
       before(:each) do
         @<%= membership_plural %> = [@<%= membership_singular %>]
         @<%= membership_singular %>_association = stub("association", :find => @<%= membership_singular %>)
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
-        @<%= group_singular %>.stub!(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
-        @<%= membership_singular %>.stub!(:destroy).and_return(@<%= membership_singular %>)
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
+        @<%= group_singular %>.stub(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
+        @<%= membership_singular %>.stub(:destroy).and_return(@<%= membership_singular %>)
 
         delete :destroy, :id => '1', :<%= group_singular %>_id => "1"
       end
@@ -285,8 +285,8 @@ describe <%= membership_plural_class %>Controller do
     describe "handling GET /<%= user_plural %>/1/<%= membership_plural %>" do
 
       before(:each) do
-        @<%= user_singular %>.stub!(:<%= membership_plural %>).and_return([@<%= membership_singular %>])
-        <%= user_class %>.stub!(:find).and_return(@<%= user_singular %>)
+        @<%= user_singular %>.stub(:<%= membership_plural %>).and_return([@<%= membership_singular %>])
+        <%= user_class %>.stub(:find).and_return(@<%= user_singular %>)
 
         get :index, :<%= user_singular %>_id => "1"
       end
@@ -307,9 +307,9 @@ describe <%= membership_plural_class %>Controller do
     describe "handling GET /<%= user_plural %>/1/<%= membership_plural %>/1" do
 
       before(:each) do
-        <%= user_class %>.stub!(:find).and_return(@<%= user_singular %>)
+        <%= user_class %>.stub(:find).and_return(@<%= user_singular %>)
         @<%= membership_singular %>_association = stub("association", :find => @<%= membership_singular %>)
-        @<%= user_singular %>.stub!(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
+        @<%= user_singular %>.stub(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
 
         get :show, :id => "1", :<%= user_singular %>_id => "1"
       end
@@ -330,10 +330,10 @@ describe <%= membership_plural_class %>Controller do
     describe "handling GET /<%= user_plural %>/1/<%= membership_plural %>/new" do
 
       before(:each) do
-        <%= user_class %>.stub!(:find).and_return(@<%= user_singular %>)
-        <%= group_class %>.stub!(:find).and_return([@<%= group_singular %>])
+        <%= user_class %>.stub(:find).and_return(@<%= user_singular %>)
+        <%= group_class %>.stub(:find).and_return([@<%= group_singular %>])
         @<%= membership_singular %>_association = stub("association", :build => @<%= membership_singular %>)
-        @<%= user_singular %>.stub!(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
+        @<%= user_singular %>.stub(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
 
         get :new, :<%= user_singular %>_id => "1"
       end
@@ -358,11 +358,11 @@ describe <%= membership_plural_class %>Controller do
     describe "handling POST /<%= user_plural %>/1/<%= membership_plural %> as admin" do
 
       before(:each) do
-        @<%= membership_singular %>.stub!(:save).and_return(true)
-        <%= user_class %>.stub!(:find).and_return(@<%= user_singular %>)
-        <%= group_class %>.stub!(:find).and_return([@<%= group_singular %>])
+        @<%= membership_singular %>.stub(:save).and_return(true)
+        <%= user_class %>.stub(:find).and_return(@<%= user_singular %>)
+        <%= group_class %>.stub(:find).and_return([@<%= group_singular %>])
         @<%= membership_singular %>_association = stub("association", :build => @<%= membership_singular %>)
-        @<%= user_singular %>.stub!(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
+        @<%= user_singular %>.stub(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
       end
 
       def do_post
@@ -375,7 +375,7 @@ describe <%= membership_plural_class %>Controller do
       end
 
       it "should render 'new' when invalid" do
-        @<%= membership_singular %>.stub!(:save).and_return(false)
+        @<%= membership_singular %>.stub(:save).and_return(false)
 
         do_post
         response.should render_template("new")
@@ -402,9 +402,9 @@ describe <%= membership_plural_class %>Controller do
       before(:each) do
         @<%= membership_plural %> = [@<%= membership_singular %>]
         @<%= membership_singular %>_association = stub("association", :find => @<%= membership_singular %>)
-        <%= user_class %>.stub!(:find).and_return(@<%= user_singular %>)
-        @<%= user_singular %>.stub!(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
-        @<%= membership_singular %>.stub!(:destroy).and_return(@<%= membership_singular %>)
+        <%= user_class %>.stub(:find).and_return(@<%= user_singular %>)
+        @<%= user_singular %>.stub(:<%= membership_plural %>).and_return(@<%= membership_singular %>_association)
+        @<%= membership_singular %>.stub(:destroy).and_return(@<%= membership_singular %>)
 
         delete :destroy, :id => '1', :<%= user_singular %>_id => "1"
       end

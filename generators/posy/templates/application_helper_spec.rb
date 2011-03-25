@@ -6,8 +6,8 @@ describe ApplicationHelper do
   describe "#resource_name" do
     before(:each) do
       @pocky = Pocky.new
-      Posy.stub!(:name_method_for).and_return('name')
-      @pocky.stub!(:name).and_return("teh p0cky")
+      Posy.stub(:name_method_for).and_return('name')
+      @pocky.stub(:name).and_return("teh p0cky")
     end
 
     it "should call Posy.name_method_for" do
@@ -32,9 +32,9 @@ describe ApplicationHelper do
     end
 
     it "should return link to resource when argument is an ActiveRecord" do
-      Posy.stub!(:name_method_for).and_return('name')
+      Posy.stub(:name_method_for).and_return('name')
       pocky = Pocky.new
-      pocky.stub!(:name).and_return("teh p0cky")
+      pocky.stub(:name).and_return("teh p0cky")
 
       resource_link(pocky).should == link_to("teh p0cky (Pocky)", :controller => "pockies", :action => "show", :id => pocky.id)
     end

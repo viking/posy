@@ -9,7 +9,7 @@ describe "rendering /<%= group_plural %>/show" do
 
     @<%= user_singular %> = mock_model(<%= user_class %>, :login => 'dude', :email => 'guy@dudes.com')
     @<%= user_plural %> = Array.new(3, @<%= user_singular %>)
-    @<%= group_singular %>.stub!(:<%= user_plural %>).and_return(@<%= user_plural %>)
+    @<%= group_singular %>.stub(:<%= user_plural %>).and_return(@<%= user_plural %>)
 
     @pocky = Pocky.new
     @resource_<%= permission_singular %> = mock_model(<%= permission_class %>, {
@@ -21,7 +21,7 @@ describe "rendering /<%= group_plural %>/show" do
       :controller => "pockies"
     })
     @<%= permission_plural %> = [@resource_<%= permission_singular %>, @controller_<%= permission_singular %>]
-    @<%= group_singular %>.stub!(:<%= permission_plural %>).and_return(@<%= permission_plural %>)
+    @<%= group_singular %>.stub(:<%= permission_plural %>).and_return(@<%= permission_plural %>)
 
     assigns[:<%= group_singular %>] = @<%= group_singular %>
   end

@@ -15,7 +15,7 @@ describe "rendering /<%= user_plural %>/new" do
 
   it "should have div#errorExplanation when @<%= user_singular %> has errors" do
     errors = stub("errors", :count => 1, :full_messages => ["Login can't be blank"])
-    @<%= user_singular %>.stub!(:errors).and_return(errors)
+    @<%= user_singular %>.stub(:errors).and_return(errors)
     render '<%= user_plural %>/new'
     response.should have_tag("div#errorExplanation")
   end

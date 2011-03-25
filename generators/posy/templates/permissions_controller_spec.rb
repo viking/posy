@@ -52,7 +52,7 @@ describe <%= permission_plural_class %>Controller do
     describe "handling GET /<%= permission_plural %>/" do
 
       before(:each) do
-        <%= permission_class %>.stub!(:find).and_return([@<%= permission_singular %>])
+        <%= permission_class %>.stub(:find).and_return([@<%= permission_singular %>])
 
         get :index
       end
@@ -69,7 +69,7 @@ describe <%= permission_plural_class %>Controller do
     describe "handling GET /<%= permission_plural %>/1" do
 
       before(:each) do
-        <%= permission_class %>.stub!(:find).and_return(@<%= permission_singular %>)
+        <%= permission_class %>.stub(:find).and_return(@<%= permission_singular %>)
 
         get :show, :id => "1"
       end
@@ -86,7 +86,7 @@ describe <%= permission_plural_class %>Controller do
     describe "handling GET /<%= permission_plural %>/1/edit" do
 
       before(:each) do
-        <%= permission_class %>.stub!(:find).and_return(@<%= permission_singular %>)
+        <%= permission_class %>.stub(:find).and_return(@<%= permission_singular %>)
 
         get :edit, :id => "1"
       end
@@ -104,9 +104,9 @@ describe <%= permission_plural_class %>Controller do
 
       before(:each) do
         @resource_types = %w{Lion Tiger Bear}
-        <%= permission_class %>.stub!(:new).and_return(@<%= permission_singular %>)
-        <%= group_class %>.stub!(:find).and_return([@<%= group_singular %>])
-        Posy.stub!(:models).and_return(@resource_types)
+        <%= permission_class %>.stub(:new).and_return(@<%= permission_singular %>)
+        <%= group_class %>.stub(:find).and_return([@<%= group_singular %>])
+        Posy.stub(:models).and_return(@resource_types)
       end
 
       it "should be successful" do
@@ -143,8 +143,8 @@ describe <%= permission_plural_class %>Controller do
     describe "handling GET /<%= permission_plural %>/new.js" do
 
       before(:each) do
-        <%= permission_class %>.stub!(:new).and_return(@<%= permission_singular %>)
-        <%= group_class %>.stub!(:find).and_return([@<%= group_singular %>])
+        <%= permission_class %>.stub(:new).and_return(@<%= permission_singular %>)
+        <%= group_class %>.stub(:find).and_return([@<%= group_singular %>])
       end
 
       it "should be successful" do
@@ -158,7 +158,7 @@ describe <%= permission_plural_class %>Controller do
       end
 
       it "should set @controllers when params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
-        Posy.stub!(:controllers).and_return(%w{vampires})
+        Posy.stub(:controllers).and_return(%w{vampires})
 
         get :new, :format => 'js', :<%= permission_singular %> => { :resource_type => 'Controller' }
         assigns[:controllers].should == %w{vampires}
@@ -166,7 +166,7 @@ describe <%= permission_plural_class %>Controller do
 
       it "should set @resources when params[:<%= permission_singular %>][:resource_type] is 'Pocky'" do
         @pockys = Array.new(5) { |i| Pocky.new(i+1) }
-        Pocky.stub!(:find).and_return(@pockys)
+        Pocky.stub(:find).and_return(@pockys)
 
         get :new, :format => 'js', :<%= permission_singular %> => { :resource_type => 'Pocky' }
         assigns[:resources].should == @pockys.collect { |p| [p.name, p.id] }
@@ -178,11 +178,11 @@ describe <%= permission_plural_class %>Controller do
       before(:each) do
         @resource_types = %w{Lion Tiger Bear}
 
-        <%= permission_class %>.stub!(:new).and_return(@<%= permission_singular %>)
-        <%= group_class %>.stub!(:find).and_return([@<%= group_singular %>])
-        @<%= permission_singular %>.stub!(:save).and_return(true)
-        @<%= permission_singular %>.stub!(:controller).and_return(nil)
-        Posy.stub!(:models).and_return(@resource_types)
+        <%= permission_class %>.stub(:new).and_return(@<%= permission_singular %>)
+        <%= group_class %>.stub(:find).and_return([@<%= group_singular %>])
+        @<%= permission_singular %>.stub(:save).and_return(true)
+        @<%= permission_singular %>.stub(:controller).and_return(nil)
+        Posy.stub(:models).and_return(@resource_types)
       end
 
       it "should redirect to /<%= permission_plural %>/:id when valid" do
@@ -191,13 +191,13 @@ describe <%= permission_plural_class %>Controller do
       end
 
       it "should render 'new' when invalid" do
-        @<%= permission_singular %>.stub!(:save).and_return(false)
+        @<%= permission_singular %>.stub(:save).and_return(false)
         post :create
         response.should render_template("new")
       end
 
       it "should set @resource_types when invalid" do
-        @<%= permission_singular %>.stub!(:save).and_return(false)
+        @<%= permission_singular %>.stub(:save).and_return(false)
         post :create
         assigns[:resource_types].should == ['Controller'] + @resource_types
       end
@@ -213,24 +213,24 @@ describe <%= permission_plural_class %>Controller do
       end
 
       it "should set @<%= permission_singular %>'s resource_type to nil when @<%= permission_singular %>.controller exists" do
-        @<%= permission_singular %>.stub!(:controller).and_return("vampires")
+        @<%= permission_singular %>.stub(:controller).and_return("vampires")
 
         @<%= permission_singular %>.should_receive(:resource_type=).with(nil)
         post :create
       end
 
       it "should set @controllers when invalid and params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
-        @<%= permission_singular %>.stub!(:save).and_return(false)
-        Posy.stub!(:controllers).and_return(%w{vampires})
+        @<%= permission_singular %>.stub(:save).and_return(false)
+        Posy.stub(:controllers).and_return(%w{vampires})
 
         post :create, :<%= permission_singular %> => { :resource_type => 'Controller' }
         assigns[:controllers].should == %w{vampires}
       end
 
       it "should set @resources when invalid params[:<%= permission_singular %>][:resource_type] is 'Pocky'" do
-        @<%= permission_singular %>.stub!(:save).and_return(false)
+        @<%= permission_singular %>.stub(:save).and_return(false)
         @pockys = Array.new(5) { |i| Pocky.new(i+1) }
-        Pocky.stub!(:find).and_return(@pockys)
+        Pocky.stub(:find).and_return(@pockys)
 
         post :create, :<%= permission_singular %> => { :resource_type => 'Pocky' }
         assigns[:resources].should == @pockys.collect { |p| [p.name, p.id] }
@@ -240,10 +240,10 @@ describe <%= permission_plural_class %>Controller do
     describe "handling PUT /<%= permission_plural %>/1" do
 
       before(:each) do
-        <%= permission_class %>.stub!(:find).and_return(@<%= permission_singular %>)
-        <%= group_class %>.stub!(:find).and_return([@<%= group_singular %>])
-        @<%= permission_singular %>.stub!(:update_attributes).and_return(true)
-        @<%= permission_singular %>.stub!(:controller).and_return(nil)
+        <%= permission_class %>.stub(:find).and_return(@<%= permission_singular %>)
+        <%= group_class %>.stub(:find).and_return([@<%= group_singular %>])
+        @<%= permission_singular %>.stub(:update_attributes).and_return(true)
+        @<%= permission_singular %>.stub(:controller).and_return(nil)
       end
 
       it "should redirect to /<%= permission_plural %>/:id when valid" do
@@ -252,7 +252,7 @@ describe <%= permission_plural_class %>Controller do
       end
 
       it "should render 'edit' when invalid" do
-        @<%= permission_singular %>.stub!(:update_attributes).and_return(false)
+        @<%= permission_singular %>.stub(:update_attributes).and_return(false)
         put :update, :id => "1", :<%= permission_singular %> => { }
         response.should render_template("edit")
       end
@@ -277,8 +277,8 @@ describe <%= permission_plural_class %>Controller do
     describe "handling DELETE /<%= permission_plural %>/1" do
 
       before(:each) do
-        <%= permission_class %>.stub!(:find).and_return(@<%= permission_singular %>)
-        @<%= permission_singular %>.stub!(:destroy).and_return(@<%= permission_singular %>)
+        <%= permission_class %>.stub(:find).and_return(@<%= permission_singular %>)
+        @<%= permission_singular %>.stub(:destroy).and_return(@<%= permission_singular %>)
       end
 
       it "should redirect to /<%= permission_plural %>" do
@@ -295,8 +295,8 @@ describe <%= permission_plural_class %>Controller do
     describe "handling GET /<%= group_plural %>/1/<%= permission_plural %>/" do
 
       before(:each) do
-        @<%= group_singular %>.stub!(:<%= permission_plural %>).and_return([@<%= permission_singular %>])
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
+        @<%= group_singular %>.stub(:<%= permission_plural %>).and_return([@<%= permission_singular %>])
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
 
         get :index, :<%= group_singular %>_id => '1'
       end
@@ -318,8 +318,8 @@ describe <%= permission_plural_class %>Controller do
 
       before(:each) do
         @<%= permission_singular %>_association = stub("association", :find => @<%= permission_singular %>)
-        @<%= group_singular %>.stub!(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
+        @<%= group_singular %>.stub(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
 
         get :show, :id => "1", :<%= group_singular %>_id => '1'
       end
@@ -341,8 +341,8 @@ describe <%= permission_plural_class %>Controller do
 
       before(:each) do
         @<%= permission_singular %>_association = stub("association", :find => @<%= permission_singular %>)
-        @<%= group_singular %>.stub!(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
+        @<%= group_singular %>.stub(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
 
         get :edit, :id => "1", :<%= group_singular %>_id => '1'
       end
@@ -364,8 +364,8 @@ describe <%= permission_plural_class %>Controller do
 
       before(:each) do
         @<%= permission_singular %>_association = stub("association", :build => @<%= permission_singular %>)
-        @<%= group_singular %>.stub!(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
+        @<%= group_singular %>.stub(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
 
         get :new, :<%= group_singular %>_id => '1'
       end
@@ -391,8 +391,8 @@ describe <%= permission_plural_class %>Controller do
 
       before(:each) do
         @<%= permission_singular %>_association = stub("association", :build => @<%= permission_singular %>)
-        @<%= group_singular %>.stub!(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
+        @<%= group_singular %>.stub(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
       end
 
       it "should be successful" do
@@ -406,7 +406,7 @@ describe <%= permission_plural_class %>Controller do
       end
 
       it "should set @controllers when params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
-        Posy.stub!(:controllers).and_return(%w{vampires})
+        Posy.stub(:controllers).and_return(%w{vampires})
 
         get :new, :format => 'js', :<%= group_singular %>_id => '1', :<%= permission_singular %> => { :resource_type => 'Controller' }
         assigns[:controllers].should == %w{vampires}
@@ -414,7 +414,7 @@ describe <%= permission_plural_class %>Controller do
 
       it "should set @resources when params[:<%= permission_singular %>][:resource_type] is 'Pocky'" do
         @pockys = Array.new(5) { |i| Pocky.new(i+1) }
-        Pocky.stub!(:find).and_return(@pockys)
+        Pocky.stub(:find).and_return(@pockys)
 
         get :new, :format => 'js', :<%= group_singular %>_id => '1', :<%= permission_singular %> => { :resource_type => 'Pocky' }
         assigns[:resources].should == @pockys.collect { |p| [p.name, p.id] }
@@ -425,10 +425,10 @@ describe <%= permission_plural_class %>Controller do
 
       before(:each) do
         @<%= permission_singular %>_association = stub("association", :build => @<%= permission_singular %>)
-        @<%= group_singular %>.stub!(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
-        @<%= permission_singular %>.stub!(:save).and_return(true)
-        @<%= permission_singular %>.stub!(:controller).and_return(nil)
+        @<%= group_singular %>.stub(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
+        @<%= permission_singular %>.stub(:save).and_return(true)
+        @<%= permission_singular %>.stub(:controller).and_return(nil)
       end
 
       it "should redirect to /<%= group_plural %>/1/<%= permission_plural %>/:id when valid" do
@@ -437,7 +437,7 @@ describe <%= permission_plural_class %>Controller do
       end
 
       it "should render 'new' when invalid" do
-        @<%= permission_singular %>.stub!(:save).and_return(false)
+        @<%= permission_singular %>.stub(:save).and_return(false)
         post :create, :<%= group_singular %>_id => '1'
         response.should render_template("new")
       end
@@ -453,24 +453,24 @@ describe <%= permission_plural_class %>Controller do
       end
 
       it "should set @<%= permission_singular %>'s resource_type to nil when @<%= permission_singular %>.controller exists" do
-        @<%= permission_singular %>.stub!(:controller).and_return("vampires")
+        @<%= permission_singular %>.stub(:controller).and_return("vampires")
 
         @<%= permission_singular %>.should_receive(:resource_type=).with(nil)
         post :create, :<%= group_singular %>_id => '1'
       end
 
       it "should set @controllers when invalid and params[:<%= permission_singular %>][:resource_type] is 'Controller'" do
-        @<%= permission_singular %>.stub!(:save).and_return(false)
-        Posy.stub!(:controllers).and_return(%w{vampires})
+        @<%= permission_singular %>.stub(:save).and_return(false)
+        Posy.stub(:controllers).and_return(%w{vampires})
 
         post :create, :<%= permission_singular %> => { :resource_type => 'Controller' }
         assigns[:controllers].should == %w{vampires}
       end
 
       it "should set @resources when invalid params[:<%= permission_singular %>][:resource_type] is 'Pocky'" do
-        @<%= permission_singular %>.stub!(:save).and_return(false)
+        @<%= permission_singular %>.stub(:save).and_return(false)
         @pockys = Array.new(5) { |i| Pocky.new(i+1) }
-        Pocky.stub!(:find).and_return(@pockys)
+        Pocky.stub(:find).and_return(@pockys)
 
         post :create, :<%= permission_singular %> => { :resource_type => 'Pocky' }
         assigns[:resources].should == @pockys.collect { |p| [p.name, p.id] }
@@ -481,10 +481,10 @@ describe <%= permission_plural_class %>Controller do
 
       before(:each) do
         @<%= permission_singular %>_association = stub("association", :find => @<%= permission_singular %>)
-        @<%= group_singular %>.stub!(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
-        @<%= permission_singular %>.stub!(:update_attributes).and_return(true)
-        @<%= permission_singular %>.stub!(:controller).and_return(nil)
+        @<%= group_singular %>.stub(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
+        @<%= permission_singular %>.stub(:update_attributes).and_return(true)
+        @<%= permission_singular %>.stub(:controller).and_return(nil)
       end
 
       it "should redirect to /<%= group_plural %>/1/<%= permission_plural %>/:id when valid" do
@@ -493,7 +493,7 @@ describe <%= permission_plural_class %>Controller do
       end
 
       it "should render 'edit' when invalid" do
-        @<%= permission_singular %>.stub!(:update_attributes).and_return(false)
+        @<%= permission_singular %>.stub(:update_attributes).and_return(false)
         put :update, :id => "1", :<%= group_singular %>_id => '1', :<%= permission_singular %> => { }
         response.should render_template("edit")
       end
@@ -524,9 +524,9 @@ describe <%= permission_plural_class %>Controller do
 
       before(:each) do
         @<%= permission_singular %>_association = stub("association", :find => @<%= permission_singular %>)
-        @<%= group_singular %>.stub!(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
-        <%= group_class %>.stub!(:find).and_return(@<%= group_singular %>)
-        @<%= permission_singular %>.stub!(:destroy).and_return(@<%= permission_singular %>)
+        @<%= group_singular %>.stub(:<%= permission_plural %>).and_return(@<%= permission_singular %>_association)
+        <%= group_class %>.stub(:find).and_return(@<%= group_singular %>)
+        @<%= permission_singular %>.stub(:destroy).and_return(@<%= permission_singular %>)
 
         delete :destroy, :id => '1', :<%= group_singular %>_id => '1'
       end

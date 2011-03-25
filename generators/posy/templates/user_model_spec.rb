@@ -353,7 +353,7 @@ describe <%= user_class %>, "with explicit access to some resources and a defaul
       @<%= user_singular %>.<%= membership_plural %>.create(:<%= group_singular %> => <%= group_singular %>)
       <%= group_singular %>
     end
-    Posy.stub!(:controllers).and_return(%w{test_monkeys})
+    Posy.stub(:controllers).and_return(%w{test_monkeys})
   end
 
   it "should have 5 readable resources when controller <%= permission_singular %> also has read access" do

@@ -41,7 +41,7 @@ describe "rendering /<%= permission_plural %>/new" do
   end
 
   it "should have a resource_id select box that has 4 options (including a blank) when @resources is set" do
-    @<%= permission_singular %>.stub!(:resource_id).and_return(nil)
+    @<%= permission_singular %>.stub(:resource_id).and_return(nil)
     resources = [["pocky-1", 1], ["pocky-2", 2], ["pocky-3", 3]]
     assigns[:resources] = resources
 
@@ -62,7 +62,7 @@ describe "rendering /<%= permission_plural %>/new" do
   end
 
   it "should have a resource_select tag with a controller select box that has 4 options (including a blank) when @controllers is set" do
-    @<%= permission_singular %>.stub!(:controller).and_return(nil)
+    @<%= permission_singular %>.stub(:controller).and_return(nil)
     @controllers = %w{lions tigers bears}
     assigns[:controllers] = @controllers
 

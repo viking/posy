@@ -51,7 +51,7 @@ describe <%= user_plural_class %>Controller do
     describe <%= user_plural_class %>Controller, "handling GET /<%= user_plural %> as admin" do
 
       before(:each) do
-        <%= user_class %>.stub!(:find).and_return([@<%= user_singular %>])
+        <%= user_class %>.stub(:find).and_return([@<%= user_singular %>])
 
         get :index
       end
@@ -68,7 +68,7 @@ describe <%= user_plural_class %>Controller do
     describe "handling GET /<%= user_plural %>/1" do
 
       before(:each) do
-        <%= user_class %>.stub!(:find).and_return(@<%= user_singular %>)
+        <%= user_class %>.stub(:find).and_return(@<%= user_singular %>)
 
         get :show, :id => "1"
       end
@@ -85,7 +85,7 @@ describe <%= user_plural_class %>Controller do
     describe "handling GET /<%= user_plural %>/new" do
 
       before(:each) do
-        <%= user_class %>.stub!(:new).and_return(@<%= user_singular %>)
+        <%= user_class %>.stub(:new).and_return(@<%= user_singular %>)
 
         get :new
       end
@@ -102,7 +102,7 @@ describe <%= user_plural_class %>Controller do
     describe "handling GET /<%= user_plural %>/1/edit" do
 
       before(:each) do
-        <%= user_class %>.stub!(:find).and_return(@<%= user_singular %>)
+        <%= user_class %>.stub(:find).and_return(@<%= user_singular %>)
 
         get :edit, :id => "1"
       end
@@ -119,8 +119,8 @@ describe <%= user_plural_class %>Controller do
     describe "handling POST /<%= user_plural %>" do
 
       before(:each) do
-        <%= user_class %>.stub!(:new).and_return(@<%= user_singular %>)
-        @<%= user_singular %>.stub!(:save).and_return(true)
+        <%= user_class %>.stub(:new).and_return(@<%= user_singular %>)
+        @<%= user_singular %>.stub(:save).and_return(true)
       end
 
       it "should redirect to /<%= user_plural %>/:id when valid" do
@@ -129,7 +129,7 @@ describe <%= user_plural_class %>Controller do
       end
 
       it "should render 'new' when invalid" do
-        @<%= user_singular %>.stub!(:save).and_return(false)
+        @<%= user_singular %>.stub(:save).and_return(false)
         post :create
         response.should render_template("new")
       end
@@ -143,8 +143,8 @@ describe <%= user_plural_class %>Controller do
     describe "handling PUT /<%= user_plural %>/1" do
 
       before(:each) do
-        <%= user_class %>.stub!(:find).and_return(@<%= user_singular %>)
-        @<%= user_singular %>.stub!(:update_attributes).and_return(true)
+        <%= user_class %>.stub(:find).and_return(@<%= user_singular %>)
+        @<%= user_singular %>.stub(:update_attributes).and_return(true)
       end
 
       it "should redirect to /<%= user_plural %>/:id when valid" do
@@ -153,7 +153,7 @@ describe <%= user_plural_class %>Controller do
       end
 
       it "should render 'edit' when invalid" do
-        @<%= user_singular %>.stub!(:update_attributes).and_return(false)
+        @<%= user_singular %>.stub(:update_attributes).and_return(false)
         put :update, :id => '1'
         response.should render_template("edit")
       end
@@ -167,8 +167,8 @@ describe <%= user_plural_class %>Controller do
     describe "handling DELETE /<%= user_plural %>/1" do
 
       before(:each) do
-        <%= user_class %>.stub!(:find).and_return(@<%= user_singular %>)
-        @<%= user_singular %>.stub!(:destroy).and_return(@<%= user_singular %>)
+        <%= user_class %>.stub(:find).and_return(@<%= user_singular %>)
+        @<%= user_singular %>.stub(:destroy).and_return(@<%= user_singular %>)
 
         delete :destroy, :id => '1'
       end

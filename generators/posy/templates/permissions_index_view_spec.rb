@@ -4,7 +4,7 @@ describe "rendering /<%= permission_plural %>/index" do
   before do
     @<%= group_singular %> = mock_model(<%= group_class %>, :name => "dudes")
     @pocky = Pocky.new
-    @pocky.stub!(:name).and_return('teh p0cky')
+    @pocky.stub(:name).and_return('teh p0cky')
     @controller_<%= permission_singular %> = mock_model(<%= permission_class %>, {
       :<%= group_singular %> => @<%= group_singular %>, :controller => "vampires", :can_read => true,
       :can_write => true, :is_sticky => false
@@ -31,7 +31,7 @@ describe "rendering /<%= permission_plural %>/index when @<%= group_singular %> 
   before do
     @<%= group_singular %> = mock_model(<%= group_class %>, :name => "dudes")
     @pocky = Pocky.new
-    @pocky.stub!(:name).and_return('teh p0cky')
+    @pocky.stub(:name).and_return('teh p0cky')
     @controller_<%= permission_singular %> = mock_model(<%= permission_class %>, {
       :<%= group_singular %> => @<%= group_singular %>, :controller => "vampires", :can_read => true,
       :can_write => true, :is_sticky => false

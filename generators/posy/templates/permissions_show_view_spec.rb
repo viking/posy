@@ -31,7 +31,7 @@ describe "rendering /<%= permission_plural %>/show for a resource <%= permission
       :can_read => true, :can_write => false, :is_sticky => false
     })
     assigns[:<%= permission_singular %>] = @<%= permission_singular %>
-    @controller.template.stub!(:resource_link).and_return('teh p0cky')
+    @controller.template.stub(:resource_link).and_return('teh p0cky')
   end
 
   it "should not raise an error" do

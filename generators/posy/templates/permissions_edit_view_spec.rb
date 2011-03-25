@@ -33,7 +33,7 @@ describe "rendering /<%= permission_plural %>/edit for a resource <%= permission
   before do
     @<%= group_singular %> = mock_model(<%= group_class %>, :name => "dudes")
     @pocky = Pocky.new
-    @pocky.stub!(:name).and_return("teh p0cky")
+    @pocky.stub(:name).and_return("teh p0cky")
     @<%= permission_singular %> = mock_model(<%= permission_class %>, {
       :<%= group_singular %> => @<%= group_singular %>, :resource => @pocky, :resource_type => 'Pocky', :can_read => true,
       :can_write => true, :is_sticky => false, :controller => nil
