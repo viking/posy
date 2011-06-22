@@ -14,11 +14,8 @@ module ActiveRecord
       super
 
       base.class_eval do
-        alias_method :create_without_user, :create
-        alias_method :create, :create_with_user
-
-        alias_method :update_without_user, :update
-        alias_method :update, :update_with_user
+        alias_method_chain :create, :user
+        alias_method_chain :update, :user
       end
     end
 
