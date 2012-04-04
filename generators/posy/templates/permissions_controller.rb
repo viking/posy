@@ -160,7 +160,8 @@ class <%= permission_plural_class %>Controller < ApplicationController
       when 'Controller'
         @controllers = Posy.controllers
       when /[A-Z]\w+/
-        @resources = type.constantize.find(:all).collect { |x| [x.name, x.id] }
+        name_method = Posy.name_method_for(type)
+        @resources = type.constantize.find(:all).collect { |x| [x[name_method], x.id] }
       end
     end
 end
